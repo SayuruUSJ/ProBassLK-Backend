@@ -13,6 +13,5 @@ import lombok.NoArgsConstructor;
 public class Client extends User{
     @Column(name = "organization_name", nullable = false, length = 100)
     private String organizationName;
-    @Column(name = "verification_status")
-    private Boolean verificationStatus;
+
 }

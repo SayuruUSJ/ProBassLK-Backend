@@ -6,8 +6,11 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lk.workbridge.marketplace.dto.LoginRequest;
 import lk.workbridge.marketplace.dto.RegisterRequest;
+import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.service.AuthService;
+import lk.workbridge.marketplace.service.EmailService;
+import lk.workbridge.marketplace.service.VerificationCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -33,6 +37,8 @@ public class AuthController {
 
     private final AuthService service;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
+    private final VerificationCodeService verificationCodeService;
 
     @GetMapping("/test")
     public String test(){
@@ -43,6 +49,29 @@ public class AuthController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         String result = service.register(request);
         return ResponseEntity.ok(result);
+    }
+
+
+    @PostMapping("/send-verification")
+    public ResponseEntity<?> sendVerification(@RequestParam String email) {
+        boolean sent = emailService.sendVerificationEmail(email);
+        if (sent) {
+            return ResponseEntity.ok("Verification email sent");
+        } else {
+            return ResponseEntity.status(500).body("Failed to send email");
+        }
+    }
+
+    @PostMapping("/verify-code")
+    public ResponseEntity<?> verifyCode(@Valid @RequestBody VerificationRequest request) {
+
+        boolean isValid = verificationCodeService.validateCode(request.getEmail(), request.getCode());
+        if (isValid) {
+            service.verifyUser(request);
+            return ResponseEntity.ok("Email verified successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid or expired code");
+        }
     }
 
     @PostMapping("/login-json")

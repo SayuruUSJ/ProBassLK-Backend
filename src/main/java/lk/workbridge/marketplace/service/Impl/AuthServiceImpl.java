@@ -1,6 +1,7 @@
 package lk.workbridge.marketplace.service.Impl;
 
 import lk.workbridge.marketplace.dto.RegisterRequest;
+import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
 import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.JobRole;
@@ -11,6 +12,7 @@ import lk.workbridge.marketplace.enums.Role;
 import lk.workbridge.marketplace.repository.JobRoleRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
 import lk.workbridge.marketplace.service.AuthService;
+import lk.workbridge.marketplace.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,6 +33,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     private final UserRepository repo;
     private final JobRoleRepository jobRoleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public String register(RegisterRequest request) {
@@ -66,9 +69,16 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             client.setRole(
                     Role.CLIENT
             );
+        boolean isTrue=emailService.sendVerificationEmail(
+                    request.getEmail()
+            );
+            System.out.println(isTrue);
+if(isTrue==true){
 
-            repo.save(client);
-            return "succuss";
+   repo.save(client);
+   return "succuss";
+}
+
         } else if (request.getRole() == Role.WORKER) {
            Worker worker=new Worker();
            worker.setAvailable(request.getAvailable());
@@ -81,7 +91,9 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
            worker.setPhoneNumber(request.getPhoneNumber());
            worker.setAddress(request.getAddress());
            worker.setRole(Role.WORKER);
-
+            worker.setVerificationStatus(
+                    request.getVerificationStatus()
+            );
             for (WorkerSkillRequest skillRequest
                     : request.getSkills()) {
 
@@ -127,11 +139,21 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                         .add(skill);
 
             }
-           repo.save(worker);
-           return "worker registered successfully";
+
+            boolean isTrue=emailService.sendVerificationEmail(
+                    request.getEmail()
+            );
+            System.out.println(isTrue);
+           if(isTrue==true){
+
+               repo.save(worker);
+               return "worker registered successfully";
+           }
+
         }
-        return "";
+        return "Registration failed";
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -157,8 +179,28 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         }
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+       Integer isUserVerified= repo.isUserVerified(userDetails.getUsername());
+       if(isUserVerified==0){
+           throw new RuntimeException("User not verified");
+       }else{
              return repo.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+       }
+
+    }
+
+
+    @Override
+    public boolean verifyUser(VerificationRequest request) {
+        User user=repo.findByUsername(request.getUsername()).orElseThrow(
+                () -> new UsernameNotFoundException("User not found with username: " + request.getUsername())
+        );
+        if (user != null) {
+            user.setVerificationStatus(request.isVerificationStatus());
+            repo.save(user);
+            return true;
+        }
+        return false;
     }
 
 }

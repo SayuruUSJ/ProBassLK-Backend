@@ -56,4 +56,6 @@ public abstract  class User {
     @CreationTimestamp
     @Column(name = "created-at", nullable = false)
      private Date createdAt;
+    @Column(name = "verification_status")
+    private Boolean verificationStatus;
 }

@@ -79,10 +79,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login-json").permitAll()
                         .requestMatchers("/api/auth/logout").permitAll()
                         .requestMatchers("/api/auth/session-info").permitAll()
+                        .requestMatchers("/api/auth/verify-code").permitAll()
+                        .requestMatchers("/api/auth/send-verification").permitAll()
                         .requestMatchers("/api/auth/expired").permitAll()
                         .requestMatchers("/api/auth/invalid-session").permitAll()
                         .requestMatchers("/api/auth/login-failed").permitAll()
                         .requestMatchers("/api/auth/logout-success").permitAll()
+
                         .requestMatchers("/error").permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
