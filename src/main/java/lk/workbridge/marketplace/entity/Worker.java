@@ -42,6 +42,13 @@ public class Worker extends User{
 
     )
 
+    private Set<ClientBookingRequestedAdvertisement> bookingRequests = new HashSet<>();
+
+    @OneToMany(
+            mappedBy = "worker",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private Set<WorkerSkill> skills
             = new HashSet<>();
 

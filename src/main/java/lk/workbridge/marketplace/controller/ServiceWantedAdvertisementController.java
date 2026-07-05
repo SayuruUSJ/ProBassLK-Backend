@@ -1,0 +1,81 @@
+package lk.workbridge.marketplace.controller;
+
+import jakarta.validation.Valid;
+import lk.workbridge.marketplace.dto.ClientBookingRequestAD;
+import lk.workbridge.marketplace.dto.ServiceProviderRequestForWantedAD;
+import lk.workbridge.marketplace.dto.ServiceWantedAD;
+import lk.workbridge.marketplace.service.ServiceProviderRequestForWantedADService;
+import lk.workbridge.marketplace.service.ServiceWantedAdvertisementService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@CrossOrigin
+@RequestMapping("/api/service-wanted-advertisements")
+@RequiredArgsConstructor
+public class ServiceWantedAdvertisementController {
+    private final ServiceWantedAdvertisementService serviceWantedAdvertisementService;
+    private final ServiceProviderRequestForWantedADService serviceProviderRequestService;
+    @PostMapping("/create-advertisement")
+    public ResponseEntity<?> register(@Valid @RequestBody ServiceWantedAD request) {
+        String result = serviceWantedAdvertisementService.requestAdvertisement(request);
+        return ResponseEntity.ok(result);
+    }
+    
+    @PostMapping("/create-request-for-wanted-advertisement")
+    public ResponseEntity<?> createNewRequestForAdFromServiceProvider(
+            @Valid @RequestBody ServiceProviderRequestForWantedAD request) {
+
+        try {
+
+            String response = serviceProviderRequestService.createNewRequest(request);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong.");
+
+        }
+    }
+    @PutMapping("/update-request")
+    public ResponseEntity<?> updateRequestedAd(@RequestParam String ad_status,
+                                               @RequestParam int request_id,
+                                               @RequestParam String request_status
+                                               ){
+
+        try {
+
+            String response = serviceProviderRequestService.updateRequest(ad_status, request_id, request_status);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong.");
+
+        }
+
+    }
+
+}
