@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lk.workbridge.marketplace.dto.LoginRequest;
 import lk.workbridge.marketplace.dto.RegisterRequest;
+import lk.workbridge.marketplace.dto.UpdateProfile;
 import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.service.AuthService;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +50,13 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         String result = service.register(request);
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateProfile updateProfile){
+
+        String result=service.updateProfile(updateProfile);
         return ResponseEntity.ok(result);
     }
 
@@ -96,6 +105,14 @@ public class AuthController {
 
             User user = service.getCurrentUser();
 
+            if  (!Boolean.TRUE.equals(user.getVerificationStatus()))  {
+            SecurityContextHolder.clearContext();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of(
+                            "success", false,
+                            "error", "Account not verified"
+                    ));
+        }
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "Login successful",

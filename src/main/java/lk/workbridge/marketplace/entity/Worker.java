@@ -29,6 +29,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Worker extends User{
 
+@Column(name="available",nullable = true)
 
     private Boolean available;
 

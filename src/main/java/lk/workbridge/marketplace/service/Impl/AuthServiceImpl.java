@@ -1,6 +1,7 @@
 package lk.workbridge.marketplace.service.Impl;
 
 import lk.workbridge.marketplace.dto.RegisterRequest;
+import lk.workbridge.marketplace.dto.UpdateProfile;
 import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
 import lk.workbridge.marketplace.entity.Client;
@@ -22,8 +23,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
+import java.util.Optional;
 
 
 @Service
@@ -55,17 +57,11 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                     passwordEncoder.encode(request.getPassword())
             );
 
-            client.setPhoneNumber(
-                    request.getPhoneNumber()
-            );
-            client.setOrganizationName(
-                    request.getOrganizationName()
-            );
+
             client.setVerificationStatus(
                     request.getVerificationStatus()
             );
-            client.setAddress(request.getAddress());
-            client.setDistrict(request.getDistrict());
+
             client.setRole(
                     Role.CLIENT
             );
@@ -81,64 +77,18 @@ if(isTrue==true){
 
         } else if (request.getRole() == Role.WORKER) {
            Worker worker=new Worker();
-           worker.setAvailable(request.getAvailable());
-           worker.setDistrict(request.getDistrict());
+
            worker.setEmail(request.getEmail());
            worker.setFirstName(request.getFirstName());
            worker.setLastName(request.getLastName());
            worker.setUsername(request.getUsername());
           worker.setPassword(passwordEncoder.encode(request.getPassword()));
-           worker.setPhoneNumber(request.getPhoneNumber());
-           worker.setAddress(request.getAddress());
+
            worker.setRole(Role.WORKER);
             worker.setVerificationStatus(
                     request.getVerificationStatus()
             );
-            for (WorkerSkillRequest skillRequest
-                    : request.getSkills()) {
 
-                JobRole jobRole =
-
-                        jobRoleRepository
-
-                                .findByRoleName(
-
-                                        skillRequest.getRole()
-
-                                )
-
-                                .orElseThrow(
-
-                                        () -> new RuntimeException(
-
-                                                "Role not found"
-
-                                        )
-
-                                );
-
-                WorkerSkill skill =
-                        new WorkerSkill();
-
-                skill.setWorker(
-                        worker
-                );
-
-                skill.setJobRole(
-                        jobRole
-                );
-
-                skill.setDailyRate(
-
-                        skillRequest.getDailyRate()
-
-                );
-
-                worker.getSkills()
-
-                        .add(skill);
-
-            }
 
             boolean isTrue=emailService.sendVerificationEmail(
                     request.getEmail()
@@ -201,6 +151,88 @@ if(isTrue==true){
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    @Override
+    public String updateProfile(UpdateProfile updateProfile) {
+
+        Optional<User> userOptional = repo.findById(updateProfile.getUserId());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+          
+            if(user.getRole()==Role.CLIENT){
+                  Client client=(Client) user;
+                client.setPhoneNumber(
+                    updateProfile.getPhoneNumber()
+            );
+                client.setOrganizationName(
+                    updateProfile.getOrganizationName()
+            );
+                client.setAddress(updateProfile.getAddress());
+                client.setDistrict(updateProfile.getDistrict());
+             repo.save(client);
+            } else if (user.getRole()==Role.WORKER) {
+                
+                Worker worker=(Worker) user;
+                worker.setPhoneNumber(
+                    updateProfile.getPhoneNumber()
+            );
+                worker.setAddress(updateProfile.getAddress());
+                worker.setDistrict(updateProfile.getDistrict());
+                for (WorkerSkillRequest skillRequest
+                    : updateProfile.getSkills()) {
+
+                JobRole jobRole =
+
+                        jobRoleRepository
+
+                                .findByRoleName(
+
+                                        skillRequest.getRole()
+
+                                )
+
+                                .orElseThrow(
+
+                                        () -> new RuntimeException(
+
+                                                "Role not found"
+
+                                        )
+
+                                );
+
+                WorkerSkill skill =
+                        new WorkerSkill();
+
+                skill.setWorker(
+                        worker
+                );
+
+                skill.setJobRole(
+                        jobRole
+                );
+
+                skill.setDailyRate(
+
+                        skillRequest.getDailyRate()
+
+                );
+
+                worker.getSkills()
+
+                        .add(skill);
+
+            }
+                repo.save(worker);
+            }
+            return "Profile updated successfully";
+        } else {
+            return "User not found with ID: " + updateProfile.getUserId();
+        }
+
+
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Client extends User{
-    @Column(name = "organization_name", nullable = false, length = 100)
+    @Column(name = "organization_name", nullable = true, length = 100)
     private String organizationName;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)

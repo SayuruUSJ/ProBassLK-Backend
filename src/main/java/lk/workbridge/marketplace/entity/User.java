@@ -38,15 +38,15 @@ public abstract  class User {
     private String password;
     @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
-    @Column(name = "phone-number", length = 12)
+    @Column(name = "phone-number", length = 12,nullable = true)
     private String phoneNumber;
     @Column(name = "first-name", nullable = false, length = 50)
     private String firstName;
     @Column(name = "last-name", nullable = false, length = 50)
     private String lastName;
-    @Column(name = "district", nullable = false, length = 50)
+    @Column(name = "district", nullable = true, length = 50)
     private String district;
-    @Column(name = "address", nullable = false, length = 100)
+    @Column(name = "address", nullable = true, length = 100)
     private String address;
     @Enumerated(
             EnumType.STRING

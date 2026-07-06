@@ -36,24 +36,9 @@ public class RegisterRequest {
     @NotBlank(message = "Password is required")
     @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
      private String password;
-
-    @NotBlank(message = "Phone number is required")
-
-    private String phoneNumber;
-
     @NotNull(message = "Role is required")
     private Role role;
 
-    private Boolean available;
-
-    private String organizationName;
-
     private Boolean verificationStatus;
 
-    private Set<WorkerSkillRequest>  skills;
-
-    @NotBlank(message="District cannot null")
-    private String district;
-    @NotBlank(message = "Address is required")
-    private String address;
 }
