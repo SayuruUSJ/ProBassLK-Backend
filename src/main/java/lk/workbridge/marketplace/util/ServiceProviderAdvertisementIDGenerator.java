@@ -32,5 +32,4 @@ public class ServiceProviderAdvertisementIDGenerator implements IdentifierGenera
         }
         return PREFIX + "001";
     }
-
 }
