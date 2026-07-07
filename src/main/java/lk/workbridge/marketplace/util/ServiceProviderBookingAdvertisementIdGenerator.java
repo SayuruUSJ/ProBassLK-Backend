@@ -8,13 +8,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class ServiceProviderAdvertisementIDGenerator implements IdentifierGenerator {
+public class ServiceProviderBookingAdvertisementIdGenerator implements IdentifierGenerator {
 
-    private static final String PREFIX = "ProBassLKSPADOFFCIAL#";
+    private static final String PREFIX = "ProBassLKADSP#";
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object object) {
-        String query = "SELECT MAX(CAST(SUBSTRING(`service_id`, LENGTH('" + PREFIX + "') + 1) AS UNSIGNED)) FROM service_provider_advertisement";
+        String query = "SELECT MAX(CAST(SUBSTRING(`advertisement_id`, LENGTH('" + PREFIX + "') + 1) AS UNSIGNED)) FROM client_requestedAdvertisements";
 
         try (Connection connection = session.getJdbcConnectionAccess().obtainConnection();
              Statement statement = connection.createStatement();
@@ -32,5 +32,4 @@ public class ServiceProviderAdvertisementIDGenerator implements IdentifierGenera
         }
         return PREFIX + "001";
     }
-
 }

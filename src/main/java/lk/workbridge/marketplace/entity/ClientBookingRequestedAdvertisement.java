@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lk.workbridge.marketplace.util.ServiceProviderADID;
+import lk.workbridge.marketplace.util.ServiceProviderBookingADID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ import java.time.LocalDate;
 public class ClientBookingRequestedAdvertisement {
 
     @Id
-    @ServiceProviderADID
+    @ServiceProviderBookingADID
     @Column(name = "advertisement_id", nullable = false, length = 20)
     private String id;
 

@@ -20,6 +20,8 @@ import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Getter
 @Setter
@@ -27,6 +29,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "skills")
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Worker extends User{
 
 
