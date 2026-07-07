@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 
-@IdGeneratorType(ServiceProviderAdvertisementIdGenerator.class)
+@IdGeneratorType(ServiceProviderAdvertisementIDGenerator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target({FIELD, METHOD})
-public @interface ServiceProviderADID {
+public @interface ServiceProviderAdvertisementID {
 }
