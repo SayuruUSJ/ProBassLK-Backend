@@ -4,6 +4,7 @@ import lk.workbridge.marketplace.dto.ServiceProviderAD;
 import lk.workbridge.marketplace.dto.ServiceProviderADResponse;
 import lk.workbridge.marketplace.service.ServiceProviderAdvertisementService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +54,16 @@ public class ServiceProviderAdvertisementController {
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/get-all-ads")
+    public ResponseEntity<Page<ServiceProviderADResponse>> getAllAdvertisements(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                serviceProviderAdvertisementService.getAllAdvertisements(page, size)
+        );
     }
 
 }

@@ -14,6 +14,9 @@ import lk.workbridge.marketplace.repository.UserRepository;
 import lk.workbridge.marketplace.repository.WorkerSkillRepository;
 import lk.workbridge.marketplace.service.ServiceProviderAdvertisementService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -103,6 +106,59 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
 
     }
 
+    @Override
+    public Page<ServiceProviderADResponse> getAllAdvertisements(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return serviceProviderAdvertisementRepository
+                .findAll(pageable)
+                .map(this::mapToResponse);
+    }
+
+    private ServiceProviderADResponse mapToResponse(ServiceProviderAdvertisement advertisement) {
+
+        User user = userRepository.findById(advertisement.getWorker().getId())
+                .orElseThrow(() -> new RuntimeException("User not found."));
+
+        Worker worker = (Worker) user;
+
+        validateWorkerProfile(worker);
+
+        ServiceProviderADResponse response = new ServiceProviderADResponse();
+
+        response.setServiceId(advertisement.getServiceId());
+        response.setStatus(advertisement.getStatus());
+        response.setWorkerId(worker.getId());
+        response.setFirstName(worker.getFirstName());
+        response.setLastName(worker.getLastName());
+        response.setEmail(worker.getEmail());
+        response.setAvailable(worker.getAvailable());
+        response.setPhoneNumber(worker.getPhoneNumber());
+        response.setDistrict(worker.getDistrict());
+        response.setAddress(worker.getAddress());
+
+        Optional<Worker> workerWithSkills =
+                workerSkillRepository.findByIdWithSkills(worker.getId());
+
+        if (workerWithSkills.isEmpty()) {
+            throw new RuntimeException("Please complete your profile.");
+        }
+
+        List<WorkerSkillResponse> skills = workerWithSkills
+                .map(Worker::getSkills)
+                .orElse(Collections.emptySet())
+                .stream()
+                .map(skill -> new WorkerSkillResponse(
+                        skill.getJobRole(),
+                        skill.getDailyRate()
+                ))
+                .toList();
+
+        response.setSkills(skills);
+
+        return response;
+    }
+
     private void validateWorkerProfile(Worker worker) {
         if (worker.getFirstName() == null || worker.getFirstName().isBlank() ||
                 worker.getLastName() == null || worker.getLastName().isBlank() ||
@@ -116,4 +172,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
             throw new RuntimeException("Please complete your profile.");
         }
     }
+
+
+
 }
