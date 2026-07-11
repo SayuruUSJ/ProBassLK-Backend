@@ -3,10 +3,12 @@ F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbrid
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\AuthController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\ClientBookingRequestController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\CustomController.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\RatingAndReviewController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\ServiceProviderAdvertisementController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\ServiceWantedAdvertisementController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\ClientBookingRequestAD.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\LoginRequest.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\RatingRequest.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\RegisterRequest.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\ServiceProviderAD.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\ServiceProviderADResponse.java
@@ -20,6 +22,7 @@ F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbrid
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\entity\Client.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\entity\ClientBookingRequestedAdvertisement.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\entity\JobRole.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\entity\Rating.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\entity\ServiceProviderAdvertisement.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\entity\ServiceProvidersRequestsForWantedAdvertisements.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\entity\ServiceWantedAdvertisement.java
@@ -32,6 +35,7 @@ F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbrid
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\Main.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\repository\ClientBookingRequestAdvertisementRepository.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\repository\JobRoleRepository.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\repository\RatingRepository.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\repository\ServiceProviderAdvertisementRepository.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\repository\ServiceProviderRequestForWantedADRepository.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\repository\ServiceWantedAdvertisementRepository.java
@@ -44,9 +48,11 @@ F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbrid
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\Impl\AuthServiceImpl.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\Impl\ClientBookingBookingRequestAdvertisementServiceImpl.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\Impl\EmailServiceImpl.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\Impl\RatingAndReviewServiceImpl.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\Impl\ServiceProviderAdvertisementServiceImpl.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\Impl\ServiceProviderRequestForWantedADServiceImpl.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\Impl\ServiceWantedAdvertisementServiceImpl.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\RatingAndReviewService.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\ServiceProviderAdvertisementService.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\ServiceProviderRequestForWantedADService.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\ServiceWantedAdvertisementService.java

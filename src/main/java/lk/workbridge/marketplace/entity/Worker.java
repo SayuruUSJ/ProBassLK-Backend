@@ -18,7 +18,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -55,5 +57,8 @@ public class Worker extends User{
     )
     private Set<WorkerSkill> skills
             = new HashSet<>();
+
+    @OneToMany(mappedBy = "worker")
+    private List<Rating> ratings = new ArrayList<>();
 
 }
