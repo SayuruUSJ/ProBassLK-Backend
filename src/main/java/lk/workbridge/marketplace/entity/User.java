@@ -58,4 +58,6 @@ public abstract  class User {
      private Date createdAt;
     @Column(name = "verification_status")
     private Boolean verificationStatus;
+    @Column(name="profile_image_url",nullable = true)
+    private String profileImageUrl;
 }

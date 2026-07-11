@@ -7,9 +7,11 @@ import jakarta.validation.Valid;
 import lk.workbridge.marketplace.dto.LoginRequest;
 import lk.workbridge.marketplace.dto.RegisterRequest;
 import lk.workbridge.marketplace.dto.UpdateProfile;
+import lk.workbridge.marketplace.dto.UserProfile;
 import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.service.AuthService;
+import lk.workbridge.marketplace.service.CloudinaryService;
 import lk.workbridge.marketplace.service.EmailService;
 import lk.workbridge.marketplace.service.VerificationCodeService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -41,6 +45,8 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
     private final VerificationCodeService verificationCodeService;
+
+    private final CloudinaryService cloudinaryService;
 
     @GetMapping("/test")
     public String test(){
@@ -60,6 +66,17 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("/upload-image")
+    public ResponseEntity<String> upload(
+            @RequestParam("image") MultipartFile image,
+        @RequestParam("user-id") String userID)
+            throws IOException {
+
+        String url = cloudinaryService.uploadFile(image);
+        System.out.println(userID);
+        String result = service.uploadProfileImage(url,userID);
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping("/send-verification")
     public ResponseEntity<?> sendVerification(@RequestParam String email) {
@@ -133,8 +150,21 @@ public class AuthController {
                     ));
         }
     }
+@GetMapping("/profile-info")
+    public ResponseEntity<?> getUserProfile(@RequestParam String userId) {
+        try {
+            UserProfile user = service.getProfileInfo(userId);
+            return ResponseEntity.ok(user);
 
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "success", false,
+                            "error", e.getMessage()
+                    ));
+        }
 
+    }
     @GetMapping("/session-info")
     public ResponseEntity<?> getSessionInfo(HttpServletRequest request) {
 

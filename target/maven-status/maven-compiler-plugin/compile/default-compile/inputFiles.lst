@@ -1,3 +1,4 @@
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\config\CloudinaryConfig.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\config\SecurityConfig.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\AuthController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\ClientBookingRequestController.java
@@ -12,6 +13,7 @@ F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbrid
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\ServiceProviderRequestForWantedAD.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\ServiceWantedAD.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\UpdateProfile.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\UserProfile.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\VerificationRequest.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\WorkerSkillRequest.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\WorkerSkillResponse.java
@@ -37,6 +39,7 @@ F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbrid
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\repository\WorkerSkillRepository.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\AuthService.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\ClientBookingRequestAdvertisementService.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\CloudinaryService.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\EmailService.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\Impl\AuthServiceImpl.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\service\Impl\ClientBookingBookingRequestAdvertisementServiceImpl.java

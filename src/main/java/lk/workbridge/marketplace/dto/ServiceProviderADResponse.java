@@ -35,6 +35,8 @@ public class ServiceProviderADResponse {
     private String address;
 
     private String status;
+
+    private String profileUrl;
    
     private List<WorkerSkillResponse> skills;
 

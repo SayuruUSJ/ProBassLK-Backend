@@ -81,7 +81,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         response.setPhoneNumber(worker.getPhoneNumber());
         response.setDistrict(worker.getDistrict());
         response.setAddress(worker.getAddress());
-
+        response.setProfileUrl(worker.getProfileImageUrl());
         Optional<Worker> byIdWithSkills = workerSkillRepository.findByIdWithSkills(worker.getId());
 
         if (byIdWithSkills.isEmpty()) {

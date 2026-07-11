@@ -2,8 +2,10 @@ package lk.workbridge.marketplace.service.Impl;
 
 import lk.workbridge.marketplace.dto.RegisterRequest;
 import lk.workbridge.marketplace.dto.UpdateProfile;
+import lk.workbridge.marketplace.dto.UserProfile;
 import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
+import lk.workbridge.marketplace.dto.WorkerSkillResponse;
 import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.JobRole;
 import lk.workbridge.marketplace.entity.User;
@@ -12,6 +14,7 @@ import lk.workbridge.marketplace.entity.WorkerSkill;
 import lk.workbridge.marketplace.enums.Role;
 import lk.workbridge.marketplace.repository.JobRoleRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
+import lk.workbridge.marketplace.repository.WorkerSkillRepository;
 import lk.workbridge.marketplace.service.AuthService;
 import lk.workbridge.marketplace.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -36,6 +40,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     private final JobRoleRepository jobRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final WorkerSkillRepository workerSkillRepository;
 
     @Override
     public String register(RegisterRequest request) {
@@ -233,6 +238,74 @@ if(isTrue==true){
         }
 
 
+    }
+    @Override
+    public String uploadProfileImage(String profileImageUrl, String userId) {
+         System.out.println("User ID received: [" + userId + "]");
+
+    Optional<User> userOptional = repo.findById(userId);
+
+    System.out.println("User found: " + userOptional.isPresent());
+
+    if (userOptional.isPresent()) {
+        User user = userOptional.get();
+        user.setProfileImageUrl(profileImageUrl);
+        repo.save(user);
+        return "Profile image uploaded successfully";
+    }
+
+    return "User not found with ID: " + userId;
+    }
+
+    @Override
+    public UserProfile getProfileInfo(String userId) {
+        UserProfile userProfile=new UserProfile();
+        User user=repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found."));
+        if(user.getRole()==Role.WORKER){
+            Worker worker=(Worker) user;
+            Optional<Worker> workerWithSkills = workerSkillRepository.findByIdWithSkills(userId);
+            List<WorkerSkillResponse> skills = workerWithSkills
+                    .map(Worker::getSkills)
+                    .orElse(Collections.emptySet())
+                    .stream()
+                    .map(skill -> new WorkerSkillResponse(
+                            skill.getJobRole(),
+                            skill.getDailyRate()
+                    ))
+                    .toList();
+            userProfile.setSkills(skills);
+          userProfile.setId(worker.getId());
+          userProfile.setUsername(worker.getUsername());
+          userProfile.setEmail(worker.getEmail());
+          userProfile.setPhoneNumber(worker.getPhoneNumber());
+          userProfile.setFirstName(worker.getFirstName());
+          userProfile.setLastName(worker.getLastName());
+          userProfile.setAddress(worker.getAddress());
+          userProfile.setDistrict(worker.getDistrict());
+          userProfile.setProfileImageUrl(worker.getProfileImageUrl());
+          userProfile.setVerificationStatus(worker.getVerificationStatus());
+          userProfile.setRole(worker.getRole());
+
+
+        }else   {
+            Client client=(Client) user;
+            userProfile.setId(client.getId());
+            userProfile.setUsername(client.getUsername());
+            userProfile.setEmail(client.getEmail());
+            userProfile.setPhoneNumber(client.getPhoneNumber());
+            userProfile.setFirstName(client.getFirstName());
+            userProfile.setLastName(client.getLastName());
+            userProfile.setAddress(client.getAddress());
+            userProfile.setDistrict(client.getDistrict());
+            userProfile.setProfileImageUrl(client.getProfileImageUrl());
+            userProfile.setVerificationStatus(client.getVerificationStatus());
+            userProfile.setRole(client.getRole());
+            userProfile.setOrganizationName(client.getOrganizationName());
+            userProfile.setSkills(Collections.emptyList());
+        }
+
+
+        return userProfile;
     }
 
 }
