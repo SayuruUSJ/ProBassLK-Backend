@@ -67,14 +67,19 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
     }
 
     @Override
-    public ServiceProviderADResponse getAdvertisementForSpecificWorker(String serviceId) {
+    public ServiceProviderADResponse getAdvertisementForSpecificWorker(String workerId) {
 
-       ServiceProviderAdvertisement serviceProviderAdvertisement =serviceProviderAdvertisementRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Advertisement not found."));
+       ServiceProviderAdvertisement serviceProviderAdvertisement =serviceProviderAdvertisementRepository.findAdvertisementByWorker(workerId).orElseThrow(() -> new RuntimeException("Advertisement not found."));
         ServiceProviderADResponse response = new ServiceProviderADResponse();
         User user=userRepository.findById(serviceProviderAdvertisement.getWorker().getId()).orElseThrow(() -> new RuntimeException("User not found."));
         Worker worker=(Worker) user;
         validateWorkerProfile(worker);
+        Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
+        long completedJobs= clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
 
+        response.setAverageStars(averageStars);
+        response.setCompletedJobs(completedJobs);
+        response.setJobTitle(worker.getTitle());
         response.setServiceId(serviceProviderAdvertisement.getServiceId());
         response.setStatus(serviceProviderAdvertisement.getStatus());
         response.setWorkerId(worker.getId());
@@ -115,7 +120,16 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         Pageable pageable = PageRequest.of(page, size);
 
         return serviceProviderAdvertisementRepository
-                .findAll(pageable)
+                .findAllVerifiedAdvertisements(pageable)
+                .map(this::mapToResponse);
+    }
+
+    @Override
+    public Page<ServiceProviderADResponse> getAllPendingAdvertisements(int page, int size) {
+       Pageable  pageable=PageRequest.of(page,size);
+
+        return serviceProviderAdvertisementRepository
+                .findAllPendingAdvertisements(pageable)
                 .map(this::mapToResponse);
     }
 
@@ -132,6 +146,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
          long completedJobs= clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
         ServiceProviderADResponse response = new ServiceProviderADResponse();
         response.setAverageStars(averageStars);
+        response.setCompletedJobs(completedJobs);
         response.setJobTitle(worker.getTitle());
         response.setServiceId(advertisement.getServiceId());
         response.setStatus(advertisement.getStatus());

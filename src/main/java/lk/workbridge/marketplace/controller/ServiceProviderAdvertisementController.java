@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServiceProviderAdvertisementController {
 
     private final ServiceProviderAdvertisementService serviceProviderAdvertisementService;
-    @PostMapping
+    @PostMapping("/create-advertisement")
     public ResponseEntity<String> createAdvertisement(
             @RequestBody ServiceProviderAD serviceProviderAD) {
 
@@ -29,10 +29,10 @@ public class ServiceProviderAdvertisementController {
         return ResponseEntity.ok(response);
     }
 
-    // ✅ 2. Update Advertisement Status
-    @PutMapping("/{serviceId}/status")
+
+    @PutMapping("/update-status")
     public ResponseEntity<Boolean> updateStatus(
-            @PathVariable String serviceId,
+            @RequestParam String serviceId,
             @RequestParam String status) {
 
         Boolean response = serviceProviderAdvertisementService
@@ -42,12 +42,12 @@ public class ServiceProviderAdvertisementController {
     }
 
 
-    @GetMapping("/{serviceId}")
+    @GetMapping("/{workerId}")
     public ResponseEntity<ServiceProviderADResponse> getAdvertisement(
-            @PathVariable String serviceId) {
+            @PathVariable String workerId) {
 
         ServiceProviderADResponse response =
-                serviceProviderAdvertisementService.getAdvertisementForSpecificWorker(serviceId);
+                serviceProviderAdvertisementService.getAdvertisementForSpecificWorker(workerId);
 
         if (response == null) {
             return ResponseEntity.notFound().build();
@@ -56,6 +56,7 @@ public class ServiceProviderAdvertisementController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("/get-all-ads")
     public ResponseEntity<Page<ServiceProviderADResponse>> getAllAdvertisements(
             @RequestParam(defaultValue = "0") int page,
@@ -63,6 +64,16 @@ public class ServiceProviderAdvertisementController {
 
         return ResponseEntity.ok(
                 serviceProviderAdvertisementService.getAllAdvertisements(page, size)
+        );
+    }
+
+    @GetMapping("/get-all-pending-ads")
+    public ResponseEntity<Page<ServiceProviderADResponse>> getAllPendingAdvertisements(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                serviceProviderAdvertisementService.getAllPendingAdvertisements(page, size)
         );
     }
 

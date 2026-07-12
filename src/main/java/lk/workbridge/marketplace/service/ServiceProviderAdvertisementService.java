@@ -11,6 +11,7 @@ import java.util.List;
 public interface ServiceProviderAdvertisementService {
     String createNewAdvertisement(ServiceProviderAD serviceProviderAD);
     Boolean updateAdvertisementStatus(String status,String serviceId);
-    ServiceProviderADResponse getAdvertisementForSpecificWorker(String serviceId);
+    ServiceProviderADResponse getAdvertisementForSpecificWorker(String workerId);
     Page<ServiceProviderADResponse> getAllAdvertisements(int page, int size);
+    Page<ServiceProviderADResponse> getAllPendingAdvertisements(int page, int size);
 }
