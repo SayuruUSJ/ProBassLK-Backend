@@ -19,6 +19,9 @@ public class ServiceWantedAD {
     @NotBlank(message = "Client contact number is required")
     private String clientContactNumber;
 
+    @NotBlank(message = "Title is required")
+    private String title;
+
     private String description;
 
     @NotBlank(message = "Service type is required")

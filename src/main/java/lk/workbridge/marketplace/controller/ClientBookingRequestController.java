@@ -35,6 +35,13 @@ public class ClientBookingRequestController {
         return ResponseEntity.ok(result);
     }
 
+    @PutMapping("/update-completed-jobs")
+    public ResponseEntity<?> updateCompletedJobs(@RequestParam String advertisementId,
+                                                  @RequestParam String status) {
+        boolean isCompleted = clientRequestAdvertisementService.updateCompleteOrIncompleteJobs(advertisementId, status);
+        return ResponseEntity.ok(isCompleted);
+    }
+
     @GetMapping("/get-requests")
     public ResponseEntity<?> getAllRequestsByWorkerId(@RequestParam String workerId) {
         return ResponseEntity.ok(clientRequestAdvertisementService.getAllRequestsByWorkerId(workerId));

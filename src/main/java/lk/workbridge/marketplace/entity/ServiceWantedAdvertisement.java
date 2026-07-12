@@ -34,6 +34,9 @@ public class ServiceWantedAdvertisement {
     @Column(name = "client_contact_number", nullable = false, length = 100)
     private String clientContactNumber;
 
+    @Column(name="title",nullable = false)
+    private String title;
+
     @Column(name = "description", nullable = true, length = 255)
     private String description;
 
@@ -48,5 +51,6 @@ public class ServiceWantedAdvertisement {
 
     @Column(name = "status", nullable = false, length = 50)
     private String status;
+
 
 }

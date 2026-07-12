@@ -85,7 +85,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/invalid-session").permitAll()
                         .requestMatchers("/api/auth/login-failed").permitAll()
                         .requestMatchers("/api/auth/logout-success").permitAll()
-                        
+                        .requestMatchers("/api/service-wanted-advertisements/get-all-wanted-ads").permitAll()
+                        .requestMatchers("/api/service-provider-advertisements/get-all-ads").permitAll()
                         .requestMatchers("/error").permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

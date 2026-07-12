@@ -20,6 +20,8 @@ public class UpdateProfile {
 
     private String organizationName;
 
+    private String title;
+
     private Boolean available;
 
     private Set<WorkerSkillRequest> skills;

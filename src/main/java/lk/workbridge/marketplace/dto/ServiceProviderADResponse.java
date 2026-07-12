@@ -30,6 +30,8 @@ public class ServiceProviderADResponse {
 
     private String district;
 
+    private String jobTitle;
+
     private Boolean available;
 
     private String address;
@@ -37,7 +39,11 @@ public class ServiceProviderADResponse {
     private String status;
 
     private String profileUrl;
-   
+
+    private Double averageStars;
+
+    private long completedJobs;
+
     private List<WorkerSkillResponse> skills;
 
 }

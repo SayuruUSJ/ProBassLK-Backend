@@ -10,4 +10,5 @@ public interface ClientBookingRequestAdvertisementService {
     String requestAdvertisement(ClientBookingRequestAD requestAD);
     Boolean acceptOrReject(String advertisementId, String status);
     List<ClientBookingRequestedAdvertisement> getAllRequestsByWorkerId(String workerId);
+    Boolean updateCompleteOrIncompleteJobs(String advertisementId, String status);
 }

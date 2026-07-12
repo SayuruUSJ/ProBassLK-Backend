@@ -18,4 +18,13 @@ public interface ServiceProviderRequestForWantedADRepository extends JpaReposito
     """, nativeQuery = true)
 Long countRequest(@Param("advertisementId") String advertisementId,
                   @Param("workerId") String workerId);
+
+    @Query(value = """
+    SELECT COUNT(*)
+    FROM service_providers_requests_for_wanted_advertisements
+    WHERE advertisement_id = :advertisementId
+     
+    """, nativeQuery = true)
+    Long countApplicantsRequests(@Param("advertisementId") String advertisementId
+                      );
 }

@@ -41,7 +41,7 @@ public class ServiceProviderAdvertisementController {
         return ResponseEntity.ok(response);
     }
 
-    // ✅ 3. Get Advertisement by ID (with worker details if loaded)
+
     @GetMapping("/{serviceId}")
     public ResponseEntity<ServiceProviderADResponse> getAdvertisement(
             @PathVariable String serviceId) {

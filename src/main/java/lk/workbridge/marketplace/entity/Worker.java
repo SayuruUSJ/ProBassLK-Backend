@@ -37,6 +37,8 @@ public class Worker extends User{
 @Column(name="available",nullable = true)
 
     private Boolean available;
+@Column(name="title",nullable = false)
+private String title;
 
     @OneToMany(
 

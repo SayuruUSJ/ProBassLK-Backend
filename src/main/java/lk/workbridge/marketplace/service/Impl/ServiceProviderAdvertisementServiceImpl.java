@@ -8,6 +8,8 @@ import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
 
 import lk.workbridge.marketplace.entity.WorkerSkill;
+import lk.workbridge.marketplace.repository.ClientBookingRequestAdvertisementRepository;
+import lk.workbridge.marketplace.repository.RatingRepository;
 import lk.workbridge.marketplace.repository.ServiceProviderAdvertisementRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
 
@@ -30,6 +32,8 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
    private final ServiceProviderAdvertisementRepository serviceProviderAdvertisementRepository;
  private final UserRepository userRepository;
  private final WorkerSkillRepository workerSkillRepository;
+ private final RatingRepository ratingRepository;
+ private final ClientBookingRequestAdvertisementRepository clientBookingRequestAdvertisementRepository;
    @Override
     public String createNewAdvertisement(ServiceProviderAD serviceProviderAD) {
   User user = userRepository.findById(serviceProviderAD.getWorkerId())
@@ -124,8 +128,11 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
 
         validateWorkerProfile(worker);
 
+        Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
+         long completedJobs= clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
         ServiceProviderADResponse response = new ServiceProviderADResponse();
-
+        response.setAverageStars(averageStars);
+        response.setJobTitle(worker.getTitle());
         response.setServiceId(advertisement.getServiceId());
         response.setStatus(advertisement.getStatus());
         response.setWorkerId(worker.getId());

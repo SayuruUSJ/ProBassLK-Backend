@@ -2,14 +2,18 @@ package lk.workbridge.marketplace.controller;
 
 import jakarta.validation.Valid;
 import lk.workbridge.marketplace.dto.ClientBookingRequestAD;
+import lk.workbridge.marketplace.dto.ServiceProviderADResponse;
 import lk.workbridge.marketplace.dto.ServiceProviderRequestForWantedAD;
 import lk.workbridge.marketplace.dto.ServiceWantedAD;
+import lk.workbridge.marketplace.dto.ServiceWantedADResponse;
 import lk.workbridge.marketplace.service.ServiceProviderRequestForWantedADService;
 import lk.workbridge.marketplace.service.ServiceWantedAdvertisementService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -76,6 +80,16 @@ public class ServiceWantedAdvertisementController {
 
         }
 
+    }
+
+    @GetMapping("/get-all-wanted-ads")
+    public ResponseEntity<Page<ServiceWantedADResponse>> getAllAdvertisements(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                serviceWantedAdvertisementService.getAllAdvertisements(page, size)
+        );
     }
 
 }

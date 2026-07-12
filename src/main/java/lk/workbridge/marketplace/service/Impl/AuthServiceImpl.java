@@ -185,6 +185,7 @@ if(isTrue==true){
             );
                 worker.setAddress(updateProfile.getAddress());
                 worker.setDistrict(updateProfile.getDistrict());
+                worker.setTitle(updateProfile.getTitle());
                 for (WorkerSkillRequest skillRequest
                     : updateProfile.getSkills()) {
 

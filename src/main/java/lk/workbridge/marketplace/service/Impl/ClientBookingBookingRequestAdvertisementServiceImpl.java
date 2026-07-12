@@ -87,5 +87,24 @@ public class ClientBookingBookingRequestAdvertisementServiceImpl implements Clie
         return requestedAdvertisements;
     }
 
+    @Override
+    public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String status) {
+        if (!status.equalsIgnoreCase("COMPLETED") &&
+                !status.equalsIgnoreCase("INCOMPLETE")) {
+
+            throw new RuntimeException("Invalid status.");
+        }
+
+        ClientBookingRequestedAdvertisement advertisement =
+                clientRequestAdvertisementRepository.findById(advertisementId)
+                        .orElseThrow(() ->
+                                new RuntimeException("Advertisement not found."));
+
+        advertisement.setStatus(status.toUpperCase());
+
+        clientRequestAdvertisementRepository.save(advertisement);
+        return true;
+    }
+
 
 }
