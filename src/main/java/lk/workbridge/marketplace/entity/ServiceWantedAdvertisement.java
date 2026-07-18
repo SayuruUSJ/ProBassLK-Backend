@@ -70,7 +70,7 @@ public class ServiceWantedAdvertisement {
     @Column(name="expected_duration",nullable = false)
     private String expectedDuration;
 
-    @Column(name="application_deadline",nullable = false)
+    @Column(name = "application_deadline")
     private LocalDate applicationDeadline;
 
     @Column(name="is_work_date_flexible")

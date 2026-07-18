@@ -222,7 +222,14 @@ public class AdminServiceImpl implements AdminService {
                 worker.getTitle(),
                 bookingRequestResponses,
                 skills,
-                ratingsResponses
+                ratingsResponses,
+                worker.getOverallExperience(),
+                worker.getAbout(),
+                worker.isEmergencyAvailable(),
+                worker.getNIC(),
+                worker.getWorkingDaysMask(),
+                worker.getStartTime(),
+                worker.getEndTime()
         );
 
         return info;

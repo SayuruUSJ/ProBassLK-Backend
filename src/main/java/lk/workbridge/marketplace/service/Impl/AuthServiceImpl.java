@@ -2,11 +2,11 @@ package lk.workbridge.marketplace.service.Impl;
 
 import lk.workbridge.marketplace.dto.ClientProfileUpdate;
 import lk.workbridge.marketplace.dto.RegisterRequest;
-import lk.workbridge.marketplace.dto.BaseProfileUpdate;
 import lk.workbridge.marketplace.dto.ServiceProviderProfileUpdate;
 import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
-import lk.workbridge.marketplace.dto.responses.UserProfile;
+import lk.workbridge.marketplace.dto.responses.ClientProfile;
+import lk.workbridge.marketplace.dto.responses.ServiceProviderProfile;
 import lk.workbridge.marketplace.dto.responses.WorkerSkillResponse;
 import lk.workbridge.marketplace.entity.Admin;
 import lk.workbridge.marketplace.entity.Client;
@@ -31,11 +31,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.time.DayOfWeek;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -310,71 +310,81 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         return "User not found with ID: " + userId;
     }
 
+
     @Override
-    public UserProfile getProfileInfo(String userId) {
+    public ClientProfile getClientProfileInfo(String userId) {
         User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found."));
 
-        if (user.getRole() == Role.WORKER) {
-            Worker worker = (Worker) user;
-            Optional<Worker> workerWithSkills = workerSkillRepository.findByIdWithSkills(userId);
-            List<WorkerSkillResponse> skills = workerWithSkills
-                    .map(Worker::getSkills)
-                    .orElse(Collections.emptySet())
-                    .stream()
-                    .map(skill -> new WorkerSkillResponse(
-                            skill.getJobRole(),
-                            skill.getRate(),
-                            skill.getRateType(),
-                            skill.getExperience(),
-                            skill.getDescription(),
-                            skill.isNegotiable()
-                    ))
-                    .toList();
-            return new UserProfile(
-                    worker.getId(),
-                    worker.getUsername(),
-                    worker.getEmail(),
-                    worker.getPrimaryPhoneNumber(),
-                    worker.getSecondaryPhoneNumber(),
-                    worker.getLandlineNumber(),
-                    worker.getFirstName(),
-                    worker.getLastName(),
-                    worker.getDistrict(),
-                    worker.getAddress(),
-                    worker.getCity(),
-                    worker.getRole(),
-                    worker.getCreatedAt(),
-                    worker.getVerificationStatus(),
-                    worker.getProfileImageUrl(),
-                    null,
-                    skills
-            );
+        Client client = (Client) user;
+        return new ClientProfile(
+                client.getId(),
+                client.getUsername(),
+                client.getEmail(),
+                client.getPrimaryPhoneNumber(),
+                client.getSecondaryPhoneNumber(),
+                client.getLandlineNumber(),
+                client.getFirstName(),
+                client.getLastName(),
+                client.getDistrict(),
+                client.getAddress(),
+                client.getCity(),
+                client.getRole(),
+                client.getCreatedAt(),
+                client.getVerificationStatus(),
+                client.getProfileImageUrl(),
+                client.getOrganizationName()
 
-        } else {
+        );
 
-            Client client = (Client) user;
-            return new UserProfile(
-                    client.getId(),
-                    client.getUsername(),
-                    client.getEmail(),
-                    client.getPrimaryPhoneNumber(),
-                    client.getSecondaryPhoneNumber(),
-                    client.getLandlineNumber(),
-                    client.getFirstName(),
-                    client.getLastName(),
-                    client.getDistrict(),
-                    client.getAddress(),
-                    client.getCity(),
-                    client.getRole(),
-                    client.getCreatedAt(),
-                    client.getVerificationStatus(),
-                    client.getProfileImageUrl(),
-                    client.getOrganizationName(),
-                    Collections.emptyList()
-            );
+    }
 
-        }
+    @Override
+    public ServiceProviderProfile getServiceProviderProfileInfo(String userId) {
+        User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found."));
+        Worker worker = (Worker) user;
+        Optional<Worker> workerWithSkills = workerSkillRepository.findByIdWithSkills(userId);
+        List<WorkerSkillResponse> skills = workerWithSkills
+                .map(Worker::getSkills)
+                .orElse(Collections.emptySet())
+                .stream()
+                .map(skill -> new WorkerSkillResponse(
+                        skill.getJobRole(),
+                        skill.getRate(),
+                        skill.getRateType(),
+                        skill.getExperience(),
+                        skill.getDescription(),
+                        skill.isNegotiable()
+                ))
+                .toList();
+        Set<DayOfWeek> workingDays = worker.getWorkingDays();
+        return new ServiceProviderProfile(
+                worker.getId(),
+                worker.getUsername(),
+                worker.getEmail(),
+                worker.getPrimaryPhoneNumber(),
+                worker.getSecondaryPhoneNumber(),
+                worker.getLandlineNumber(),
+                worker.getFirstName(),
+                worker.getLastName(),
+                worker.getDistrict(),
+                worker.getAddress(),
+                worker.getCity(),
+                worker.getRole(),
+                worker.getCreatedAt(),
+                worker.getVerificationStatus(),
+                worker.getProfileImageUrl(),
+                  skills,
+                worker.getAvailable() != null && worker.getAvailable(),
+                worker.getTitle(),
+                worker.getOverallExperience() > 0 ? worker.getOverallExperience() : null,
+                worker.getAbout(),
+                worker.isEmergencyAvailable(),
+                worker.getNIC(),
+                workingDays,
+                worker.getStartTime(),
+                worker.getEndTime()
 
+        );
     }
 
 }

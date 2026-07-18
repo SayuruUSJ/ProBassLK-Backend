@@ -7,10 +7,10 @@ import jakarta.validation.Valid;
 import lk.workbridge.marketplace.dto.ClientProfileUpdate;
 import lk.workbridge.marketplace.dto.LoginRequest;
 import lk.workbridge.marketplace.dto.RegisterRequest;
-import lk.workbridge.marketplace.dto.BaseProfileUpdate;
 import lk.workbridge.marketplace.dto.ServiceProviderProfileUpdate;
 import lk.workbridge.marketplace.dto.VerificationRequest;
-import lk.workbridge.marketplace.dto.responses.UserProfile;
+import lk.workbridge.marketplace.dto.responses.ClientProfile;
+import lk.workbridge.marketplace.dto.responses.ServiceProviderProfile;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.service.AuthService;
 import lk.workbridge.marketplace.service.CloudinaryService;
@@ -51,7 +51,7 @@ public class AuthController {
     private final CloudinaryService cloudinaryService;
 
     @GetMapping("/test")
-    public String test(){
+    public String test() {
         return "Hello";
     }
 
@@ -62,18 +62,17 @@ public class AuthController {
     }
 
 
-
     @PutMapping("/update-client-profile")
-    public ResponseEntity<?> updateClientProfile(@RequestBody ClientProfileUpdate clientProfileUpdate){
+    public ResponseEntity<?> updateClientProfile(@RequestBody ClientProfileUpdate clientProfileUpdate) {
 
-        String result=service.clientProfileUpdate(clientProfileUpdate);
+        String result = service.clientProfileUpdate(clientProfileUpdate);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping("/update-service-provider-profile")
-    public ResponseEntity<?> updateServiceProviderProfile(@RequestBody ServiceProviderProfileUpdate serviceProviderProfileUpdate){
+    public ResponseEntity<?> updateServiceProviderProfile(@RequestBody ServiceProviderProfileUpdate serviceProviderProfileUpdate) {
 
-        String result=service.serviceProviderProfileUpdate(serviceProviderProfileUpdate);
+        String result = service.serviceProviderProfileUpdate(serviceProviderProfileUpdate);
         return ResponseEntity.ok(result);
     }
 
@@ -81,12 +80,12 @@ public class AuthController {
     @PostMapping("/upload-image")
     public ResponseEntity<String> upload(
             @RequestParam("image") MultipartFile image,
-        @RequestParam("user-id") String userID)
+            @RequestParam("user-id") String userID)
             throws IOException {
 
         String url = cloudinaryService.uploadFile(image);
         System.out.println(userID);
-        String result = service.uploadProfileImage(url,userID);
+        String result = service.uploadProfileImage(url, userID);
         return ResponseEntity.ok(result);
     }
 
@@ -134,14 +133,14 @@ public class AuthController {
 
             User user = service.getCurrentUser();
 
-            if  (!Boolean.TRUE.equals(user.getVerificationStatus()))  {
-            SecurityContextHolder.clearContext();
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of(
-                            "success", false,
-                            "error", "Account not verified"
-                    ));
-        }
+            if (!Boolean.TRUE.equals(user.getVerificationStatus())) {
+                SecurityContextHolder.clearContext();
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of(
+                                "success", false,
+                                "error", "Account not verified"
+                        ));
+            }
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "Login successful",
@@ -162,11 +161,31 @@ public class AuthController {
                     ));
         }
     }
-@GetMapping("/profile-info")
-    public ResponseEntity<?> getUserProfile(@RequestParam String userId) {
+
+
+
+
+    @GetMapping("/client-profile-info")
+    public ResponseEntity<?> getClientProfile(@RequestParam String userId) {
         try {
-            UserProfile user = service.getProfileInfo(userId);
-            return ResponseEntity.ok(user);
+            ClientProfile clientProfile = service.getClientProfileInfo(userId);
+            return ResponseEntity.ok(clientProfile);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "success", false,
+                            "error", e.getMessage()
+                    ));
+        }
+
+    }
+
+    @GetMapping("/service-provider-profile-info")
+    public ResponseEntity<?> getServiceProviderProfile(@RequestParam String userId) {
+        try {
+            ServiceProviderProfile serviceProviderProfile = service.getServiceProviderProfileInfo(userId);
+            return ResponseEntity.ok(serviceProviderProfile);
 
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -222,12 +241,12 @@ public class AuthController {
         SecurityContextHolder.clearContext();
 
 
-
         return ResponseEntity.ok(Map.of(
                 "success", true,
                 "message", "Logged out successfully"
         ));
     }
+
     @GetMapping("/invalid-session")
     public ResponseEntity<?> invalidSession() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -236,6 +255,7 @@ public class AuthController {
                         "message", "Please login again"
                 ));
     }
+
     @GetMapping("/logout-success")
     public ResponseEntity<?> logoutSuccess() {
         return ResponseEntity.ok(Map.of(

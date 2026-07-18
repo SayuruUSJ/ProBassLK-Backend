@@ -2,10 +2,13 @@ package lk.workbridge.marketplace.dto.responses;
 
 import lk.workbridge.marketplace.enums.Role;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-public record UserProfile(
+public record ServiceProviderProfile(
         String id,
 
         String username,
@@ -35,7 +38,17 @@ public record UserProfile(
         Boolean verificationStatus,
 
         String profileImageUrl,
-        String organizationName,
-        List<WorkerSkillResponse> skills
+
+        List<WorkerSkillResponse> skills,
+
+         boolean available,
+        String title,
+        Integer overallExperience,
+        String about,
+        Boolean emergencyAvailable,
+        String nic,
+        Set<DayOfWeek> workingDaysMask,
+        LocalTime startTime,
+        LocalTime endTime
 ) {
 }
