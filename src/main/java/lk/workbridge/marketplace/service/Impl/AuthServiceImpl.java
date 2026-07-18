@@ -1,7 +1,9 @@
 package lk.workbridge.marketplace.service.Impl;
 
+import lk.workbridge.marketplace.dto.ClientProfileUpdate;
 import lk.workbridge.marketplace.dto.RegisterRequest;
-import lk.workbridge.marketplace.dto.UpdateProfile;
+import lk.workbridge.marketplace.dto.BaseProfileUpdate;
+import lk.workbridge.marketplace.dto.ServiceProviderProfileUpdate;
 import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
 import lk.workbridge.marketplace.dto.responses.UserProfile;
@@ -29,6 +31,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -178,85 +182,114 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
 
     @Transactional
     @Override
-    public String updateProfile(UpdateProfile updateProfile) {
+    public String clientProfileUpdate(ClientProfileUpdate clientProfileUpdate) {
+        Optional<User> userOptional = Optional.of(repo.findById(clientProfileUpdate.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found")));
 
-        Optional<User> userOptional = repo.findById(updateProfile.getUserId());
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
+        User user = userOptional.get();
+        Client client = (Client) user;
+        client.setPrimaryPhoneNumber(
+                clientProfileUpdate.getPhoneNumber()
+        );
+        client.setSecondaryPhoneNumber(
+                clientProfileUpdate.getSecondaryPhoneNumber()
+        );
+        client.setLandlineNumber(
+                clientProfileUpdate.getLandlineNumber()
+        );
+        client.setOrganizationName(
+                clientProfileUpdate.getOrganizationName()
+        );
+        client.setAddress(clientProfileUpdate.getAddress());
+        client.setDistrict(clientProfileUpdate.getDistrict());
+        client.setCity(clientProfileUpdate.getCity());
+        repo.save(client);
 
-            if (user.getRole() == Role.CLIENT) {
-                Client client = (Client) user;
-                client.setPhoneNumber(
-                        updateProfile.getPhoneNumber()
-                );
-                client.setOrganizationName(
-                        updateProfile.getOrganizationName()
-                );
-                client.setAddress(updateProfile.getAddress());
-                client.setDistrict(updateProfile.getDistrict());
-                repo.save(client);
-            } else if (user.getRole() == Role.WORKER) {
+        return "Client Profile Updated Successfully";
+    }
+    @Transactional
+    @Override
+    public String serviceProviderProfileUpdate(ServiceProviderProfileUpdate serviceProviderProfileUpdate) {
+        Optional<User> userOptional = Optional.of(repo.findById(serviceProviderProfileUpdate.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found")));
 
-                Worker worker = (Worker) user;
-                worker.setPhoneNumber(
-                        updateProfile.getPhoneNumber()
-                );
-                worker.setAddress(updateProfile.getAddress());
-                worker.setDistrict(updateProfile.getDistrict());
-                worker.setTitle(updateProfile.getTitle());
-                for (WorkerSkillRequest skillRequest
-                        : updateProfile.getSkills()) {
+        User user = userOptional.get();
+        Worker worker = (Worker) user;
+        worker.setPrimaryPhoneNumber(
+                serviceProviderProfileUpdate.getPhoneNumber()
+        );
+        worker.setSecondaryPhoneNumber(
+                serviceProviderProfileUpdate.getSecondaryPhoneNumber()
+        );
+        worker.setLandlineNumber(
+                serviceProviderProfileUpdate.getLandlineNumber()
+        );
+        worker.setAddress(serviceProviderProfileUpdate.getAddress());
+        worker.setDistrict(serviceProviderProfileUpdate.getDistrict());
+        worker.setCity(serviceProviderProfileUpdate.getCity());
+        worker.setTitle(serviceProviderProfileUpdate.getTitle());
+        worker.setWorkingDaysFromSet(serviceProviderProfileUpdate.getWorkingDays());
 
-                    JobRole jobRole =
+        worker.setStartTime(
+                serviceProviderProfileUpdate.getStartTime()
 
-                            jobRoleRepository
+        );
+        worker.setEndTime(serviceProviderProfileUpdate.getEndTime());
+        worker.setNIC(serviceProviderProfileUpdate.getNIC());
+        worker.setEmergencyAvailable(serviceProviderProfileUpdate.isEmergencyAvailable());
+        worker.setOverallExperience(serviceProviderProfileUpdate.getOverallExperience());
+        worker.setAbout(serviceProviderProfileUpdate.getAbout());
 
-                                    .findByRoleName(
+        for (WorkerSkillRequest skillRequest
+                : serviceProviderProfileUpdate.getSkills()) {
 
-                                            skillRequest.getRole()
+            JobRole jobRole =
+
+                    jobRoleRepository
+
+                            .findByRoleName(
+
+                                    skillRequest.getRole()
+
+                            )
+
+                            .orElseThrow(
+
+                                    () -> new RuntimeException(
+
+                                            "Role not found"
 
                                     )
 
-                                    .orElseThrow(
+                            );
 
-                                            () -> new RuntimeException(
+            WorkerSkill skill =
+                    new WorkerSkill();
 
-                                                    "Role not found"
+            skill.setWorker(
+                    worker
+            );
 
-                                            )
+            skill.setJobRole(
+                    jobRole
+            );
 
-                                    );
+            skill.setRate(
 
-                    WorkerSkill skill =
-                            new WorkerSkill();
+                    skillRequest.getDailyRate()
 
-                    skill.setWorker(
-                            worker
-                    );
+            );
+            skill.setRateType(skillRequest.getRateType());
+            skill.setExperience(skillRequest.getExperience());
+            skill.setDescription(skill.getDescription());
+            skill.setNegotiable(skill.isNegotiable());
+            worker.getSkills()
 
-                    skill.setJobRole(
-                            jobRole
-                    );
+                    .add(skill);
 
-                    skill.setDailyRate(
-
-                            skillRequest.getDailyRate()
-
-                    );
-
-                    worker.getSkills()
-
-                            .add(skill);
-
-                }
-                repo.save(worker);
-            }
-            return "Profile updated successfully";
-        } else {
-            return "User not found with ID: " + updateProfile.getUserId();
         }
-
-
+        repo.save(worker);
+        return "service provider profile updated succfully";
     }
 
     @Override
@@ -290,18 +323,25 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                     .stream()
                     .map(skill -> new WorkerSkillResponse(
                             skill.getJobRole(),
-                            skill.getDailyRate()
+                            skill.getRate(),
+                            skill.getRateType(),
+                            skill.getExperience(),
+                            skill.getDescription(),
+                            skill.isNegotiable()
                     ))
                     .toList();
             return new UserProfile(
                     worker.getId(),
                     worker.getUsername(),
                     worker.getEmail(),
-                    worker.getPhoneNumber(),
+                    worker.getPrimaryPhoneNumber(),
+                    worker.getSecondaryPhoneNumber(),
+                    worker.getLandlineNumber(),
                     worker.getFirstName(),
                     worker.getLastName(),
                     worker.getDistrict(),
                     worker.getAddress(),
+                    worker.getCity(),
                     worker.getRole(),
                     worker.getCreatedAt(),
                     worker.getVerificationStatus(),
@@ -317,11 +357,14 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                     client.getId(),
                     client.getUsername(),
                     client.getEmail(),
-                    client.getPhoneNumber(),
+                    client.getPrimaryPhoneNumber(),
+                    client.getSecondaryPhoneNumber(),
+                    client.getLandlineNumber(),
                     client.getFirstName(),
                     client.getLastName(),
                     client.getDistrict(),
                     client.getAddress(),
+                    client.getCity(),
                     client.getRole(),
                     client.getCreatedAt(),
                     client.getVerificationStatus(),

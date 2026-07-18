@@ -170,7 +170,11 @@ public class AdminServiceImpl implements AdminService {
                 .stream()
                 .map(skill -> new WorkerSkillResponse(
                         skill.getJobRole(),
-                        skill.getDailyRate()
+                        skill.getRate(),
+                        skill.getRateType(),
+                        skill.getExperience(),
+                        skill.getDescription(),
+                        skill.isNegotiable()
                 ))
                 .toList();
 
@@ -230,7 +234,7 @@ public class AdminServiceImpl implements AdminService {
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
-                user.getPhoneNumber(),
+                user.getPrimaryPhoneNumber(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getDistrict(),
@@ -289,14 +293,18 @@ public class AdminServiceImpl implements AdminService {
                 .stream()
                 .map(skill -> new WorkerSkillResponse(
                         skill.getJobRole(),
-                        skill.getDailyRate()
+                        skill.getRate(),
+                        skill.getRateType(),
+                        skill.getExperience(),
+                        skill.getDescription(),
+                        skill.isNegotiable()
                 ))
                 .toList();
        return new ServiceProviderADResponse(
                 advertisement.getServiceId(),
                 worker.getId(),
                 worker.getEmail(),
-                worker.getPhoneNumber(),
+                worker.getPrimaryPhoneNumber(),
                 worker.getFirstName(),
                 worker.getLastName(),
                 worker.getDistrict(),

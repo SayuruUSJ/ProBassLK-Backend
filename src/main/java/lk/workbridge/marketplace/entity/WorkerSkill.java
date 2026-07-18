@@ -1,11 +1,15 @@
 package lk.workbridge.marketplace.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lk.workbridge.marketplace.enums.RateType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,6 +18,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -21,12 +31,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(exclude = "worker")
 @EqualsAndHashCode(exclude = "worker")
-@Table(name="worker-skill")
+@Table(name = "worker-skill")
 public class WorkerSkill {
     @Id
 
     @GeneratedValue(
-            strategy=
+            strategy =
                     GenerationType.IDENTITY
     )
 
@@ -40,5 +50,18 @@ public class WorkerSkill {
 
     private JobRole jobRole;
 
-    private Double dailyRate;
+
+    private Double rate;
+    @Enumerated(
+            EnumType.STRING
+    )
+    @Column(name = "rate_type", nullable = true)
+    private RateType rateType;
+    @Column(name = "experience", nullable = true)
+    private int experience;
+    @Column(name="description",nullable = true)
+    private String description;
+    @Column(name="negotiable",nullable = true)
+    private boolean negotiable;
+
 }

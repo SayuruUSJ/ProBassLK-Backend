@@ -14,11 +14,17 @@ public record UserProfile(
 
         String phoneNumber,
 
+        String secondaryPhoneNumber,
+
+        String landLineNumber,
+
         String firstName,
 
         String lastName,
 
         String district,
+
+        String city,
 
         String address,
 

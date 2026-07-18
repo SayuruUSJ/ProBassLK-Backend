@@ -4,9 +4,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lk.workbridge.marketplace.dto.ClientProfileUpdate;
 import lk.workbridge.marketplace.dto.LoginRequest;
 import lk.workbridge.marketplace.dto.RegisterRequest;
-import lk.workbridge.marketplace.dto.UpdateProfile;
+import lk.workbridge.marketplace.dto.BaseProfileUpdate;
+import lk.workbridge.marketplace.dto.ServiceProviderProfileUpdate;
 import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.responses.UserProfile;
 import lk.workbridge.marketplace.entity.User;
@@ -59,12 +61,22 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/update-profile")
-    public ResponseEntity<?> updateProfile(@RequestBody UpdateProfile updateProfile){
 
-        String result=service.updateProfile(updateProfile);
+
+    @PutMapping("/update-client-profile")
+    public ResponseEntity<?> updateClientProfile(@RequestBody ClientProfileUpdate clientProfileUpdate){
+
+        String result=service.clientProfileUpdate(clientProfileUpdate);
         return ResponseEntity.ok(result);
     }
+
+    @PutMapping("/update-service-provider-profile")
+    public ResponseEntity<?> updateServiceProviderProfile(@RequestBody ServiceProviderProfileUpdate serviceProviderProfileUpdate){
+
+        String result=service.serviceProviderProfileUpdate(serviceProviderProfileUpdate);
+        return ResponseEntity.ok(result);
+    }
+
 
     @PostMapping("/upload-image")
     public ResponseEntity<String> upload(

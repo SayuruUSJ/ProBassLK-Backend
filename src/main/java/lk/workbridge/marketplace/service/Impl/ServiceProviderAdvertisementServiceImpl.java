@@ -78,14 +78,19 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 .stream()
                 .map(skill -> new WorkerSkillResponse(
                         skill.getJobRole(),
-                        skill.getDailyRate()
+                        skill.getRate(),
+                        skill.getRateType(),
+                        skill.getExperience(),
+                        skill.getDescription(),
+                        skill.isNegotiable()
+
                 ))
                 .toList();
         return new ServiceProviderADResponse(
                 serviceProviderAdvertisement.getServiceId(),
                 serviceProviderAdvertisement.getWorker().getId(),
                 serviceProviderAdvertisement.getWorker().getEmail(),
-                serviceProviderAdvertisement.getWorker().getPhoneNumber(),
+                serviceProviderAdvertisement.getWorker().getPrimaryPhoneNumber(),
                 serviceProviderAdvertisement.getWorker().getFirstName(),
                 serviceProviderAdvertisement.getWorker().getLastName(),
                 serviceProviderAdvertisement.getWorker().getDistrict(),
@@ -136,14 +141,18 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 .stream()
                 .map(skill -> new WorkerSkillResponse(
                         skill.getJobRole(),
-                        skill.getDailyRate()
+                        skill.getRate(),
+                        skill.getRateType(),
+                        skill.getExperience(),
+                        skill.getDescription(),
+                        skill.isNegotiable()
                 ))
                 .toList();
         return new ServiceProviderADResponse(
                 advertisement.getServiceId(),
                 worker.getId(),
                 worker.getEmail(),
-                worker.getPhoneNumber(),
+                worker.getPrimaryPhoneNumber(),
                 worker.getFirstName(),
                 worker.getLastName(),
                 worker.getDistrict(),
@@ -158,15 +167,20 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         );
 
     }
+    //TODO CHECK VALIDATION
 
     private void validateWorkerProfile(Worker worker) {
         if (worker.getFirstName() == null || worker.getFirstName().isBlank() ||
                 worker.getLastName() == null || worker.getLastName().isBlank() ||
                 worker.getEmail() == null || worker.getEmail().isBlank() ||
-                worker.getPhoneNumber() == null || worker.getPhoneNumber().isBlank() ||
+                worker.getPrimaryPhoneNumber() == null || worker.getPrimaryPhoneNumber().isBlank() ||
                 worker.getDistrict() == null || worker.getDistrict().isBlank() ||
                 worker.getAddress() == null || worker.getAddress().isBlank() ||
-                worker.getAvailable() == null) {
+                worker.getAvailable() == null|| worker.getNIC().isBlank()||
+                worker.getTitle().isBlank()|| worker.getWorkingDays().isEmpty()||
+        worker.getSecondaryPhoneNumber().isBlank() || worker.getStartTime()==null||
+                worker.getEndTime()==null
+        ) {
 
 
             throw new RuntimeException("Please complete your profile.");

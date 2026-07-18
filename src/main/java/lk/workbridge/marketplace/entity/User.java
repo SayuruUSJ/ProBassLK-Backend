@@ -40,7 +40,11 @@ public abstract  class User  {
     @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
     @Column(name = "phone-number", length = 12,nullable = true)
-    private String phoneNumber;
+    private String primaryPhoneNumber;
+    @Column(name = "secondary_phone_number", length = 12,nullable = true)
+    private String secondaryPhoneNumber;
+    @Column(name="land_line_number", length = 12,nullable = true)
+    private String landlineNumber;
     @Column(name = "first-name", nullable = false, length = 50)
     private String firstName;
     @Column(name = "last-name", nullable = false, length = 50)
@@ -49,6 +53,8 @@ public abstract  class User  {
     private String district;
     @Column(name = "address", nullable = true, length = 100)
     private String address;
+    @Column(name = "city",nullable = true,length = 100)
+    private String city;
     @Enumerated(
             EnumType.STRING
     )

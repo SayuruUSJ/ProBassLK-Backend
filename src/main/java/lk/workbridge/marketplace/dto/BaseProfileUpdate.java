@@ -8,21 +8,24 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateProfile {
+public class BaseProfileUpdate {
 
     private String userId;
 
     private String phoneNumber;
 
+    private String secondaryPhoneNumber;
+
+    private String landlineNumber;
+
     private String district;
 
     private String address;
 
-    private String organizationName;
+    private  String city;
 
-    private String title;
 
-    private Boolean available;
 
-    private Set<WorkerSkillRequest> skills;
+
+
 }
