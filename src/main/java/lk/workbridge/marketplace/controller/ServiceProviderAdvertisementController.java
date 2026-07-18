@@ -1,7 +1,7 @@
 package lk.workbridge.marketplace.controller;
 
 import lk.workbridge.marketplace.dto.ServiceProviderAD;
-import lk.workbridge.marketplace.dto.ServiceProviderADResponse;
+import lk.workbridge.marketplace.dto.responses.ServiceProviderADResponse;
 import lk.workbridge.marketplace.service.ServiceProviderAdvertisementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

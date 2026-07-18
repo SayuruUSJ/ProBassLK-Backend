@@ -1,11 +1,9 @@
 package lk.workbridge.marketplace.controller;
 
 import jakarta.validation.Valid;
-import lk.workbridge.marketplace.dto.ClientBookingRequestAD;
-import lk.workbridge.marketplace.dto.ServiceProviderADResponse;
 import lk.workbridge.marketplace.dto.ServiceProviderRequestForWantedAD;
 import lk.workbridge.marketplace.dto.ServiceWantedAD;
-import lk.workbridge.marketplace.dto.ServiceWantedADResponse;
+import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
 import lk.workbridge.marketplace.service.ServiceProviderRequestForWantedADService;
 import lk.workbridge.marketplace.service.ServiceWantedAdvertisementService;
 import lombok.RequiredArgsConstructor;

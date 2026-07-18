@@ -1,13 +1,13 @@
 package lk.workbridge.marketplace.service.Impl;
 
-import lk.workbridge.marketplace.dto.ServiceProviderADResponse;
-import lk.workbridge.marketplace.dto.ServiceWantedADResponse;
 import lk.workbridge.marketplace.dto.responses.BookingRequestResponse;
 import lk.workbridge.marketplace.dto.responses.ClientMoreInfo;
 import lk.workbridge.marketplace.dto.responses.RatingResponse;
+import lk.workbridge.marketplace.dto.responses.ServiceProviderADResponse;
+import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
 import lk.workbridge.marketplace.dto.responses.UserBasicInfo;
-import lk.workbridge.marketplace.dto.WorkerSkillResponse;
 import lk.workbridge.marketplace.dto.responses.WorkerMoreInfo;
+import lk.workbridge.marketplace.dto.responses.WorkerSkillResponse;
 import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.ClientBookingRequestedAdvertisement;
 import lk.workbridge.marketplace.entity.Rating;
@@ -247,25 +247,24 @@ public class AdminServiceImpl implements AdminService {
 
 
     private ServiceWantedADResponse mapToServiceWantedResponse(ServiceWantedAdvertisement advertisement) {
-        ServiceWantedADResponse response = new ServiceWantedADResponse();
         User user=userRepository.findById(advertisement.getClient().getId())
                 .orElseThrow(() -> new RuntimeException("Client not found."));
         Client client=(Client) user;
         long countApplicantsRequest =serviceProviderRequestForWantedADRepository.countApplicantsRequests(advertisement.getAdvertisement_id());
+        return new ServiceWantedADResponse(
+                advertisement.getAdvertisement_id(),
+                client.getFirstName(),
+                client.getLastName(),
+                advertisement.getTitle(),
+                advertisement.getClientContactNumber(),
+                advertisement.getDescription(),
+                advertisement.getServiceType(),
+                advertisement.getLocation(),
+                advertisement.getRequiredDate(),
+                advertisement.getStatus(),
+                countApplicantsRequest
+        );
 
-        response.setAdvertisementId(advertisement.getAdvertisement_id());
-        response.setFirstName(client.getFirstName());
-        response.setLastName(client.getLastName());
-        response.setTitle(advertisement.getTitle());
-        response.setDescription(advertisement.getDescription());
-        response.setStatus(advertisement.getStatus());
-        response.setClientContactNumber(advertisement.getClientContactNumber());
-        response.setServiceType(advertisement.getServiceType());
-        response.setRequiredDate(advertisement.getRequiredDate());
-        response.setLocation(advertisement.getLocation());
-        response.setApplicationCount(countApplicantsRequest);
-
-        return response;
     }
 
     private ServiceProviderADResponse mapToResponse(ServiceProviderAdvertisement advertisement) {
@@ -277,22 +276,6 @@ public class AdminServiceImpl implements AdminService {
 
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
         long completedJobs= clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
-        ServiceProviderADResponse response = new ServiceProviderADResponse();
-        response.setServiceId(advertisement.getServiceId());
-        response.setAverageStars(averageStars);
-        response.setCompletedJobs(completedJobs);
-        response.setJobTitle(worker.getTitle());
-        response.setServiceId(advertisement.getServiceId());
-        response.setStatus(advertisement.getStatus());
-        response.setWorkerId(worker.getId());
-        response.setFirstName(worker.getFirstName());
-        response.setLastName(worker.getLastName());
-        response.setEmail(worker.getEmail());
-        response.setAvailable(worker.getAvailable());
-        response.setPhoneNumber(worker.getPhoneNumber());
-        response.setDistrict(worker.getDistrict());
-        response.setAddress(worker.getAddress());
-
         Optional<Worker> workerWithSkills =
                 workerSkillRepository.findByIdWithSkills(worker.getId());
 
@@ -309,10 +292,25 @@ public class AdminServiceImpl implements AdminService {
                         skill.getDailyRate()
                 ))
                 .toList();
+       return new ServiceProviderADResponse(
+                advertisement.getServiceId(),
+                worker.getId(),
+                worker.getEmail(),
+                worker.getPhoneNumber(),
+                worker.getFirstName(),
+                worker.getLastName(),
+                worker.getDistrict(),
+                worker.getTitle(),
+                worker.getAvailable(),
+                worker.getAddress(),
+                advertisement.getStatus(),
+                worker.getProfileImageUrl(),
+                averageStars,
+                completedJobs,
+                skills
 
-        response.setSkills(skills);
+        );
 
-        return response;
     }
 
 }

@@ -2,10 +2,10 @@ package lk.workbridge.marketplace.service.Impl;
 
 import lk.workbridge.marketplace.dto.RegisterRequest;
 import lk.workbridge.marketplace.dto.UpdateProfile;
-import lk.workbridge.marketplace.dto.UserProfile;
 import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
-import lk.workbridge.marketplace.dto.WorkerSkillResponse;
+import lk.workbridge.marketplace.dto.responses.UserProfile;
+import lk.workbridge.marketplace.dto.responses.WorkerSkillResponse;
 import lk.workbridge.marketplace.entity.Admin;
 import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.JobRole;
@@ -28,6 +28,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -70,42 +71,42 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             client.setRole(
                     Role.CLIENT
             );
-        boolean isTrue=emailService.sendVerificationEmail(
+            boolean isTrue = emailService.sendVerificationEmail(
                     request.getEmail()
             );
             System.out.println(isTrue);
-if(isTrue==true){
+            if (isTrue == true) {
 
-   repo.save(client);
-   return "succuss";
-}
+                repo.save(client);
+                return "succuss";
+            }
 
         } else if (request.getRole() == Role.WORKER) {
-           Worker worker=new Worker();
+            Worker worker = new Worker();
 
-           worker.setEmail(request.getEmail());
-           worker.setFirstName(request.getFirstName());
-           worker.setLastName(request.getLastName());
-           worker.setUsername(request.getUsername());
-          worker.setPassword(passwordEncoder.encode(request.getPassword()));
+            worker.setEmail(request.getEmail());
+            worker.setFirstName(request.getFirstName());
+            worker.setLastName(request.getLastName());
+            worker.setUsername(request.getUsername());
+            worker.setPassword(passwordEncoder.encode(request.getPassword()));
 
-           worker.setRole(Role.WORKER);
+            worker.setRole(Role.WORKER);
             worker.setVerificationStatus(
                     request.getVerificationStatus()
             );
 
 
-            boolean isTrue=emailService.sendVerificationEmail(
+            boolean isTrue = emailService.sendVerificationEmail(
                     request.getEmail()
             );
             System.out.println(isTrue);
-           if(isTrue==true){
+            if (isTrue == true) {
 
-               repo.save(worker);
-               return "worker registered successfully";
-           }
+                repo.save(worker);
+                return "worker registered successfully";
+            }
 
-        }else if (request.getRole() == Role.ADMIN) {
+        } else if (request.getRole() == Role.ADMIN) {
             Admin admin = new Admin();
             admin.setFirstName(request.getFirstName());
             admin.setLastName(request.getLastName());
@@ -151,20 +152,20 @@ if(isTrue==true){
         }
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-       Integer isUserVerified= repo.isUserVerified(userDetails.getUsername());
-       if(isUserVerified==0){
-           throw new RuntimeException("User not verified");
-       }else{
-             return repo.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-       }
+        Integer isUserVerified = repo.isUserVerified(userDetails.getUsername());
+        if (isUserVerified == 0) {
+            throw new RuntimeException("User not verified");
+        } else {
+            return repo.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+        }
 
     }
 
 
     @Override
     public boolean verifyUser(VerificationRequest request) {
-        User user=repo.findByUsername(request.getUsername()).orElseThrow(
+        User user = repo.findByUsername(request.getUsername()).orElseThrow(
                 () -> new UsernameNotFoundException("User not found with username: " + request.getUsername())
         );
         if (user != null) {
@@ -182,72 +183,72 @@ if(isTrue==true){
         Optional<User> userOptional = repo.findById(updateProfile.getUserId());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-          
-            if(user.getRole()==Role.CLIENT){
-                  Client client=(Client) user;
+
+            if (user.getRole() == Role.CLIENT) {
+                Client client = (Client) user;
                 client.setPhoneNumber(
-                    updateProfile.getPhoneNumber()
-            );
+                        updateProfile.getPhoneNumber()
+                );
                 client.setOrganizationName(
-                    updateProfile.getOrganizationName()
-            );
+                        updateProfile.getOrganizationName()
+                );
                 client.setAddress(updateProfile.getAddress());
                 client.setDistrict(updateProfile.getDistrict());
-             repo.save(client);
-            } else if (user.getRole()==Role.WORKER) {
-                
-                Worker worker=(Worker) user;
+                repo.save(client);
+            } else if (user.getRole() == Role.WORKER) {
+
+                Worker worker = (Worker) user;
                 worker.setPhoneNumber(
-                    updateProfile.getPhoneNumber()
-            );
+                        updateProfile.getPhoneNumber()
+                );
                 worker.setAddress(updateProfile.getAddress());
                 worker.setDistrict(updateProfile.getDistrict());
                 worker.setTitle(updateProfile.getTitle());
                 for (WorkerSkillRequest skillRequest
-                    : updateProfile.getSkills()) {
+                        : updateProfile.getSkills()) {
 
-                JobRole jobRole =
+                    JobRole jobRole =
 
-                        jobRoleRepository
+                            jobRoleRepository
 
-                                .findByRoleName(
+                                    .findByRoleName(
 
-                                        skillRequest.getRole()
+                                            skillRequest.getRole()
 
-                                )
+                                    )
 
-                                .orElseThrow(
+                                    .orElseThrow(
 
-                                        () -> new RuntimeException(
+                                            () -> new RuntimeException(
 
-                                                "Role not found"
+                                                    "Role not found"
 
-                                        )
+                                            )
 
-                                );
+                                    );
 
-                WorkerSkill skill =
-                        new WorkerSkill();
+                    WorkerSkill skill =
+                            new WorkerSkill();
 
-                skill.setWorker(
-                        worker
-                );
+                    skill.setWorker(
+                            worker
+                    );
 
-                skill.setJobRole(
-                        jobRole
-                );
+                    skill.setJobRole(
+                            jobRole
+                    );
 
-                skill.setDailyRate(
+                    skill.setDailyRate(
 
-                        skillRequest.getDailyRate()
+                            skillRequest.getDailyRate()
 
-                );
+                    );
 
-                worker.getSkills()
+                    worker.getSkills()
 
-                        .add(skill);
+                            .add(skill);
 
-            }
+                }
                 repo.save(worker);
             }
             return "Profile updated successfully";
@@ -257,30 +258,31 @@ if(isTrue==true){
 
 
     }
+
     @Override
     public String uploadProfileImage(String profileImageUrl, String userId) {
-         System.out.println("User ID received: [" + userId + "]");
+        System.out.println("User ID received: [" + userId + "]");
 
-    Optional<User> userOptional = repo.findById(userId);
+        Optional<User> userOptional = repo.findById(userId);
 
-    System.out.println("User found: " + userOptional.isPresent());
+        System.out.println("User found: " + userOptional.isPresent());
 
-    if (userOptional.isPresent()) {
-        User user = userOptional.get();
-        user.setProfileImageUrl(profileImageUrl);
-        repo.save(user);
-        return "Profile image uploaded successfully";
-    }
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setProfileImageUrl(profileImageUrl);
+            repo.save(user);
+            return "Profile image uploaded successfully";
+        }
 
-    return "User not found with ID: " + userId;
+        return "User not found with ID: " + userId;
     }
 
     @Override
     public UserProfile getProfileInfo(String userId) {
-        UserProfile userProfile=new UserProfile();
-        User user=repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found."));
-        if(user.getRole()==Role.WORKER){
-            Worker worker=(Worker) user;
+        User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found."));
+
+        if (user.getRole() == Role.WORKER) {
+            Worker worker = (Worker) user;
             Optional<Worker> workerWithSkills = workerSkillRepository.findByIdWithSkills(userId);
             List<WorkerSkillResponse> skills = workerWithSkills
                     .map(Worker::getSkills)
@@ -291,39 +293,45 @@ if(isTrue==true){
                             skill.getDailyRate()
                     ))
                     .toList();
-            userProfile.setSkills(skills);
-          userProfile.setId(worker.getId());
-          userProfile.setUsername(worker.getUsername());
-          userProfile.setEmail(worker.getEmail());
-          userProfile.setPhoneNumber(worker.getPhoneNumber());
-          userProfile.setFirstName(worker.getFirstName());
-          userProfile.setLastName(worker.getLastName());
-          userProfile.setAddress(worker.getAddress());
-          userProfile.setDistrict(worker.getDistrict());
-          userProfile.setProfileImageUrl(worker.getProfileImageUrl());
-          userProfile.setVerificationStatus(worker.getVerificationStatus());
-          userProfile.setRole(worker.getRole());
+            return new UserProfile(
+                    worker.getId(),
+                    worker.getUsername(),
+                    worker.getEmail(),
+                    worker.getPhoneNumber(),
+                    worker.getFirstName(),
+                    worker.getLastName(),
+                    worker.getDistrict(),
+                    worker.getAddress(),
+                    worker.getRole(),
+                    worker.getCreatedAt(),
+                    worker.getVerificationStatus(),
+                    worker.getProfileImageUrl(),
+                    null,
+                    skills
+            );
 
+        } else {
 
-        }else   {
-            Client client=(Client) user;
-            userProfile.setId(client.getId());
-            userProfile.setUsername(client.getUsername());
-            userProfile.setEmail(client.getEmail());
-            userProfile.setPhoneNumber(client.getPhoneNumber());
-            userProfile.setFirstName(client.getFirstName());
-            userProfile.setLastName(client.getLastName());
-            userProfile.setAddress(client.getAddress());
-            userProfile.setDistrict(client.getDistrict());
-            userProfile.setProfileImageUrl(client.getProfileImageUrl());
-            userProfile.setVerificationStatus(client.getVerificationStatus());
-            userProfile.setRole(client.getRole());
-            userProfile.setOrganizationName(client.getOrganizationName());
-            userProfile.setSkills(Collections.emptyList());
+            Client client = (Client) user;
+            return new UserProfile(
+                    client.getId(),
+                    client.getUsername(),
+                    client.getEmail(),
+                    client.getPhoneNumber(),
+                    client.getFirstName(),
+                    client.getLastName(),
+                    client.getDistrict(),
+                    client.getAddress(),
+                    client.getRole(),
+                    client.getCreatedAt(),
+                    client.getVerificationStatus(),
+                    client.getProfileImageUrl(),
+                    client.getOrganizationName(),
+                    Collections.emptyList()
+            );
+
         }
 
-
-        return userProfile;
     }
 
 }

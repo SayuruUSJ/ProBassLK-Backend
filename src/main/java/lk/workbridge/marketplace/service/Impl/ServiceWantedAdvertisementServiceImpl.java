@@ -1,15 +1,10 @@
 package lk.workbridge.marketplace.service.Impl;
 
-import lk.workbridge.marketplace.dto.ServiceProviderADResponse;
 import lk.workbridge.marketplace.dto.ServiceWantedAD;
-import lk.workbridge.marketplace.dto.ServiceWantedADResponse;
-import lk.workbridge.marketplace.dto.WorkerSkillResponse;
+import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
 import lk.workbridge.marketplace.entity.Client;
-import lk.workbridge.marketplace.entity.ClientBookingRequestedAdvertisement;
-import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.ServiceWantedAdvertisement;
 import lk.workbridge.marketplace.entity.User;
-import lk.workbridge.marketplace.entity.Worker;
 import lk.workbridge.marketplace.repository.ServiceProviderRequestForWantedADRepository;
 import lk.workbridge.marketplace.repository.ServiceWantedAdvertisementRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
@@ -20,10 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,24 +64,26 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
 
 
     private ServiceWantedADResponse mapToResponse(ServiceWantedAdvertisement advertisement) {
-        ServiceWantedADResponse response = new ServiceWantedADResponse();
         User user=userRepository.findById(advertisement.getClient().getId())
                 .orElseThrow(() -> new RuntimeException("Client not found."));
         Client client=(Client) user;
-    long countApplicantsRequest =serviceProviderRequestForWantedADRepository.countApplicantsRequests(advertisement.getAdvertisement_id());
+        long countApplicantsRequest =serviceProviderRequestForWantedADRepository.countApplicantsRequests(advertisement.getAdvertisement_id());
+      return new ServiceWantedADResponse(
+                advertisement.getAdvertisement_id(),
+                client.getFirstName(),
+                client.getLastName(),
+                advertisement.getTitle(),
+                advertisement.getClientContactNumber(),
+                advertisement.getDescription(),
+                advertisement.getServiceType(),
+                advertisement.getLocation(),
+                advertisement.getRequiredDate(),
+                advertisement.getStatus(),
+                countApplicantsRequest
+        );
 
-        response.setFirstName(client.getFirstName());
-        response.setLastName(client.getLastName());
-        response.setTitle(advertisement.getTitle());
-        response.setDescription(advertisement.getDescription());
-        response.setStatus(advertisement.getStatus());
-        response.setClientContactNumber(advertisement.getClientContactNumber());
-        response.setServiceType(advertisement.getServiceType());
-        response.setRequiredDate(advertisement.getRequiredDate());
-        response.setLocation(advertisement.getLocation());
-        response.setApplicationCount(countApplicantsRequest);
 
-        return response;
+
     }
 
 

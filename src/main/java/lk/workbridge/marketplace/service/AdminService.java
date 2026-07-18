@@ -1,8 +1,8 @@
 package lk.workbridge.marketplace.service;
 
-import lk.workbridge.marketplace.dto.ServiceProviderADResponse;
-import lk.workbridge.marketplace.dto.ServiceWantedADResponse;
 import lk.workbridge.marketplace.dto.responses.ClientMoreInfo;
+import lk.workbridge.marketplace.dto.responses.ServiceProviderADResponse;
+import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
 import lk.workbridge.marketplace.dto.responses.UserBasicInfo;
 import lk.workbridge.marketplace.dto.responses.WorkerMoreInfo;
 import org.springframework.data.domain.Page;
