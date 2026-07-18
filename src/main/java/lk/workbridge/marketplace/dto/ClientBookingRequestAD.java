@@ -24,6 +24,9 @@ public class ClientBookingRequestAD {
 @NotBlank(message = "Requested service is required")
     private String requestedService;
 
+@NotBlank(message = "Advertisement ID is required")
+private String advertisementId;
+
 @NotNull(message = "Requested date is required")
 @FutureOrPresent(message = "Required date cannot be in the past")
     private LocalDate requestedDate;

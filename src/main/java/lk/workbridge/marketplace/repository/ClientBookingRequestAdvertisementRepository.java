@@ -20,4 +20,6 @@ public interface ClientBookingRequestAdvertisementRepository extends JpaReposito
     Long countCompletedBookings(
             @Param("workerId") String workerId,
             @Param("status") String status);
+
+    List<ClientBookingRequestedAdvertisement> findByClientId(String clientId);
 }

@@ -1,6 +1,8 @@
 package lk.workbridge.marketplace.repository;
 
 import lk.workbridge.marketplace.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +26,6 @@ public interface UserRepository extends JpaRepository<User,String> {
            nativeQuery = true)
     Integer isUserVerified(@Param("username") String username);
 
+    @Query("SELECT u FROM User u")
+    Page<User> findAllUsersWithBasicInfo(Pageable pageable);
 }

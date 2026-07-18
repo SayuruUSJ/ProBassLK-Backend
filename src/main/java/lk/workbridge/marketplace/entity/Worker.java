@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Getter
 @Setter
@@ -32,13 +33,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Worker extends User{
+public class Worker extends User {
 
-@Column(name="available",nullable = true)
+    @Column(name = "available", nullable = true)
 
     private Boolean available;
-@Column(name="title",nullable = false)
-private String title;
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @OneToMany(
 

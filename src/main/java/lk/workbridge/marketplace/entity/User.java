@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+
 import lk.workbridge.marketplace.enums.Role;
 import lk.workbridge.marketplace.util.WorkbridgeId;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ import java.util.Date;
 @Inheritance(
         strategy = InheritanceType.JOINED
 )
-public abstract  class User {
+public abstract  class User  {
 
     @Id
     @WorkbridgeId

@@ -30,6 +30,10 @@ public class ClientBookingRequestedAdvertisement {
     @JoinColumn(name = "worker_id", referencedColumnName = "user-id", nullable = false)
     private Worker worker;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_id", referencedColumnName = "service_id", nullable = false)
+    private ServiceProviderAdvertisement serviceProviderAdvertisement;
+
     @Column(name = "worker_email", nullable = false, length = 100)
     private String workerEmail;
 

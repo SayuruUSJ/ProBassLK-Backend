@@ -66,7 +66,7 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
         Pageable pageable = PageRequest.of(page, size);
 
         return serviceWantedAdvertisementRepository
-                .findAll(pageable)
+                .findAllVerifiedAdvertisements(pageable)
                 .map(this::mapToResponse);
 
     }

@@ -30,16 +30,16 @@ public class ServiceProviderAdvertisementController {
     }
 
 
-    @PutMapping("/update-status")
-    public ResponseEntity<Boolean> updateStatus(
-            @RequestParam String serviceId,
-            @RequestParam String status) {
-
-        Boolean response = serviceProviderAdvertisementService
-                .updateAdvertisementStatus(status, serviceId);
-
-        return ResponseEntity.ok(response);
-    }
+//    @PutMapping("/update-status")
+//    public ResponseEntity<Boolean> updateStatus(
+//            @RequestParam String serviceId,
+//            @RequestParam String status) {
+//
+//        Boolean response = serviceProviderAdvertisementService
+//                .updateAdvertisementStatus(status, serviceId);
+//
+//        return ResponseEntity.ok(response);
+//    }
 
 
     @GetMapping("/{workerId}")
@@ -67,14 +67,14 @@ public class ServiceProviderAdvertisementController {
         );
     }
 
-    @GetMapping("/get-all-pending-ads")
-    public ResponseEntity<Page<ServiceProviderADResponse>> getAllPendingAdvertisements(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        return ResponseEntity.ok(
-                serviceProviderAdvertisementService.getAllPendingAdvertisements(page, size)
-        );
-    }
+//    @GetMapping("/get-all-pending-ads")
+//    public ResponseEntity<Page<ServiceProviderADResponse>> getAllPendingAdvertisements(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size) {
+//
+//        return ResponseEntity.ok(
+//                serviceProviderAdvertisementService.getAllPendingAdvertisements(page, size)
+//        );
+//    }
 
 }

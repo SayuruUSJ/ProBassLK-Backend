@@ -57,14 +57,6 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
 
 
 
-    @Override
-    public Boolean updateAdvertisementStatus(String status,String serviceId) {
-       serviceProviderAdvertisementRepository.findById(serviceId).ifPresent(advertisement -> {
-           advertisement.setStatus(status);
-           serviceProviderAdvertisementRepository.save(advertisement);
-       });
-        return true;
-    }
 
     @Override
     public ServiceProviderADResponse getAdvertisementForSpecificWorker(String workerId) {
@@ -124,14 +116,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 .map(this::mapToResponse);
     }
 
-    @Override
-    public Page<ServiceProviderADResponse> getAllPendingAdvertisements(int page, int size) {
-       Pageable  pageable=PageRequest.of(page,size);
 
-        return serviceProviderAdvertisementRepository
-                .findAllPendingAdvertisements(pageable)
-                .map(this::mapToResponse);
-    }
 
     private ServiceProviderADResponse mapToResponse(ServiceProviderAdvertisement advertisement) {
 
@@ -145,6 +130,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
          long completedJobs= clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
         ServiceProviderADResponse response = new ServiceProviderADResponse();
+        response.setServiceId(advertisement.getServiceId());
         response.setAverageStars(averageStars);
         response.setCompletedJobs(completedJobs);
         response.setJobTitle(worker.getTitle());

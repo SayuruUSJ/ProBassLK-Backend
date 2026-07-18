@@ -3,9 +3,11 @@ package lk.workbridge.marketplace.service.Impl;
 import lk.workbridge.marketplace.dto.ClientBookingRequestAD;
 import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.ClientBookingRequestedAdvertisement;
+import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
 import lk.workbridge.marketplace.repository.ClientBookingRequestAdvertisementRepository;
+import lk.workbridge.marketplace.repository.ServiceProviderAdvertisementRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
 import lk.workbridge.marketplace.service.ClientBookingRequestAdvertisementService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ClientBookingBookingRequestAdvertisementServiceImpl implements ClientBookingRequestAdvertisementService {
     private final ClientBookingRequestAdvertisementRepository clientRequestAdvertisementRepository;
     private final UserRepository userRepository;
+    private final ServiceProviderAdvertisementRepository serviceProviderAdvertisementRepository;
     @Override
     public String requestAdvertisement(ClientBookingRequestAD requestAD) {
         try {
@@ -31,7 +34,10 @@ public class ClientBookingBookingRequestAdvertisementServiceImpl implements Clie
             Client client=(Client)userTwo;
             ClientBookingRequestedAdvertisement advertisement = new ClientBookingRequestedAdvertisement();
 
+            ServiceProviderAdvertisement serviceProviderAdvertisement=serviceProviderAdvertisementRepository.findById(requestAD.getAdvertisementId())
+                    .orElseThrow(() -> new RuntimeException("Advertisement not found."));
             advertisement.setWorker(worker);
+            advertisement.setServiceProviderAdvertisement(serviceProviderAdvertisement);
             advertisement.setWorkerEmail(requestAD.getWorkerEmail());
             advertisement.setRequestedService(requestAD.getRequestedService());
             advertisement.setRequestedDate(requestAD.getRequestedDate());

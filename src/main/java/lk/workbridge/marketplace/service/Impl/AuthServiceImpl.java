@@ -6,6 +6,7 @@ import lk.workbridge.marketplace.dto.UserProfile;
 import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillResponse;
+import lk.workbridge.marketplace.entity.Admin;
 import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.JobRole;
 import lk.workbridge.marketplace.entity.User;
@@ -34,7 +35,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-
 public class AuthServiceImpl implements AuthService, UserDetailsService {
     private final UserRepository repo;
     private final JobRoleRepository jobRoleRepository;
@@ -105,6 +105,23 @@ if(isTrue==true){
                return "worker registered successfully";
            }
 
+        }else if (request.getRole() == Role.ADMIN) {
+            Admin admin = new Admin();
+            admin.setFirstName(request.getFirstName());
+            admin.setLastName(request.getLastName());
+            admin.setUsername(request.getUsername());
+            admin.setEmail(request.getEmail());
+            admin.setPassword(passwordEncoder.encode(request.getPassword()));
+            admin.setVerificationStatus(request.getVerificationStatus());
+            admin.setRole(Role.ADMIN);
+
+
+            boolean isTrue = emailService.sendVerificationEmail(admin.getEmail());
+            System.out.println(isTrue);
+            if (isTrue == true) {
+                repo.save(admin);
+                return "admin registered successfully";
+            }
         }
         return "Registration failed";
     }

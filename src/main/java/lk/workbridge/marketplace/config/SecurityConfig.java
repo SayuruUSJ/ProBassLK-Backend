@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.session.SessionRegistry;
@@ -21,7 +22,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
-
+@EnableMethodSecurity
 public class SecurityConfig {
 
 
@@ -87,6 +88,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/logout-success").permitAll()
                         .requestMatchers("/api/service-wanted-advertisements/get-all-wanted-ads").permitAll()
                         .requestMatchers("/api/service-provider-advertisements/get-all-ads").permitAll()
+
                         .requestMatchers("/error").permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

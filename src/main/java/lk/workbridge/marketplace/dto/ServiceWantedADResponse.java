@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ServiceWantedADResponse {
 
+    private String advertisementId;
+
     private String firstName;
 
     private String lastName;
