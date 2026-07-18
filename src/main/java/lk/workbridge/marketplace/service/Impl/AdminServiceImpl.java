@@ -263,10 +263,23 @@ public class AdminServiceImpl implements AdminService {
                 advertisement.getClientContactNumber(),
                 advertisement.getDescription(),
                 advertisement.getServiceType(),
-                advertisement.getLocation(),
+                advertisement.getFullAddress(),
                 advertisement.getRequiredDate(),
                 advertisement.getStatus(),
-                countApplicantsRequest
+                countApplicantsRequest,
+                advertisement.getPreferredContactMethod(),
+                advertisement.getCity(),
+                advertisement.getDistrict(),
+                advertisement.getStartTime(),
+                advertisement.getExpectedDuration(),
+                advertisement.getApplicationDeadline(),
+                advertisement.isWorkDateFlexible(),
+                advertisement.getRequiredSkills(),
+                advertisement.getNoOfWorkersRequired(),
+                advertisement.getPaymentType(),
+                advertisement.getOfferedRate(),
+                advertisement.isRateNegotiable(),
+                advertisement.getAdditionalInstructions()
         );
 
     }

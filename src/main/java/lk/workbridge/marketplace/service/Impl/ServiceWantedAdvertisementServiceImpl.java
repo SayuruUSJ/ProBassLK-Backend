@@ -32,18 +32,30 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
             Client client=(Client)userTwo;
             ServiceWantedAdvertisement advertisement = new ServiceWantedAdvertisement();
 
-            advertisement.setServiceType(serviceWantedAD.getServiceType());
-            advertisement.setRequiredDate(serviceWantedAD.getRequiredDate());
             advertisement.setClient(client);
+            advertisement.setClientContactNumber(serviceWantedAD.getClientContactNumber());
+            advertisement.setPreferredContactMethod(serviceWantedAD.getPreferredContactMethod());
             advertisement.setTitle(serviceWantedAD.getTitle());
-            advertisement.setClientContactNumber(serviceWantedAD.getClientContactNumber());
-            advertisement.setClientContactNumber(serviceWantedAD.getClientContactNumber());
-            advertisement.setLocation(serviceWantedAD.getLocation());
             advertisement.setDescription(serviceWantedAD.getDescription());
-            advertisement.setStatus("PENDING");
+            advertisement.setServiceType(serviceWantedAD.getServiceType());
+            advertisement.setFullAddress(serviceWantedAD.getLocation());
+            advertisement.setCity(serviceWantedAD.getCity());
+            advertisement.setDistrict(serviceWantedAD.getDistrict());
+            advertisement.setRequiredDate(serviceWantedAD.getRequiredDate());
+            advertisement.setStartTime(serviceWantedAD.getStartTime());
+            advertisement.setExpectedDuration(serviceWantedAD.getExpectedDuration());
+            advertisement.setApplicationDeadline(serviceWantedAD.getApplicationDeadline());
+            advertisement.setWorkDateFlexible(serviceWantedAD.getIsWorkDateFlexible());
+            advertisement.setStatus(serviceWantedAD.getStatus());
+            advertisement.setRequiredSkills(serviceWantedAD.getRequiredSkills());
+            advertisement.setNoOfWorkersRequired(serviceWantedAD.getNoOfWorkersRequired());
+            advertisement.setPaymentType(serviceWantedAD.getPaymentType());
+            advertisement.setOfferedRate(serviceWantedAD.getOfferedRate());
+            advertisement.setRateNegotiable(serviceWantedAD.getIsRateNegotiable());
+            advertisement.setAdditionalInstructions(serviceWantedAD.getAdditionalInstructions());
 
 
-                serviceWantedAdvertisementRepository.save(advertisement);
+            serviceWantedAdvertisementRepository.save(advertisement);
                 return "Advertisement request sent successfully.";
 
         } catch (DataAccessException e) {
@@ -76,10 +88,23 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
                 advertisement.getClientContactNumber(),
                 advertisement.getDescription(),
                 advertisement.getServiceType(),
-                advertisement.getLocation(),
+                advertisement.getFullAddress(),
                 advertisement.getRequiredDate(),
                 advertisement.getStatus(),
-                countApplicantsRequest
+                countApplicantsRequest,
+              advertisement.getPreferredContactMethod(),
+              advertisement.getCity(),
+              advertisement.getDistrict(),
+              advertisement.getStartTime(),
+              advertisement.getExpectedDuration(),
+              advertisement.getApplicationDeadline(),
+              advertisement.isWorkDateFlexible(),
+              advertisement.getRequiredSkills(),
+              advertisement.getNoOfWorkersRequired(),
+              advertisement.getPaymentType(),
+              advertisement.getOfferedRate(),
+              advertisement.isRateNegotiable(),
+              advertisement.getAdditionalInstructions()
         );
 
 
