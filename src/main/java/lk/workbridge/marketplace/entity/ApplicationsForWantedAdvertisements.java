@@ -9,16 +9,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lk.workbridge.marketplace.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="service_providers_requests_for_wanted_advertisements")
-public class ServiceProvidersRequestsForWantedAdvertisements {
+public class ApplicationsForWantedAdvertisements {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "request_id", nullable = false, unique = true)
@@ -36,8 +39,16 @@ public class ServiceProvidersRequestsForWantedAdvertisements {
     private String message;
 
     @Column(name="daily_rate",nullable = false)
-    private  Double dailyRate;
+    private  Double proposedRate;
+
+    @Column(name="payment_type",nullable = false)
+    private PaymentType paymentType;
 
     @Column(name="status", nullable = false)
     private String status;
+
+    @Column(name="created_at")
+    private LocalDate createdAt;
+
+
 }

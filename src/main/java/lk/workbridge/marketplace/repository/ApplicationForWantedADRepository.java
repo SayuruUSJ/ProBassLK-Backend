@@ -1,11 +1,13 @@
 package lk.workbridge.marketplace.repository;
 
-import lk.workbridge.marketplace.entity.ServiceProvidersRequestsForWantedAdvertisements;
+import lk.workbridge.marketplace.entity.ApplicationsForWantedAdvertisements;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ServiceProviderRequestForWantedADRepository extends JpaRepository<ServiceProvidersRequestsForWantedAdvertisements, Integer> {
+public interface ApplicationForWantedADRepository extends JpaRepository<ApplicationsForWantedAdvertisements, Integer> {
 //    boolean existsByAdvertisementAdvertisementIdAndWorkerWorkerId(
 //            String advertisementId,
 //            String workerId);
@@ -27,4 +29,14 @@ Long countRequest(@Param("advertisementId") String advertisementId,
     """, nativeQuery = true)
     Long countApplicantsRequests(@Param("advertisementId") String advertisementId
                       );
+
+    @Query("""
+        SELECT a 
+        FROM ApplicationsForWantedAdvertisements a 
+        WHERE a.advertisement.client.id = :clientId
+    """)
+    Page<ApplicationsForWantedAdvertisements> findByClientId(
+            @Param("clientId") String clientId,
+            Pageable pageable
+    );
 }

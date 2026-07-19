@@ -7,6 +7,7 @@ import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
 import lk.workbridge.marketplace.dto.responses.ClientProfile;
 import lk.workbridge.marketplace.dto.responses.ServiceProviderProfile;
+import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
 import lk.workbridge.marketplace.dto.responses.WorkerSkillResponse;
 import lk.workbridge.marketplace.entity.Admin;
 import lk.workbridge.marketplace.entity.Client;
@@ -21,6 +22,7 @@ import lk.workbridge.marketplace.repository.WorkerSkillRepository;
 import lk.workbridge.marketplace.service.AuthService;
 import lk.workbridge.marketplace.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -386,5 +388,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
 
         );
     }
+
+
 
 }

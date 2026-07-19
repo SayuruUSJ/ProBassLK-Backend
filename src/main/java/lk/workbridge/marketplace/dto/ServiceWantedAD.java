@@ -85,4 +85,5 @@ public class ServiceWantedAD {
 
     @Size(max = 255, message = "Additional instructions must not exceed 255 characters")
     private String additionalInstructions;
+
 }

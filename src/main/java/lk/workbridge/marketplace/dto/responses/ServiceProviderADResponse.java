@@ -1,6 +1,9 @@
 package lk.workbridge.marketplace.dto.responses;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 public record ServiceProviderADResponse(
         String serviceId,
@@ -31,6 +34,28 @@ public record ServiceProviderADResponse(
 
         long completedJobs,
 
-        List<WorkerSkillResponse> skills
+        List<WorkerSkillResponse> skills,
+
+        String about,
+
+        int overallExperience,
+
+        Set<DayOfWeek> workingDaysMask,
+
+        LocalTime startTime,
+
+        LocalTime endTime,
+
+        Boolean emergencyAvailable,
+
+        List<RatingResponse> ratings,
+
+        long reviewCount,
+
+        String profileImageUrl,
+
+        String city
+
+
 ) {
 }

@@ -18,7 +18,7 @@ import lk.workbridge.marketplace.entity.Worker;
 import lk.workbridge.marketplace.repository.ClientBookingRequestAdvertisementRepository;
 import lk.workbridge.marketplace.repository.RatingRepository;
 import lk.workbridge.marketplace.repository.ServiceProviderAdvertisementRepository;
-import lk.workbridge.marketplace.repository.ServiceProviderRequestForWantedADRepository;
+import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
 import lk.workbridge.marketplace.repository.ServiceWantedAdvertisementRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
 import lk.workbridge.marketplace.repository.WorkerSkillRepository;
@@ -29,9 +29,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
     private final WorkerSkillRepository workerSkillRepository;
     private final RatingRepository ratingRepository;
     private final ClientBookingRequestAdvertisementRepository clientBookingRequestAdvertisementRepository;
-    private final ServiceProviderRequestForWantedADRepository serviceProviderRequestForWantedADRepository;
+    private final ApplicationForWantedADRepository applicationForWantedADRepository;
     @Override
     public boolean acceptOrRejectServiceProviderAdvertisement(String serviceId, String status) {
         if (!isValidStatus(status)) {
@@ -69,7 +71,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private boolean isValidStatus(String status) {
-        return "VERIFIED".equals(status) || "REJECTED".equals(status);
+        return "PUBLISHED".equals(status) || "REJECTED".equals(status);
     }
 
     @Override
@@ -261,7 +263,7 @@ public class AdminServiceImpl implements AdminService {
         User user=userRepository.findById(advertisement.getClient().getId())
                 .orElseThrow(() -> new RuntimeException("Client not found."));
         Client client=(Client) user;
-        long countApplicantsRequest =serviceProviderRequestForWantedADRepository.countApplicantsRequests(advertisement.getAdvertisement_id());
+        long countApplicantsRequest = applicationForWantedADRepository.countApplicantsRequests(advertisement.getAdvertisement_id());
         return new ServiceWantedADResponse(
                 advertisement.getAdvertisement_id(),
                 client.getFirstName(),
@@ -302,6 +304,22 @@ public class AdminServiceImpl implements AdminService {
         long completedJobs= clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
         Optional<Worker> workerWithSkills =
                 workerSkillRepository.findByIdWithSkills(worker.getId());
+        Set<DayOfWeek> workingDays = worker.getWorkingDays();
+        List<Rating> ratings = ratingRepository.findByWorker(worker);
+        List<RatingResponse> ratingsResponses =ratings
+                .stream()
+                .map(rating -> {
+                    RatingResponse response = new RatingResponse(
+                            rating.getStars(),
+                            rating.getComment(),
+                            rating.getWorker() != null ? rating.getWorker().getId() : null,
+                            rating.getWorker() != null ? rating.getWorker().getFirstName() : null,
+                            rating.getClient() != null ? rating.getClient().getId() : null,
+                            rating.getClient() != null ? rating.getClient().getFirstName() : null
+                    );
+                    return response;
+                })
+                .toList();
 
         if (workerWithSkills.isEmpty()) {
             throw new RuntimeException("Please complete your profile.");
@@ -320,6 +338,7 @@ public class AdminServiceImpl implements AdminService {
                         skill.isNegotiable()
                 ))
                 .toList();
+        Long count = ratingRepository.countByWorkerId(worker.getId());
        return new ServiceProviderADResponse(
                 advertisement.getServiceId(),
                 worker.getId(),
@@ -335,8 +354,17 @@ public class AdminServiceImpl implements AdminService {
                 worker.getProfileImageUrl(),
                 averageStars,
                 completedJobs,
-                skills
-
+                skills,
+               worker.getAbout(),
+               worker.getOverallExperience(),
+               workingDays,
+               worker.getStartTime(),
+               worker.getEndTime(),
+               worker.isEmergencyAvailable(),
+               ratingsResponses,
+               count,
+               worker.getProfileImageUrl(),
+               worker.getCity()
         );
 
     }

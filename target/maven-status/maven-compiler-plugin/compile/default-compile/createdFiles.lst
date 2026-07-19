@@ -13,7 +13,6 @@ lk\workbridge\marketplace\util\ServiceWantedADIDGenerator.class
 lk\workbridge\marketplace\Main.class
 lk\workbridge\marketplace\util\ServiceProviderBookingADID.class
 lk\workbridge\marketplace\config\CloudinaryConfig.class
-lk\workbridge\marketplace\dto\ServiceProviderADResponse.class
 lk\workbridge\marketplace\dto\responses\WorkerMoreInfo.class
 lk\workbridge\marketplace\controller\RatingAndReviewController.class
 lk\workbridge\marketplace\dto\VerificationRequest.class
@@ -21,17 +20,14 @@ lk\workbridge\marketplace\service\Impl\ClientBookingBookingRequestAdvertisementS
 lk\workbridge\marketplace\entity\ServiceProviderAdvertisement.class
 lk\workbridge\marketplace\service\AuthService.class
 lk\workbridge\marketplace\controller\ServiceProviderAdvertisementController.class
-lk\workbridge\marketplace\service\ServiceProviderRequestForWantedADService.class
 lk\workbridge\marketplace\service\Impl\AuthServiceImpl.class
 lk\workbridge\marketplace\entity\User.class
 lk\workbridge\marketplace\service\Impl\ServiceProviderAdvertisementServiceImpl.class
 lk\workbridge\marketplace\service\ServiceWantedAdvertisementService.class
 lk\workbridge\marketplace\dto\ServiceWantedAD.class
-lk\workbridge\marketplace\dto\UserProfile.class
 lk\workbridge\marketplace\controller\CustomController.class
 lk\workbridge\marketplace\dto\responses\UserBasicInfo.class
 lk\workbridge\marketplace\dto\ServiceProviderRequestForWantedAD.class
-lk\workbridge\marketplace\dto\WorkerSkillResponse.class
 lk\workbridge\marketplace\service\Impl\AdminServiceImpl.class
 lk\workbridge\marketplace\repository\ServiceWantedAdvertisementRepository.class
 lk\workbridge\marketplace\entity\ServiceWantedAdvertisement.class
@@ -49,11 +45,8 @@ lk\workbridge\marketplace\controller\AdminController.class
 lk\workbridge\marketplace\controller\ServiceWantedAdvertisementController.class
 lk\workbridge\marketplace\dto\RegisterRequest.class
 lk\workbridge\marketplace\entity\WorkerSkill.class
-lk\workbridge\marketplace\entity\ServiceProvidersRequestsForWantedAdvertisements.class
-lk\workbridge\marketplace\service\Impl\ServiceProviderRequestForWantedADServiceImpl.class
 lk\workbridge\marketplace\dto\WorkerSkillRequest.class
 lk\workbridge\marketplace\entity\Client.class
-lk\workbridge\marketplace\dto\ServiceWantedADResponse.class
 lk\workbridge\marketplace\repository\UserRepository.class
 lk\workbridge\marketplace\service\RatingAndReviewService.class
 lk\workbridge\marketplace\service\ServiceProviderAdvertisementService.class
@@ -67,8 +60,6 @@ lk\workbridge\marketplace\dto\RatingRequest.class
 lk\workbridge\marketplace\service\AdminService.class
 lk\workbridge\marketplace\dto\LoginRequest.class
 lk\workbridge\marketplace\service\EmailService.class
-lk\workbridge\marketplace\repository\ServiceProviderRequestForWantedADRepository.class
-lk\workbridge\marketplace\dto\UpdateProfile.class
 lk\workbridge\marketplace\util\UserIdGenerator.class
 lk\workbridge\marketplace\dto\responses\RatingResponse.class
 lk\workbridge\marketplace\util\ServiceWantedADID.class

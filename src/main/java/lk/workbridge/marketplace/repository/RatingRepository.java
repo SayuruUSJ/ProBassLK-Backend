@@ -14,4 +14,6 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     @Query("SELECT r FROM Rating r WHERE r.worker = :worker")
     List<Rating> findByWorker(@Param("worker") Worker worker);
 
+    @Query("SELECT COUNT(r) FROM Rating r WHERE r.worker.id = :workerId")
+    Long countByWorkerId(@Param("workerId") String workerId);
 }

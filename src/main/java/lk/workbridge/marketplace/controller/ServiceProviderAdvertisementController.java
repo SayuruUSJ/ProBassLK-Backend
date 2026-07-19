@@ -41,6 +41,7 @@ public class ServiceProviderAdvertisementController {
 //    }
 
 
+    //This is also use for button service provider info in applications
     @GetMapping("/{workerId}")
     public ResponseEntity<ServiceProviderADResponse> getAdvertisement(
             @PathVariable String workerId) {

@@ -5,7 +5,7 @@ import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
 import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.ServiceWantedAdvertisement;
 import lk.workbridge.marketplace.entity.User;
-import lk.workbridge.marketplace.repository.ServiceProviderRequestForWantedADRepository;
+import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
 import lk.workbridge.marketplace.repository.ServiceWantedAdvertisementRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
 import lk.workbridge.marketplace.service.ServiceWantedAdvertisementService;
@@ -22,14 +22,15 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
 
     private final ServiceWantedAdvertisementRepository serviceWantedAdvertisementRepository;
     private final UserRepository userRepository;
-    private final ServiceProviderRequestForWantedADRepository serviceProviderRequestForWantedADRepository;
+    private final ApplicationForWantedADRepository applicationForWantedADRepository;
+
     @Override
     public String requestAdvertisement(ServiceWantedAD serviceWantedAD) {
         try {
 
-            User userTwo=userRepository.findById(serviceWantedAD.getClientId())
+            User userTwo = userRepository.findById(serviceWantedAD.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client not found."));
-            Client client=(Client)userTwo;
+            Client client = (Client) userTwo;
             ServiceWantedAdvertisement advertisement = new ServiceWantedAdvertisement();
 
             advertisement.setClient(client);
@@ -56,7 +57,7 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
 
 
             serviceWantedAdvertisementRepository.save(advertisement);
-                return "Advertisement request sent successfully.";
+            return "Advertisement request sent successfully.";
 
         } catch (DataAccessException e) {
             throw new RuntimeException("Database error while saving advertisement.", e);
@@ -74,13 +75,23 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
 
     }
 
+    @Override
+    public Page<ServiceWantedADResponse> getClientSpecificAdvertisements(String clientId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return serviceWantedAdvertisementRepository
+                .findAllAdvertisementByClientId(clientId, pageable)
+                .map(this::mapToResponse);
+
+    }
+
 
     private ServiceWantedADResponse mapToResponse(ServiceWantedAdvertisement advertisement) {
-        User user=userRepository.findById(advertisement.getClient().getId())
+        User user = userRepository.findById(advertisement.getClient().getId())
                 .orElseThrow(() -> new RuntimeException("Client not found."));
-        Client client=(Client) user;
-        long countApplicantsRequest =serviceProviderRequestForWantedADRepository.countApplicantsRequests(advertisement.getAdvertisement_id());
-      return new ServiceWantedADResponse(
+        Client client = (Client) user;
+        long countApplicantsRequest = applicationForWantedADRepository.countApplicantsRequests(advertisement.getAdvertisement_id());
+        return new ServiceWantedADResponse(
                 advertisement.getAdvertisement_id(),
                 client.getFirstName(),
                 client.getLastName(),
@@ -92,21 +103,20 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
                 advertisement.getRequiredDate(),
                 advertisement.getStatus(),
                 countApplicantsRequest,
-              advertisement.getPreferredContactMethod(),
-              advertisement.getCity(),
-              advertisement.getDistrict(),
-              advertisement.getStartTime(),
-              advertisement.getExpectedDuration(),
-              advertisement.getApplicationDeadline(),
-              advertisement.isWorkDateFlexible(),
-              advertisement.getRequiredSkills(),
-              advertisement.getNoOfWorkersRequired(),
-              advertisement.getPaymentType(),
-              advertisement.getOfferedRate(),
-              advertisement.isRateNegotiable(),
-              advertisement.getAdditionalInstructions()
+                advertisement.getPreferredContactMethod(),
+                advertisement.getCity(),
+                advertisement.getDistrict(),
+                advertisement.getStartTime(),
+                advertisement.getExpectedDuration(),
+                advertisement.getApplicationDeadline(),
+                advertisement.isWorkDateFlexible(),
+                advertisement.getRequiredSkills(),
+                advertisement.getNoOfWorkersRequired(),
+                advertisement.getPaymentType(),
+                advertisement.getOfferedRate(),
+                advertisement.isRateNegotiable(),
+                advertisement.getAdditionalInstructions()
         );
-
 
 
     }

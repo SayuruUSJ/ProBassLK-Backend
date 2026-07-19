@@ -1,8 +1,10 @@
 package lk.workbridge.marketplace.service.Impl;
 
 import lk.workbridge.marketplace.dto.ServiceProviderAD;
+import lk.workbridge.marketplace.dto.responses.RatingResponse;
 import lk.workbridge.marketplace.dto.responses.ServiceProviderADResponse;
 import lk.workbridge.marketplace.dto.responses.WorkerSkillResponse;
+import lk.workbridge.marketplace.entity.Rating;
 import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
@@ -20,9 +22,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +73,21 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         long completedJobs = clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
         Optional<Worker> byIdWithSkills = workerSkillRepository.findByIdWithSkills(worker.getId());
 
+        List<Rating> ratings = ratingRepository.findByWorker(worker);
+        List<RatingResponse> ratingsResponses =ratings
+                .stream()
+                .map(rating -> {
+                    RatingResponse response = new RatingResponse(
+                            rating.getStars(),
+                            rating.getComment(),
+                            rating.getWorker() != null ? rating.getWorker().getId() : null,
+                            rating.getWorker() != null ? rating.getWorker().getFirstName() : null,
+                            rating.getClient() != null ? rating.getClient().getId() : null,
+                            rating.getClient() != null ? rating.getClient().getFirstName() : null
+                    );
+                    return response;
+                })
+                .toList();
         if (byIdWithSkills.isEmpty()) {
             throw new RuntimeException("Please complete your profile.");
         }
@@ -86,6 +106,9 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
 
                 ))
                 .toList();
+
+        Set<DayOfWeek> workingDays = worker.getWorkingDays();
+        Long count = ratingRepository.countByWorkerId(workerId);
         return new ServiceProviderADResponse(
                 serviceProviderAdvertisement.getServiceId(),
                 serviceProviderAdvertisement.getWorker().getId(),
@@ -101,7 +124,17 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 serviceProviderAdvertisement.getWorker().getProfileImageUrl(),
                 averageStars,
                 completedJobs,
-                skills
+                skills,
+                serviceProviderAdvertisement.getWorker().getAbout(),
+                serviceProviderAdvertisement.getWorker().getOverallExperience(),
+                workingDays,
+                serviceProviderAdvertisement.getWorker().getStartTime(),
+                serviceProviderAdvertisement.getWorker().getEndTime(),
+                serviceProviderAdvertisement.getWorker().isEmergencyAvailable(),
+                ratingsResponses,
+                count,
+                serviceProviderAdvertisement.getWorker().getProfileImageUrl(),
+                serviceProviderAdvertisement.getWorker().getCity()
         );
 
 
@@ -148,6 +181,25 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                         skill.isNegotiable()
                 ))
                 .toList();
+
+        List<Rating> ratings = ratingRepository.findByWorker(worker);
+        List<RatingResponse> ratingsResponses =ratings
+                .stream()
+                .map(rating -> {
+                    RatingResponse response = new RatingResponse(
+                            rating.getStars(),
+                            rating.getComment(),
+                            rating.getWorker() != null ? rating.getWorker().getId() : null,
+                            rating.getWorker() != null ? rating.getWorker().getFirstName() : null,
+                            rating.getClient() != null ? rating.getClient().getId() : null,
+                            rating.getClient() != null ? rating.getClient().getFirstName() : null
+                    );
+                    return response;
+                })
+                .toList();
+
+        Set<DayOfWeek> workingDays = worker.getWorkingDays();
+        Long count = ratingRepository.countByWorkerId(worker.getId());
         return new ServiceProviderADResponse(
                 advertisement.getServiceId(),
                 worker.getId(),
@@ -163,7 +215,17 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 worker.getProfileImageUrl(),
                 averageStars,
                 completedJobs,
-                skills
+                skills,
+                worker.getAbout(),
+                worker.getOverallExperience(),
+                workingDays,
+                worker.getStartTime(),
+                worker.getEndTime(),
+                worker.isEmergencyAvailable(),
+                ratingsResponses,
+                count,
+                worker.getProfileImageUrl(),
+                worker.getCity()
         );
 
     }
