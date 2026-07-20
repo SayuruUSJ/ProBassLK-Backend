@@ -33,6 +33,9 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
             Client client = (Client) userTwo;
             ServiceWantedAdvertisement advertisement = new ServiceWantedAdvertisement();
 
+            if (!isValidStatus(serviceWantedAD.getStatus())) {
+                throw new IllegalArgumentException("Invalid status: " + serviceWantedAD.getStatus() + ". Status must be 'VERIFIED' or 'REJECTED'");
+            }
             advertisement.setClient(client);
             advertisement.setClientContactNumber(serviceWantedAD.getClientContactNumber());
             advertisement.setPreferredContactMethod(serviceWantedAD.getPreferredContactMethod());
@@ -54,7 +57,7 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
             advertisement.setOfferedRate(serviceWantedAD.getOfferedRate());
             advertisement.setRateNegotiable(serviceWantedAD.getIsRateNegotiable());
             advertisement.setAdditionalInstructions(serviceWantedAD.getAdditionalInstructions());
-
+            advertisement.setUrgent(serviceWantedAD.isUrgent());
 
             serviceWantedAdvertisementRepository.save(advertisement);
             return "Advertisement request sent successfully.";
@@ -62,6 +65,10 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
         } catch (DataAccessException e) {
             throw new RuntimeException("Database error while saving advertisement.", e);
         }
+    }
+
+    private boolean isValidStatus(String status) {
+        return "PENDING".equals(status);
     }
 
     @Override
@@ -115,7 +122,8 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
                 advertisement.getPaymentType(),
                 advertisement.getOfferedRate(),
                 advertisement.isRateNegotiable(),
-                advertisement.getAdditionalInstructions()
+                advertisement.getAdditionalInstructions(),
+                advertisement.isUrgent()
         );
 
 

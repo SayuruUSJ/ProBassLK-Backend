@@ -12,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -114,6 +116,22 @@ public class ServiceWantedAdvertisementController {
         return ResponseEntity.ok(applicationForWantedADService.getClientApplications(clientId,page,size));
 
 
+    }
+
+    @PutMapping("/{applicationId}/status")
+    public ResponseEntity<Boolean> updateCompleteOrIncompleteJobs(
+            @PathVariable int applicationId,
+            @RequestParam String status) {
+
+        boolean updated = applicationForWantedADService.updateCompleteOrIncompleteJobs(applicationId, status);
+        return ResponseEntity.ok(updated);
+    }
+
+
+    @DeleteMapping("/cancel/{id}")
+    public ResponseEntity<String> cancelRequest(@PathVariable int id) {
+        String cancellationStatus = applicationForWantedADService.cancelRequest(id);
+        return ResponseEntity.ok(cancellationStatus);
     }
 
 }

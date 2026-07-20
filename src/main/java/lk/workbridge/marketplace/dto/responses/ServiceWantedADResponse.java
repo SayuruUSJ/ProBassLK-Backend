@@ -40,6 +40,7 @@ public record ServiceWantedADResponse(
         PaymentType paymentType,
         Double offeredRate,
         Boolean isRateNegotiable,
-        String additionalInstructions
+        String additionalInstructions,
+        boolean isUrgent
 ) {
 }

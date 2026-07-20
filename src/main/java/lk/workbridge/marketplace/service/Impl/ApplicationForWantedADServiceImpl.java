@@ -2,12 +2,16 @@ package lk.workbridge.marketplace.service.Impl;
 
 import jakarta.transaction.Transactional;
 import lk.workbridge.marketplace.dto.ServiceProviderRequestForWantedAD;
+import lk.workbridge.marketplace.dto.responses.ClientJobs;
 import lk.workbridge.marketplace.dto.responses.WantedAdvertisementApplication;
+import lk.workbridge.marketplace.entity.ApplicationRequestCancellationResult;
 import lk.workbridge.marketplace.entity.ApplicationsForWantedAdvertisements;
+import lk.workbridge.marketplace.entity.HireRequestCancellationResult;
 import lk.workbridge.marketplace.entity.ServiceWantedAdvertisement;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
 import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
+import lk.workbridge.marketplace.repository.ApplicationRequestCancellationResultRepository;
 import lk.workbridge.marketplace.repository.RatingRepository;
 import lk.workbridge.marketplace.repository.ServiceWantedAdvertisementRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
@@ -20,6 +24,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +37,7 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
     private final ApplicationForWantedADRepository applicationForWantedADRepository;
     private final ServiceWantedAdvertisementRepository serviceWantedAdvertisementRepository;
     private final RatingRepository ratingRepository;
+    private  final ApplicationRequestCancellationResultRepository applicationRequestCancellationResultRepository;
 
     @Override
     public String createNewRequest(ServiceProviderRequestForWantedAD requestForWantedAD) {
@@ -72,11 +82,17 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
 
     @Override
     public String updateRequest(String ad_status, int request_id, String request_status) {
-        if (!request_status.equalsIgnoreCase("ACCEPTED") &&
+        if (!request_status.equalsIgnoreCase("CONFIRMED") &&
                 !request_status.equalsIgnoreCase("REJECTED")) {
 
             throw new RuntimeException("Invalid status.");
         }
+        if (!ad_status.equalsIgnoreCase("ACCEPTED") &&
+                !ad_status.equalsIgnoreCase("REJECTED")) {
+
+            throw new RuntimeException("Invalid status.");
+        }
+
 
         ApplicationsForWantedAdvertisements advertisement =
                 applicationForWantedADRepository.findById(request_id)
@@ -105,6 +121,132 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
 
     }
 
+    @Override
+    public List<ClientJobs> getClientOngoingApplications(String clientId, String jobStatus) {
+
+        List<ApplicationsForWantedAdvertisements> applications =
+                applicationForWantedADRepository.findByClientIdAndStatus(clientId, jobStatus);
+
+        if (applications.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+
+        return applications.stream()
+                .map(this::mapApplicationToClientJobs)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean updateCompleteOrIncompleteJobs(int applicationId, String status) {
+        if (!status.equalsIgnoreCase("COMPLETED")
+               ) {
+
+            throw new RuntimeException("Invalid status.");
+        }
+        ApplicationsForWantedAdvertisements applicationsForWantedAdvertisements = applicationForWantedADRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Advertisement not found."));
+        String serviceWantedAdvertisementId = applicationsForWantedAdvertisements.getAdvertisement().getAdvertisement_id();
+        ServiceWantedAdvertisement byId = serviceWantedAdvertisementRepository.findById(serviceWantedAdvertisementId)
+                .orElseThrow(() -> new RuntimeException("Wanted advertisement not found"));
+        applicationsForWantedAdvertisements.setStatus(status);
+        byId.setStatus(status);
+        return null;
+    }
+
+    @Override
+    public String cancelRequest(int id) {
+
+        ApplicationsForWantedAdvertisements applicationsForWantedAdvertisements = applicationForWantedADRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Advertisement not found."));
+        LocalDate currentDate = LocalDate.now();
+        LocalDate requestedDate = applicationsForWantedAdvertisements.getAdvertisement().getRequiredDate();
+        long daysUntilService = ChronoUnit.DAYS.between(currentDate, requestedDate);
+
+
+        ApplicationRequestCancellationResult result = new ApplicationRequestCancellationResult();
+        result.setRequest(applicationsForWantedAdvertisements);
+        result.setCancelledAt(LocalDateTime.now());
+
+        result.setDaysUntilService(daysUntilService);
+        result.setStatus("PROCESSED");
+
+
+        if (daysUntilService >= 5) {
+
+            result.setMessage("Cancelled with 5+ days notice. No cancellation fee applied. Full refund.");
+        } else if (daysUntilService >= 3) {
+
+            result.setMessage("Cancelled with 3-4 days notice. Rs. 300 cancellation fee applied.");
+
+
+        } else if (daysUntilService >= 1) {
+
+            result.setMessage("Cancelled with 1-2 days notice. Rs. 500 cancellation fee applied.");
+
+
+        } else {
+
+            throw new RuntimeException(
+                    "Cannot cancel this request. Service is scheduled for today (" + requestedDate +
+                            ") or has already passed. Please contact support."
+            );
+        }
+
+        applicationsForWantedAdvertisements.setStatus("CANCELLED");
+
+        applicationForWantedADRepository.save(applicationsForWantedAdvertisements);
+        applicationRequestCancellationResultRepository.save(result);
+        return result.getMessage();
+    }
+
+    private ClientJobs mapApplicationToClientJobs(ApplicationsForWantedAdvertisements application) {
+
+        ServiceWantedAdvertisement advertisement = application.getAdvertisement();
+        Worker worker = application.getWorker();
+
+
+        String serviceProviderName = worker != null ?
+                worker.getFirstName() + " " + worker.getLastName() :
+                "Unknown Service Provider";
+
+
+        String requestedService = advertisement != null && advertisement.getTitle() != null ?
+                advertisement.getTitle() :
+                "Service not specified";
+
+
+        String fullAddress = advertisement != null && advertisement.getFullAddress() != null ?
+                advertisement.getFullAddress() :
+                "Address not available";
+
+
+        LocalDate requestedDate = advertisement != null ?
+                advertisement.getRequiredDate() :
+                null;
+
+        String contactNumber = worker != null && worker.getPrimaryPhoneNumber() != null ?
+                worker.getPrimaryPhoneNumber() :
+                "Contact not available";
+
+
+        String status = application.getStatus() != null ?
+                application.getStatus() :
+                "UNKNOWN";
+
+        LocalDate createdAt = application.getCreatedAt();
+
+        return new ClientJobs(
+                requestedService,
+                status,
+                serviceProviderName,
+                fullAddress,
+                requestedDate,
+                createdAt,
+                contactNumber
+        );
+    }
+
     @Transactional
     private WantedAdvertisementApplication mapToWantedAdvertisementApplication(ApplicationsForWantedAdvertisements application) {
         ServiceWantedAdvertisement advertisement = application.getAdvertisement();
@@ -113,7 +255,7 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
 
 
         return new WantedAdvertisementApplication(
-
+                application.getRequestId(),
                 advertisement.getTitle(),
 
 

@@ -3,7 +3,7 @@ package lk.workbridge.marketplace.dto.responses;
 import lk.workbridge.marketplace.enums.PaymentType;
 
 public record WantedAdvertisementApplication(
-
+        int requestId,
         String title,
         String serviceProviderName,
         String jobTitle,

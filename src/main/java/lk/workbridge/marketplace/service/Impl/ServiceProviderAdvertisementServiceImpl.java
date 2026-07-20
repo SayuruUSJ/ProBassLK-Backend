@@ -9,7 +9,7 @@ import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
 
-import lk.workbridge.marketplace.repository.ClientBookingRequestAdvertisementRepository;
+import lk.workbridge.marketplace.repository.HireRequestRepository;
 import lk.workbridge.marketplace.repository.RatingRepository;
 import lk.workbridge.marketplace.repository.ServiceProviderAdvertisementRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
     private final UserRepository userRepository;
     private final WorkerSkillRepository workerSkillRepository;
     private final RatingRepository ratingRepository;
-    private final ClientBookingRequestAdvertisementRepository clientBookingRequestAdvertisementRepository;
+    private final HireRequestRepository hireRequestRepository;
 
     @Override
     public String createNewAdvertisement(ServiceProviderAD serviceProviderAD) {
@@ -47,6 +46,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         Worker worker = (Worker) user;
 
         validateWorkerProfile(worker);
+
 
         Optional<Worker> workerWithSkills = workerSkillRepository.findByIdWithSkills(worker.getId());
 
@@ -61,6 +61,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
     }
 
 
+
     @Override
     public ServiceProviderADResponse getAdvertisementForSpecificWorker(String workerId) {
 
@@ -70,7 +71,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         Worker worker = (Worker) user;
         validateWorkerProfile(worker);
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
-        long completedJobs = clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
+        long completedJobs = hireRequestRepository.countCompletedBookings(worker.getId(), "COMPLETED");
         Optional<Worker> byIdWithSkills = workerSkillRepository.findByIdWithSkills(worker.getId());
 
         List<Rating> ratings = ratingRepository.findByWorker(worker);
@@ -78,12 +79,14 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 .stream()
                 .map(rating -> {
                     RatingResponse response = new RatingResponse(
+                            rating.getId(),
                             rating.getStars(),
                             rating.getComment(),
                             rating.getWorker() != null ? rating.getWorker().getId() : null,
                             rating.getWorker() != null ? rating.getWorker().getFirstName() : null,
                             rating.getClient() != null ? rating.getClient().getId() : null,
-                            rating.getClient() != null ? rating.getClient().getFirstName() : null
+                            rating.getClient() != null ? rating.getClient().getFirstName() : null,
+                            rating.getWorker().getTitle()
                     );
                     return response;
                 })
@@ -160,7 +163,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         validateWorkerProfile(worker);
 
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
-        long completedJobs = clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
+        long completedJobs = hireRequestRepository.countCompletedBookings(worker.getId(), "COMPLETED");
         Optional<Worker> workerWithSkills =
                 workerSkillRepository.findByIdWithSkills(worker.getId());
 
@@ -187,12 +190,14 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 .stream()
                 .map(rating -> {
                     RatingResponse response = new RatingResponse(
+                            rating.getId(),
                             rating.getStars(),
                             rating.getComment(),
                             rating.getWorker() != null ? rating.getWorker().getId() : null,
                             rating.getWorker() != null ? rating.getWorker().getFirstName() : null,
                             rating.getClient() != null ? rating.getClient().getId() : null,
-                            rating.getClient() != null ? rating.getClient().getFirstName() : null
+                            rating.getClient() != null ? rating.getClient().getFirstName() : null,
+                            rating.getWorker().getTitle()
                     );
                     return response;
                 })

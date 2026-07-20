@@ -31,5 +31,6 @@ public interface AuthService {
 
     ServiceProviderProfile getServiceProviderProfileInfo(String userId);
 
+    String deleteMyAccount(String userId);
 
 }

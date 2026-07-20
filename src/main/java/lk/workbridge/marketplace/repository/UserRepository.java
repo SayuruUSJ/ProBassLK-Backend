@@ -21,11 +21,15 @@ public interface UserRepository extends JpaRepository<User,String> {
 
     // ✅ CORRECT - checks existence by email
     boolean existsByEmail(String email);
-     @Query(value = "SELECT CASE WHEN verification_status = 1 THEN true ELSE false END " +
-           "FROM users WHERE username = :username", 
-           nativeQuery = true)
+
+    @Query(value = "SELECT CASE WHEN verification_status = 1 THEN true ELSE false END " +
+            "FROM users WHERE username = :username",
+            nativeQuery = true)
     Integer isUserVerified(@Param("username") String username);
 
     @Query("SELECT u FROM User u")
     Page<User> findAllUsersWithBasicInfo(Pageable pageable);
+
+    @Query("SELECT u FROM User u WHERE u.id = :id")
+    Optional<User> findByIdJPQL(@Param("id") String id);
 }

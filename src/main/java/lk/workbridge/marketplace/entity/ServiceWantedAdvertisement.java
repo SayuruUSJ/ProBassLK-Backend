@@ -96,6 +96,9 @@ private Double offeredRate;
 @Column(name="is_negotiable",nullable = false)
 private boolean isRateNegotiable;
 
+@Column(name="isUrgent",nullable = true)
+private boolean isUrgent;
+
 @Column(name="additional_instructions",nullable = true)
 private String additionalInstructions;
 

@@ -389,6 +389,18 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         );
     }
 
+    @Transactional
+    @Override
+    public String deleteMyAccount(String userId) {
+
+        User user = repo.findByIdJPQL(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        repo.delete(user);
+        repo.flush();
+
+
+        return "User deleted successfully.";
+    }
 
 
 }

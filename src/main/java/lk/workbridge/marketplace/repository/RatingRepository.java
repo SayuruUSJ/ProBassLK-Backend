@@ -1,7 +1,10 @@
 package lk.workbridge.marketplace.repository;
 
+import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.Rating;
 import lk.workbridge.marketplace.entity.Worker;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +19,11 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     @Query("SELECT COUNT(r) FROM Rating r WHERE r.worker.id = :workerId")
     Long countByWorkerId(@Param("workerId") String workerId);
+
+    @Query("SELECT r FROM Rating r WHERE r.client = :client")
+    Page<Rating> findByClient(@Param("client") Client client,
+                              Pageable pageable
+    );
+
+
 }

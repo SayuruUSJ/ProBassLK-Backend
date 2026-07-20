@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name="client_requestedAdvertisements")
-public class ClientBookingRequestedAdvertisement {
+public class HireRequest {
 
     @Id
     @ServiceProviderBookingADID
@@ -62,5 +62,8 @@ public class ClientBookingRequestedAdvertisement {
 
     @Column(name = "description", nullable = true, length = 255)
     private String description;
+
+    @Column(name="created_at")
+    private LocalDate createdAt;
 
 }

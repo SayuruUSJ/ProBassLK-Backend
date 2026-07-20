@@ -39,6 +39,10 @@ public class Rating {
     @Column(name = "comment", nullable = true)
     private String comment;
 
+    @Column(name="provider_reply",nullable = true)
+    private String providerReply;
+
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 }

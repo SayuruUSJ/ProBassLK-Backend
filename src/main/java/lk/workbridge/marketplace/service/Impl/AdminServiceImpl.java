@@ -9,13 +9,13 @@ import lk.workbridge.marketplace.dto.responses.UserBasicInfo;
 import lk.workbridge.marketplace.dto.responses.WorkerMoreInfo;
 import lk.workbridge.marketplace.dto.responses.WorkerSkillResponse;
 import lk.workbridge.marketplace.entity.Client;
-import lk.workbridge.marketplace.entity.ClientBookingRequestedAdvertisement;
+import lk.workbridge.marketplace.entity.HireRequest;
 import lk.workbridge.marketplace.entity.Rating;
 import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.ServiceWantedAdvertisement;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
-import lk.workbridge.marketplace.repository.ClientBookingRequestAdvertisementRepository;
+import lk.workbridge.marketplace.repository.HireRequestRepository;
 import lk.workbridge.marketplace.repository.RatingRepository;
 import lk.workbridge.marketplace.repository.ServiceProviderAdvertisementRepository;
 import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
@@ -43,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final WorkerSkillRepository workerSkillRepository;
     private final RatingRepository ratingRepository;
-    private final ClientBookingRequestAdvertisementRepository clientBookingRequestAdvertisementRepository;
+    private final HireRequestRepository hireRequestRepository;
     private final ApplicationForWantedADRepository applicationForWantedADRepository;
     @Override
     public boolean acceptOrRejectServiceProviderAdvertisement(String serviceId, String status) {
@@ -105,7 +105,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public String deleteUser(String userId) {
-        userRepository.deleteById(userId);
+        User user = userRepository.findByIdJPQL(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.delete(user);
+        userRepository.flush();
+
+
         return "User deleted successfully.";
     }
 
@@ -135,8 +140,8 @@ public class AdminServiceImpl implements AdminService {
 
     private ClientMoreInfo convertToClientMoreInfo(Client client) {
 
-        List<ClientBookingRequestedAdvertisement> bookingRequests =
-                clientBookingRequestAdvertisementRepository.findByClientId(client.getId());
+        List<HireRequest> bookingRequests =
+                hireRequestRepository.findByClientId(client.getId());
 
         List<BookingRequestResponse> bookingRequestResponses = bookingRequests
                 .stream()
@@ -180,8 +185,8 @@ public class AdminServiceImpl implements AdminService {
                 ))
                 .toList();
 
-        List<ClientBookingRequestedAdvertisement> bookingRequests =
-                clientBookingRequestAdvertisementRepository.findByWorkerId(worker.getId());
+        List<HireRequest> bookingRequests =
+                hireRequestRepository.findByWorkerId(worker.getId());
 
         List<BookingRequestResponse> bookingRequestResponses = bookingRequests
                 .stream()
@@ -208,12 +213,14 @@ public class AdminServiceImpl implements AdminService {
                 .stream()
                 .map(rating -> {
                     RatingResponse response = new RatingResponse(
+                            rating.getId(),
                             rating.getStars(),
                             rating.getComment(),
                             rating.getWorker() != null ? rating.getWorker().getId() : null,
                             rating.getWorker() != null ? rating.getWorker().getFirstName() : null,
                             rating.getClient() != null ? rating.getClient().getId() : null,
-                            rating.getClient() != null ? rating.getClient().getFirstName() : null
+                            rating.getClient() != null ? rating.getClient().getFirstName() : null,
+                            rating.getWorker().getTitle()
                     );
                     return response;
                 })
@@ -288,7 +295,8 @@ public class AdminServiceImpl implements AdminService {
                 advertisement.getPaymentType(),
                 advertisement.getOfferedRate(),
                 advertisement.isRateNegotiable(),
-                advertisement.getAdditionalInstructions()
+                advertisement.getAdditionalInstructions(),
+                advertisement.isUrgent()
         );
 
     }
@@ -301,7 +309,7 @@ public class AdminServiceImpl implements AdminService {
         Worker worker = (Worker) user;
 
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
-        long completedJobs= clientBookingRequestAdvertisementRepository.countCompletedBookings(worker.getId(), "COMPLETED");
+        long completedJobs= hireRequestRepository.countCompletedBookings(worker.getId(), "COMPLETED");
         Optional<Worker> workerWithSkills =
                 workerSkillRepository.findByIdWithSkills(worker.getId());
         Set<DayOfWeek> workingDays = worker.getWorkingDays();
@@ -310,12 +318,14 @@ public class AdminServiceImpl implements AdminService {
                 .stream()
                 .map(rating -> {
                     RatingResponse response = new RatingResponse(
+                            rating.getId(),
                             rating.getStars(),
                             rating.getComment(),
                             rating.getWorker() != null ? rating.getWorker().getId() : null,
                             rating.getWorker() != null ? rating.getWorker().getFirstName() : null,
                             rating.getClient() != null ? rating.getClient().getId() : null,
-                            rating.getClient() != null ? rating.getClient().getFirstName() : null
+                            rating.getClient() != null ? rating.getClient().getFirstName() : null,
+                            rating.getWorker().getTitle()
                     );
                     return response;
                 })

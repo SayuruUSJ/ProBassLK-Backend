@@ -20,7 +20,7 @@ public class Client  extends  User{
     private String organizationName;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-    private Set<ClientBookingRequestedAdvertisement> bookingRequests = new HashSet<>();
+    private Set<HireRequest> bookingRequests = new HashSet<>();
 
 
 

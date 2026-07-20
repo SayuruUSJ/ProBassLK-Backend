@@ -2,7 +2,7 @@ package lk.workbridge.marketplace.controller;
 
 import jakarta.validation.Valid;
 import lk.workbridge.marketplace.dto.ClientBookingRequestAD;
-import lk.workbridge.marketplace.service.ClientBookingRequestAdvertisementService;
+import lk.workbridge.marketplace.service.HireRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,33 +18,40 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping("/api/client-requests")
 @RequiredArgsConstructor
-public class ClientBookingRequestController {
+public class HireRequestController {
 
-    private final ClientBookingRequestAdvertisementService clientRequestAdvertisementService;
+    private final HireRequestService hireRequestService;
 
     @PostMapping("/create-advertisement")
     public ResponseEntity<?> register(@Valid @RequestBody ClientBookingRequestAD request) {
-        String result = clientRequestAdvertisementService.requestAdvertisement(request);
+        String result = hireRequestService.requestAdvertisement(request);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping("/update-status")
     public ResponseEntity<?> acceptOrReject(@RequestParam String advertisementId,
                                             @RequestParam String status) {
-        Boolean result = clientRequestAdvertisementService.acceptOrReject(advertisementId, status);
+        Boolean result = hireRequestService.acceptOrReject(advertisementId, status);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping("/update-completed-jobs")
     public ResponseEntity<?> updateCompletedJobs(@RequestParam String advertisementId,
                                                   @RequestParam String status) {
-        boolean isCompleted = clientRequestAdvertisementService.updateCompleteOrIncompleteJobs(advertisementId, status);
+        boolean isCompleted = hireRequestService.updateCompleteOrIncompleteJobs(advertisementId, status);
         return ResponseEntity.ok(isCompleted);
     }
 
     @GetMapping("/get-requests")
     public ResponseEntity<?> getAllRequestsByWorkerId(@RequestParam String workerId) {
-        return ResponseEntity.ok(clientRequestAdvertisementService.getAllRequestsByWorkerId(workerId));
+        return ResponseEntity.ok(hireRequestService.getAllRequestsByWorkerId(workerId));
+    }
+
+    @PostMapping("/cancel-request")
+    public ResponseEntity<?> cancelRequest(
+            @RequestParam String hireAdvertisementId
+    ){
+        return ResponseEntity.ok(hireRequestService.cancelRequest(hireAdvertisementId));
     }
 
 }
