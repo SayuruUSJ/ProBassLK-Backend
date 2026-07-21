@@ -50,7 +50,7 @@ public class WorkerSkill {
 
     private JobRole jobRole;
 
-
+    @Column(name = "daily_rate")
     private Double rate;
     @Enumerated(
             EnumType.STRING
@@ -58,10 +58,10 @@ public class WorkerSkill {
     @Column(name = "rate_type", nullable = true)
     private RateType rateType;
     @Column(name = "experience", nullable = true)
-    private int experience;
+    private Integer experience;
     @Column(name="description",nullable = true)
     private String description;
     @Column(name="negotiable",nullable = true)
-    private boolean negotiable;
+    private Boolean negotiable;
 
 }

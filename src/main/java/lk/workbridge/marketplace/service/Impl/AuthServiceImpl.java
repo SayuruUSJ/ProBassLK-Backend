@@ -242,54 +242,54 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         worker.setOverallExperience(serviceProviderProfileUpdate.getOverallExperience());
         worker.setAbout(serviceProviderProfileUpdate.getAbout());
 
-        for (WorkerSkillRequest skillRequest
-                : serviceProviderProfileUpdate.getSkills()) {
-
-            JobRole jobRole =
-
-                    jobRoleRepository
-
-                            .findByRoleName(
-
-                                    skillRequest.getRole()
-
-                            )
-
-                            .orElseThrow(
-
-                                    () -> new RuntimeException(
-
-                                            "Role not found"
-
-                                    )
-
-                            );
-
-            WorkerSkill skill =
-                    new WorkerSkill();
-
-            skill.setWorker(
-                    worker
-            );
-
-            skill.setJobRole(
-                    jobRole
-            );
-
-            skill.setRate(
-
-                    skillRequest.getDailyRate()
-
-            );
-            skill.setRateType(skillRequest.getRateType());
-            skill.setExperience(skillRequest.getExperience());
-            skill.setDescription(skill.getDescription());
-            skill.setNegotiable(skill.isNegotiable());
-            worker.getSkills()
-
-                    .add(skill);
-
-        }
+//        for (WorkerSkillRequest skillRequest
+//                : serviceProviderProfileUpdate.getSkills()) {
+//
+//            JobRole jobRole =
+//
+//                    jobRoleRepository
+//
+//                            .findByRoleName(
+//
+//                                    skillRequest.getRole()
+//
+//                            )
+//
+//                            .orElseThrow(
+//
+//                                    () -> new RuntimeException(
+//
+//                                            "Role not found"
+//
+//                                    )
+//
+//                            );
+//
+//            WorkerSkill skill =
+//                    new WorkerSkill();
+//
+//            skill.setWorker(
+//                    worker
+//            );
+//
+//            skill.setJobRole(
+//                    jobRole
+//            );
+//
+//            skill.setRate(
+//
+//                    skillRequest.getDailyRate()
+//
+//            );
+//            skill.setRateType(skillRequest.getRateType());
+//            skill.setExperience(skillRequest.getExperience());
+//            skill.setDescription(skill.getDescription());
+//            skill.setNegotiable(skill.isNegotiable());
+//            worker.getSkills()
+//
+//                    .add(skill);
+//
+//        }
         repo.save(worker);
         return "service provider profile updated succfully";
     }
@@ -350,12 +350,13 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                 .orElse(Collections.emptySet())
                 .stream()
                 .map(skill -> new WorkerSkillResponse(
+                        skill.getId(),
                         skill.getJobRole(),
                         skill.getRate(),
                         skill.getRateType(),
                         skill.getExperience(),
                         skill.getDescription(),
-                        skill.isNegotiable()
+                        skill.getNegotiable()
                 ))
                 .toList();
         Set<DayOfWeek> workingDays = worker.getWorkingDays();
@@ -400,6 +401,90 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
 
 
         return "User deleted successfully.";
+    }
+
+    @Transactional
+    @Override
+    public String addWorkSkill(String UserId, WorkerSkillRequest workerSkillRequest) {
+        Optional<User> userOptional = Optional.of(repo.findById(UserId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found")));
+
+        User user = userOptional.get();
+        Worker worker = (Worker) user;
+
+            JobRole jobRole =
+
+                    jobRoleRepository
+
+                            .findByRoleName(
+
+                                    workerSkillRequest.getRole()
+
+                            )
+
+                            .orElseThrow(
+
+                                    () -> new RuntimeException(
+
+                                            "Role not found"
+
+                                    )
+
+                            );
+
+            WorkerSkill skill =
+                    new WorkerSkill();
+
+            skill.setWorker(
+                    worker
+            );
+
+            skill.setJobRole(
+                    jobRole
+            );
+
+            skill.setRate(
+
+                    workerSkillRequest.getDailyRate()
+
+            );
+            skill.setRateType(workerSkillRequest.getRateType());
+            skill.setExperience(workerSkillRequest.getExperience());
+            skill.setDescription(workerSkillRequest.getDescription());
+            skill.setNegotiable(workerSkillRequest.isNegotiable());
+
+            worker.getSkills().add(skill);
+
+            repo.save(worker);
+        return "new skill added successfully";
+    }
+
+    @Transactional
+    @Override
+    public String removeSkillID(String userId, Integer skillId) {
+Worker worker= (Worker) repo.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Worker not found with ID: " + userId));
+
+        // Find the skill
+        WorkerSkill skill = workerSkillRepository.findById(Long.valueOf(skillId))
+                .orElseThrow(() -> new RuntimeException("Skill not found with ID: " + skillId));
+
+        // Verify the skill belongs to this worker
+        if (!skill.getWorker().getId().equals(userId)) {
+            throw new RuntimeException("Skill does not belong to this worker");
+        }
+
+        // Remove the skill from worker's skill set
+        worker.getSkills().remove(skill);
+
+        // Delete the skill from database
+        workerSkillRepository.delete(skill);
+
+        // Save the worker (optional, since cascade might handle it)
+        repo.save(worker);
+
+
+        return "Skill removed successfully";
     }
 
 

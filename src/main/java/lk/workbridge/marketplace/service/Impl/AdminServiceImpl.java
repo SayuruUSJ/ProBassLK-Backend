@@ -176,12 +176,13 @@ public class AdminServiceImpl implements AdminService {
                 .orElse(Collections.emptySet())
                 .stream()
                 .map(skill -> new WorkerSkillResponse(
+                        skill.getId(),
                         skill.getJobRole(),
                         skill.getRate(),
                         skill.getRateType(),
                         skill.getExperience(),
                         skill.getDescription(),
-                        skill.isNegotiable()
+                        skill.getNegotiable()
                 ))
                 .toList();
 
@@ -340,12 +341,13 @@ public class AdminServiceImpl implements AdminService {
                 .orElse(Collections.emptySet())
                 .stream()
                 .map(skill -> new WorkerSkillResponse(
+                        skill.getId(),
                         skill.getJobRole(),
                         skill.getRate(),
                         skill.getRateType(),
                         skill.getExperience(),
                         skill.getDescription(),
-                        skill.isNegotiable()
+                        skill.getNegotiable()
                 ))
                 .toList();
         Long count = ratingRepository.countByWorkerId(worker.getId());

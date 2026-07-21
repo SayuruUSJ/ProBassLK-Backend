@@ -21,7 +21,7 @@ public class WorkerSkillRequest {
 
     private RateType rateType;
 
-    private int experience;
+    private      Integer experience;
 
     private String description;
     private boolean negotiable;

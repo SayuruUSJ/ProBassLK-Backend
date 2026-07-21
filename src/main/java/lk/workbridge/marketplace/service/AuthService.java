@@ -4,6 +4,7 @@ import lk.workbridge.marketplace.dto.ClientProfileUpdate;
 import lk.workbridge.marketplace.dto.RegisterRequest;
 import lk.workbridge.marketplace.dto.ServiceProviderProfileUpdate;
 import lk.workbridge.marketplace.dto.VerificationRequest;
+import lk.workbridge.marketplace.dto.WorkerSkillRequest;
 import lk.workbridge.marketplace.dto.responses.ClientProfile;
 import lk.workbridge.marketplace.dto.responses.ServiceProviderProfile;
 import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
@@ -32,5 +33,8 @@ public interface AuthService {
     ServiceProviderProfile getServiceProviderProfileInfo(String userId);
 
     String deleteMyAccount(String userId);
+
+    String addWorkSkill(String UserId, WorkerSkillRequest workerSkillRequest);
+    String removeSkillID(String userId,Integer skillId);
 
 }

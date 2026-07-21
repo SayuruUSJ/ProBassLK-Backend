@@ -100,12 +100,13 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 .orElse(Collections.emptySet())
                 .stream()
                 .map(skill -> new WorkerSkillResponse(
+                        skill.getId(),
                         skill.getJobRole(),
                         skill.getRate(),
                         skill.getRateType(),
                         skill.getExperience(),
                         skill.getDescription(),
-                        skill.isNegotiable()
+                        skill.getNegotiable()
 
                 ))
                 .toList();
@@ -176,12 +177,13 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 .orElse(Collections.emptySet())
                 .stream()
                 .map(skill -> new WorkerSkillResponse(
+                        skill.getId(),
                         skill.getJobRole(),
                         skill.getRate(),
                         skill.getRateType(),
                         skill.getExperience(),
                         skill.getDescription(),
-                        skill.isNegotiable()
+                        skill.getNegotiable()
                 ))
                 .toList();
 

@@ -9,6 +9,7 @@ import lk.workbridge.marketplace.dto.LoginRequest;
 import lk.workbridge.marketplace.dto.RegisterRequest;
 import lk.workbridge.marketplace.dto.ServiceProviderProfileUpdate;
 import lk.workbridge.marketplace.dto.VerificationRequest;
+import lk.workbridge.marketplace.dto.WorkerSkillRequest;
 import lk.workbridge.marketplace.dto.responses.ClientProfile;
 import lk.workbridge.marketplace.dto.responses.ServiceProviderProfile;
 import lk.workbridge.marketplace.entity.User;
@@ -27,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -147,7 +149,7 @@ public class AuthController {
                     "message", "Login successful",
                     "sessionId", session.getId(),
                     "user", Map.of(
-                            "user_id",user.getId(),
+                            "user_id", user.getId(),
                             "username", user.getUsername(),
                             "email", user.getEmail(),
                             "role", user.getRole(),
@@ -163,8 +165,6 @@ public class AuthController {
                     ));
         }
     }
-
-
 
 
     @GetMapping("/client-profile-info")
@@ -198,6 +198,7 @@ public class AuthController {
         }
 
     }
+
     @GetMapping("/session-info")
     public ResponseEntity<?> getSessionInfo(HttpServletRequest request) {
 
@@ -225,6 +226,23 @@ public class AuthController {
                 "username", isAuthenticated ? auth.getName() : null,
                 "roles", isAuthenticated ? auth.getAuthorities() : null
         ));
+    }
+
+    @PutMapping("/{workerId}/add-new-skill")
+    public ResponseEntity<?> addNewWorkerSkill(
+            @PathVariable String workerId,
+            @Valid @RequestBody WorkerSkillRequest workerSkillRequest
+    ) {
+        return ResponseEntity.ok(service.addWorkSkill(workerId, workerSkillRequest));
+
+    }
+    @DeleteMapping("/remove-new-skill")
+    public ResponseEntity<?> removeNewSkill(
+            @RequestParam String workerId,
+            @RequestParam  Integer skillId
+    ) {
+        return ResponseEntity.ok(service.removeSkillID(workerId, skillId));
+
     }
 
     @PostMapping("/logout")
@@ -269,7 +287,7 @@ public class AuthController {
     @DeleteMapping("/delete-my-account")
     public ResponseEntity<?> deleteMyAccount(
             @RequestParam String userId
-    ){
+    ) {
 
         return ResponseEntity.ok(service.deleteMyAccount(userId));
     }

@@ -17,7 +17,7 @@ public class ServiceProviderProfileUpdate extends BaseProfileUpdate{
 
     private Boolean available;
 
-    private Set<WorkerSkillRequest> skills;
+//    private Set<WorkerSkillRequest> skills;
 
     private int overallExperience;
 
