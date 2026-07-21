@@ -1,6 +1,7 @@
 package lk.workbridge.marketplace.service.Impl;
 
 import lk.workbridge.marketplace.dto.responses.ClientProfileCounts;
+import lk.workbridge.marketplace.dto.responses.ServiceProviderProfileCounts;
 import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
 import lk.workbridge.marketplace.repository.HireRequestRepository;
 import lk.workbridge.marketplace.service.ClientAndServiceProviderProfileCountService;
@@ -41,6 +42,21 @@ public class ClientAndServiceProviderProfileCountServiceImpl implements ClientAn
         return new ClientProfileCounts(
                 activeAds,
                 pendingJobs,
+                ongoingJobs
+        );
+    }
+
+    @Override
+    public ServiceProviderProfileCounts getServiceProviderProfileCounts(String workerId) {
+        long pendingHireRequestCount= hireRequestRepository.countHireRequests(workerId,"PENDING");
+        long  confirmedHireRequestCount=hireRequestRepository.countHireRequests(workerId,"CONFIRMED");
+        long confirmedApplicationRequestCount= applicationForWantedADRepository.countApplicantsRequestsServiceProvider(workerId,"CONFIRMED");
+        long ongoingJobs=confirmedApplicationRequestCount+confirmedHireRequestCount;
+        long pendingApplicationRequestCount=applicationForWantedADRepository.countApplicantsRequestsServiceProvider(workerId,"PENDING");
+
+        return new ServiceProviderProfileCounts(
+                pendingHireRequestCount,
+                pendingApplicationRequestCount,
                 ongoingJobs
         );
     }

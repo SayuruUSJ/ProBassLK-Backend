@@ -41,7 +41,7 @@ public record ServiceProviderProfile(
 
         List<WorkerSkillResponse> skills,
 
-         boolean available,
+        boolean available,
         String title,
         Integer overallExperience,
         String about,

@@ -1,6 +1,7 @@
 package lk.workbridge.marketplace.controller;
 
 import lk.workbridge.marketplace.dto.responses.ClientProfileCounts;
+import lk.workbridge.marketplace.dto.responses.ServiceProviderProfileCounts;
 import lk.workbridge.marketplace.service.ClientAndServiceProviderProfileCountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,14 @@ public class ProfileCountController {
             @RequestParam String clientId
     ) {
         return ResponseEntity.ok(clientAndServiceProviderProfileCountService.getCounts(clientId));
+
+    }
+
+    @GetMapping("/get-service-provider-counts")
+    public ResponseEntity<ServiceProviderProfileCounts> getServiceProviderProfileCounts(
+            @RequestParam String serviceProviderId
+    ) {
+        return ResponseEntity.ok(clientAndServiceProviderProfileCountService.getServiceProviderProfileCounts(serviceProviderId));
 
     }
 }

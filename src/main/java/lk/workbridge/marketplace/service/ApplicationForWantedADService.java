@@ -14,4 +14,6 @@ public interface ApplicationForWantedADService {
     List<ClientJobs> getClientOngoingApplications(String clientId, String jobStatus);
     Boolean updateCompleteOrIncompleteJobs(int applicationId, String status);
     String cancelRequest(int id);
+    Page<WantedAdvertisementApplication> getServiceProvidersSpecificApplications(String serviceProviderId,int page,int size);
+
 }

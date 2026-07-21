@@ -24,6 +24,10 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     Page<Rating> findByClient(@Param("client") Client client,
                               Pageable pageable
     );
+    @Query("SELECT r FROM Rating r WHERE r.worker = :worker")
+    Page<Rating> findByWorker(@Param("worker") Worker worker,
+                              Pageable pageable
+    );
 
 
 }

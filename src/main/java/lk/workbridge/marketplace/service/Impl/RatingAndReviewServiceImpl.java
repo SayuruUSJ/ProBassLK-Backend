@@ -12,9 +12,8 @@ import lk.workbridge.marketplace.service.RatingAndReviewService;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-import org.apache.hc.core5.http2.impl.nio.ClientH2IOEventHandler;
+import org.hibernate.jdbc.Work;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -79,6 +78,17 @@ public class RatingAndReviewServiceImpl implements RatingAndReviewService {
         ratingRepository.save(rating);
 
         return "Reply added successfully to review";
+    }
+
+    @Override
+    public Page<RatingResponse> getRatingsAndReviewsServiceProvider(int page, int size, String serviceProviderId) {
+        User userOne = userRepository.findById(serviceProviderId)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+        Worker worker = (Worker) userOne;
+        Pageable pageable = PageRequest.of(page, size);
+
+        return  ratingRepository.findByWorker(worker, pageable)
+                .map(this::mapToRatingResponse);
     }
 
 

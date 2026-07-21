@@ -1,7 +1,8 @@
 package lk.workbridge.marketplace.controller;
 
 import jakarta.validation.Valid;
-import lk.workbridge.marketplace.dto.ClientBookingRequestAD;
+import lk.workbridge.marketplace.dto.HireRequestAD;
+import lk.workbridge.marketplace.dto.responses.HireRequestResponse;
 import lk.workbridge.marketplace.service.HireRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
-@RequestMapping("/api/client-requests")
+@RequestMapping("/api/hire-requests")
 @RequiredArgsConstructor
 public class HireRequestController {
 
     private final HireRequestService hireRequestService;
 
-    @PostMapping("/create-advertisement")
-    public ResponseEntity<?> register(@Valid @RequestBody ClientBookingRequestAD request) {
+    @PostMapping("/create-request")
+    public ResponseEntity<?> register(@Valid @RequestBody HireRequestAD request) {
         String result = hireRequestService.requestAdvertisement(request);
         return ResponseEntity.ok(result);
     }
@@ -43,9 +46,25 @@ public class HireRequestController {
     }
 
     @GetMapping("/get-requests")
-    public ResponseEntity<?> getAllRequestsByWorkerId(@RequestParam String workerId) {
+    public ResponseEntity<List<HireRequestResponse>> getAllRequestsByWorkerId(@RequestParam String workerId) {
         return ResponseEntity.ok(hireRequestService.getAllRequestsByWorkerId(workerId));
     }
+
+    @GetMapping("/get-pending-requests")
+    public ResponseEntity<List<HireRequestResponse>> getAllPendingRequestsByWorkerId(@RequestParam String workerId) {
+        return ResponseEntity.ok(hireRequestService.getAllPendingRequestsByWorkerId(workerId));
+    }
+    @GetMapping("/get-accepted-requests")
+    public ResponseEntity<List<HireRequestResponse>> getAllAcceptedRequestsByWorkerId(@RequestParam String workerId) {
+        return ResponseEntity.ok(hireRequestService.getAllAcceptedRequestsByWorkerId(workerId));
+    }
+    @GetMapping("/get-rejected-requests")
+    public ResponseEntity<List<HireRequestResponse>> getAllRejectedRequestsByWorkerId(@RequestParam String workerId) {
+        return ResponseEntity.ok(hireRequestService.getAllRejectedRequestsByWorkerId(workerId));
+    }
+
+
+
 
     @PostMapping("/cancel-request")
     public ResponseEntity<?> cancelRequest(

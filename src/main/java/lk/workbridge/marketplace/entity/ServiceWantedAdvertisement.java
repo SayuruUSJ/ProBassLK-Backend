@@ -40,6 +40,9 @@ public class ServiceWantedAdvertisement {
     @Column(name = "client_contact_number", nullable = false, length = 100)
     private String clientContactNumber;
 
+    @Enumerated(
+            EnumType.STRING
+    )
     @Column(name="preferred_contact_method")
     private ContactMethod preferredContactMethod;
 

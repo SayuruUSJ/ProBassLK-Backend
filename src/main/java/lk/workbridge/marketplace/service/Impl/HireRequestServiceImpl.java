@@ -1,7 +1,8 @@
 package lk.workbridge.marketplace.service.Impl;
 
-import lk.workbridge.marketplace.dto.ClientBookingRequestAD;
+import lk.workbridge.marketplace.dto.HireRequestAD;
 import lk.workbridge.marketplace.dto.responses.ClientJobs;
+import lk.workbridge.marketplace.dto.responses.HireRequestResponse;
 import lk.workbridge.marketplace.entity.HireRequestCancellationResult;
 import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.HireRequest;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +36,7 @@ public class HireRequestServiceImpl implements HireRequestService {
     private final HireRequestCancellationResultRepository hireRequestCancellationResultRepository;
 
     @Override
-    public String requestAdvertisement(ClientBookingRequestAD requestAD) {
+    public String requestAdvertisement(HireRequestAD requestAD) {
         try {
             User userOne = userRepository.findById(requestAD.getWorkerId())
                     .orElseThrow(() -> new RuntimeException("Worker not found."));
@@ -57,6 +59,7 @@ public class HireRequestServiceImpl implements HireRequestService {
             advertisement.setLocation(requestAD.getLocation());
             advertisement.setDescription(requestAD.getDescription());
             advertisement.setCreatedAt(LocalDate.now());
+            advertisement.setRateForRequiredService(requestAD.getRateForRequiredService());
             advertisement.setStatus("PENDING");
 
             if (hireRequestRepository.existsByWorkerIdAndRequestedDate(
@@ -96,13 +99,79 @@ public class HireRequestServiceImpl implements HireRequestService {
     }
 
     @Override
-    public List<HireRequest> getAllRequestsByWorkerId(String workerId) {
+    public List<HireRequestResponse> getAllRequestsByWorkerId(String workerId) {
 
         List<HireRequest> requestedAdvertisements = hireRequestRepository.findByWorkerId(workerId);
+        System.out.println("Number of records found: " + requestedAdvertisements.size());
+        System.out.println("WorkerId: " + workerId);
         if (requestedAdvertisements.isEmpty()) {
             throw new RuntimeException("No requests found for the given worker ID.");
         }
-        return requestedAdvertisements;
+        return requestedAdvertisements
+                .stream()
+                .map(this::mapToHireRequestResponse)
+                .collect(Collectors.toList())
+                ;
+
+    }
+
+    @Override
+    public List<HireRequestResponse> getAllPendingRequestsByWorkerId(String workerId) {
+        List<String> statuses = Arrays.asList("pending", "PENDING");
+        List<HireRequest> hireRequests = hireRequestRepository.findByWorkerIdAndStatus(workerId, statuses);
+
+        if (hireRequests.isEmpty()) {
+            throw new RuntimeException("No requests found for the given worker ID.");
+        }
+        return hireRequests
+                .stream()
+                .map(this::mapToHireRequestResponse)
+                .collect(Collectors.toList())
+                ;
+    }
+
+    @Override
+    public List<HireRequestResponse> getAllAcceptedRequestsByWorkerId(String workerId) {
+        List<String> statuses = Arrays.asList("accepted", "ACCEPTED");
+        List<HireRequest> hireRequests = hireRequestRepository.findByWorkerIdAndStatus(workerId, statuses);
+
+        if (hireRequests.isEmpty()) {
+            throw new RuntimeException("No requests found for the given worker ID.");
+        }
+        return hireRequests
+                .stream()
+                .map(this::mapToHireRequestResponse)
+                .collect(Collectors.toList())
+                ;
+    }
+
+    @Override
+    public List<HireRequestResponse> getAllRejectedRequestsByWorkerId(String workerId) {
+        List<String> statuses = Arrays.asList("rejected", "REJECTED");
+        List<HireRequest> hireRequests = hireRequestRepository.findByWorkerIdAndStatus(workerId, statuses);
+
+        if (hireRequests.isEmpty()) {
+            throw new RuntimeException("No requests found for the given worker ID.");
+        }
+        return hireRequests
+                .stream()
+                .map(this::mapToHireRequestResponse)
+                .collect(Collectors.toList())
+                ;
+    }
+
+    private HireRequestResponse mapToHireRequestResponse(HireRequest hireRequest){
+        return new HireRequestResponse(
+                hireRequest.getClientName(),
+                hireRequest.getRequestedService(),
+                hireRequest.getDescription(),
+                hireRequest.getLocation(),
+                hireRequest.getRequestedDate(),
+                hireRequest.getCreatedAt(),
+                hireRequest.getRateForRequiredService(),
+                hireRequest.getStatus()
+
+        );
     }
 
     @Override

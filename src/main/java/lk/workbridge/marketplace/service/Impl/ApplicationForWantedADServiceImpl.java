@@ -200,6 +200,15 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
         return result.getMessage();
     }
 
+    @Transactional
+    @Override
+    public Page<WantedAdvertisementApplication> getServiceProvidersSpecificApplications(String serviceProviderId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return applicationForWantedADRepository.findByWorkerId(serviceProviderId, pageable)
+                .map(this::mapToWantedAdvertisementApplication);
+    }
+
     private ClientJobs mapApplicationToClientJobs(ApplicationsForWantedAdvertisements application) {
 
         ServiceWantedAdvertisement advertisement = application.getAdvertisement();

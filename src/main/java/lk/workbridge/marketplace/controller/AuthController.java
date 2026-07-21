@@ -147,6 +147,7 @@ public class AuthController {
                     "message", "Login successful",
                     "sessionId", session.getId(),
                     "user", Map.of(
+                            "user_id",user.getId(),
                             "username", user.getUsername(),
                             "email", user.getEmail(),
                             "role", user.getRole(),

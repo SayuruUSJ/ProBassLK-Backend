@@ -31,7 +31,7 @@ public class Worker extends User {
     @Column(name = "available", nullable = true)
 //currently accept or not
     private Boolean available;
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = true)
     private String title;
 
     @OneToMany(

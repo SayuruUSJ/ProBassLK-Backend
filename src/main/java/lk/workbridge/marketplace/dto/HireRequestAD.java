@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientBookingRequestAD {
+public class HireRequestAD {
 
 
 @NotBlank(message = "Worker ID is required")
@@ -24,6 +24,8 @@ public class ClientBookingRequestAD {
 @NotBlank(message = "Requested service is required")
     private String requestedService;
 
+@NotNull(message = "rate is required")
+    private Double rateForRequiredService;
 @NotBlank(message = "Advertisement ID is required")
 private String advertisementId;
 

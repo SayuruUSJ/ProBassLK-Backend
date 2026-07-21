@@ -47,6 +47,20 @@ public class RatingAndReviewController {
 
         return ResponseEntity.ok(ratings);
     }
+    @GetMapping("/get-service-provider-reviews")
+    public ResponseEntity<Page<RatingResponse>> getServiceProviderRatings(
+            @RequestParam String serviceProviderId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<RatingResponse> ratings = ratingAndReviewService.getRatingsAndReviewsServiceProvider(page, size, serviceProviderId);
+
+        if (ratings.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(ratings);
+    }
 
     @PutMapping("/add-reply-for-review")
     public ResponseEntity<?> addServiceProviderReplyForReview(

@@ -14,7 +14,7 @@ public class ServiceProviderBookingAdvertisementIdGenerator implements Identifie
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object object) {
-        String query = "SELECT MAX(CAST(SUBSTRING(`advertisement_id`, LENGTH('" + PREFIX + "') + 1) AS UNSIGNED)) FROM client_requestedAdvertisements";
+        String query = "SELECT MAX(CAST(SUBSTRING(`advertisement_id`, LENGTH('" + PREFIX + "') + 1) AS UNSIGNED)) FROM client_requested_advertisements";
 
         try (Connection connection = session.getJdbcConnectionAccess().obtainConnection();
              Statement statement = connection.createStatement();

@@ -114,8 +114,15 @@ public class ServiceWantedAdvertisementController {
             @RequestParam(defaultValue = "10") int size
     ){
         return ResponseEntity.ok(applicationForWantedADService.getClientApplications(clientId,page,size));
+    }
 
-
+        @GetMapping("/get-all-applications-serviceproviderwise")
+    public  ResponseEntity<Page<WantedAdvertisementApplication>> getServiceProviderApplications(
+            @RequestParam String serviceProviderId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        return ResponseEntity.ok(applicationForWantedADService.getServiceProvidersSpecificApplications(serviceProviderId,page,size));
     }
 
     @PutMapping("/{applicationId}/status")
