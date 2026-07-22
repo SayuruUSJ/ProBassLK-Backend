@@ -21,6 +21,8 @@ public record ServiceProviderProfile(
 
         String landLineNumber,
 
+        String whatsappNumber,
+
         String firstName,
 
         String lastName,

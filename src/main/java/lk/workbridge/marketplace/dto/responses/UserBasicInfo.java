@@ -5,7 +5,7 @@ import lk.workbridge.marketplace.enums.Role;
 import java.util.Date;
 
 public record UserBasicInfo(
-       String id,
+        String id,
 
         String username,
 
@@ -14,6 +14,12 @@ public record UserBasicInfo(
         String email,
 
         String phoneNumber,
+
+        String secondaryPhoneNumber,
+
+        String landlineNumber,
+
+        String whatsappNumber,
 
         String firstName,
 

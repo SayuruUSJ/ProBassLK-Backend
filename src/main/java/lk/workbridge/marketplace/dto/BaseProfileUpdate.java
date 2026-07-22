@@ -18,6 +18,8 @@ public class BaseProfileUpdate {
 
     private String landlineNumber;
 
+    private String whatsappNumber;
+
     private String district;
 
     private String address;

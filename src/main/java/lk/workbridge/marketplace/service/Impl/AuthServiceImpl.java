@@ -199,6 +199,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         client.setLandlineNumber(
                 clientProfileUpdate.getLandlineNumber()
         );
+        client.setWhatsappNumber(clientProfileUpdate.getWhatsappNumber());
         client.setOrganizationName(
                 clientProfileUpdate.getOrganizationName()
         );
@@ -226,6 +227,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         worker.setLandlineNumber(
                 serviceProviderProfileUpdate.getLandlineNumber()
         );
+        worker.setWhatsappNumber(serviceProviderProfileUpdate.getWhatsappNumber());
         worker.setAddress(serviceProviderProfileUpdate.getAddress());
         worker.setDistrict(serviceProviderProfileUpdate.getDistrict());
         worker.setCity(serviceProviderProfileUpdate.getCity());
@@ -325,6 +327,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                 client.getPrimaryPhoneNumber(),
                 client.getSecondaryPhoneNumber(),
                 client.getLandlineNumber(),
+                client.getWhatsappNumber(),
                 client.getFirstName(),
                 client.getLastName(),
                 client.getDistrict(),
@@ -367,6 +370,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                 worker.getPrimaryPhoneNumber(),
                 worker.getSecondaryPhoneNumber(),
                 worker.getLandlineNumber(),
+                worker.getWhatsappNumber(),
                 worker.getFirstName(),
                 worker.getLastName(),
                 worker.getDistrict(),

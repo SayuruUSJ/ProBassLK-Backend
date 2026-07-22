@@ -18,6 +18,8 @@ public record ClientProfile(
 
         String landLineNumber,
 
+        String whatsappNumber,
+
         String firstName,
 
         String lastName,

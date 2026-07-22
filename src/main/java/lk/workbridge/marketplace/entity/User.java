@@ -45,6 +45,9 @@
         private String secondaryPhoneNumber;
         @Column(name="land_line_number", length = 12,nullable = true)
         private String landlineNumber;
+        @Column(name="whatsapp_number",length = 12,nullable = true)
+        private String whatsappNumber;
+
         @Column(name = "first-name", nullable = false, length = 50)
         private String firstName;
         @Column(name = "last-name", nullable = false, length = 50)
