@@ -48,7 +48,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public boolean acceptOrRejectServiceProviderAdvertisement(String serviceId, String status) {
         if (!isValidStatus(status)) {
-            throw new IllegalArgumentException("Invalid status: " + status + ". Status must be 'VERIFIED' or 'REJECTED'");
+            throw new IllegalArgumentException("Invalid status: " + status + ". Status must be 'PUBLISHED' or 'REJECTED'");
         }
       ServiceProviderAdvertisement providerAdvertisement= serviceProviderAdvertisementRepository.findById(serviceId)
         .orElseThrow(() -> new IllegalArgumentException("Advertisement not found with ID: " + serviceId));
@@ -60,7 +60,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public boolean acceptOrRejectServiceWantedAdvertisement(String advertisementId, String status) {
         if (!isValidStatus(status)) {
-            throw new IllegalArgumentException("Invalid status: " + status + ". Status must be 'VERIFIED' or 'REJECTED'");
+            throw new IllegalArgumentException("Invalid status: " + status + ". Status must be 'PUBLISHED' or 'REJECTED'");
         }
 
         ServiceWantedAdvertisement wantedAdvertisement= serviceWantedAdvertisementRepository.findById(advertisementId)

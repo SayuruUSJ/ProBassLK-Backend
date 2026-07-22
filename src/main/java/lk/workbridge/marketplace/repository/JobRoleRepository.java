@@ -14,5 +14,6 @@ public interface JobRoleRepository extends JpaRepository<JobRole,Long> {
             WorkerJobRole roleName
 
     );
+    boolean existsByRoleName(WorkerJobRole roleName);
 
 }

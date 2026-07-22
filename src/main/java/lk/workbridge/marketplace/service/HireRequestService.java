@@ -4,6 +4,7 @@ import lk.workbridge.marketplace.dto.HireRequestAD;
 import lk.workbridge.marketplace.dto.responses.ClientJobs;
 import lk.workbridge.marketplace.dto.responses.HireRequestResponse;
 import lk.workbridge.marketplace.entity.HireRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 

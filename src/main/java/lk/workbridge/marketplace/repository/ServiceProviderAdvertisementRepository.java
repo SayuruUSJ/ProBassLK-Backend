@@ -22,7 +22,7 @@ public interface ServiceProviderAdvertisementRepository extends JpaRepository<Se
     @Query("""
     SELECT s
     FROM ServiceProviderAdvertisement s
-    WHERE s.status = "VERIFIED"
+    WHERE s.status = "PUBLISHED"
 """)
     Page<ServiceProviderAdvertisement> findAllVerifiedAdvertisements(Pageable pageable);
 
