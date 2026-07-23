@@ -85,12 +85,12 @@ public interface ApplicationForWantedADRepository extends JpaRepository<Applicat
                 SELECT c
                 FROM ApplicationsForWantedAdvertisements c
                 WHERE c.advertisement.client.id= :clientId
-                  AND c.status = :status
+                  AND c.status IN (:statuses)
                 ORDER BY c.createdAt DESC
             """)
     List<ApplicationsForWantedAdvertisements> findByClientIdAndStatus(
             @Param("clientId") String clientId,
-            @Param("status") String status
+            @Param("statuses") List<String> statuses
     );
 
     @Query("SELECT COUNT(a) FROM ApplicationsForWantedAdvertisements a WHERE a.advertisement.client.id = :clientId AND a.status = :status")

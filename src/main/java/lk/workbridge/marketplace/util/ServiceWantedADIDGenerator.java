@@ -13,7 +13,7 @@ public class ServiceWantedADIDGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object object) {
-        String query = "SELECT MAX(CAST(SUBSTRING(`advertisement_id`, LENGTH('" + PREFIX + "') + 1) AS UNSIGNED)) FROM service_wantedAdvertisements";
+        String query = "SELECT MAX(CAST(SUBSTRING(`advertisement_id`, LENGTH('" + PREFIX + "') + 1) AS UNSIGNED)) FROM service_wanted_advertisements";
 
         try (Connection connection = session.getJdbcConnectionAccess().obtainConnection();
              Statement statement = connection.createStatement();

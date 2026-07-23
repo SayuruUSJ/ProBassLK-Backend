@@ -243,6 +243,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         worker.setEmergencyAvailable(serviceProviderProfileUpdate.isEmergencyAvailable());
         worker.setOverallExperience(serviceProviderProfileUpdate.getOverallExperience());
         worker.setAbout(serviceProviderProfileUpdate.getAbout());
+        worker.setAvailable(serviceProviderProfileUpdate.getAvailable());
 
 //        for (WorkerSkillRequest skillRequest
 //                : serviceProviderProfileUpdate.getSkills()) {

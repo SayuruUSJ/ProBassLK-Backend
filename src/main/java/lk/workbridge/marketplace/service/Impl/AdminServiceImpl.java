@@ -30,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +54,7 @@ public class AdminServiceImpl implements AdminService {
       ServiceProviderAdvertisement providerAdvertisement= serviceProviderAdvertisementRepository.findById(serviceId)
         .orElseThrow(() -> new IllegalArgumentException("Advertisement not found with ID: " + serviceId));
         providerAdvertisement.setStatus(status);
+        providerAdvertisement.setUpdatedAt(LocalDate.now());
         serviceProviderAdvertisementRepository.save(providerAdvertisement);
         return true;
     }
@@ -66,6 +68,7 @@ public class AdminServiceImpl implements AdminService {
         ServiceWantedAdvertisement wantedAdvertisement= serviceWantedAdvertisementRepository.findById(advertisementId)
             .orElseThrow(() -> new IllegalArgumentException("Advertisement not found with ID: " + advertisementId));
         wantedAdvertisement.setStatus(status);
+        wantedAdvertisement.setUpdatedAt(LocalDate.now());
         serviceWantedAdvertisementRepository.save(wantedAdvertisement);
         return true;
     }

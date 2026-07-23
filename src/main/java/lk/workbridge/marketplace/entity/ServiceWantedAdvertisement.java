@@ -105,5 +105,8 @@ private boolean isUrgent;
 @Column(name="additional_instructions",nullable = true)
 private String additionalInstructions;
 
+    private LocalDate createdAt;
+
+    private  LocalDate updatedAt;
 
 }

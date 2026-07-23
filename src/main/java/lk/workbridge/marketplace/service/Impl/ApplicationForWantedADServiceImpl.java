@@ -7,12 +7,14 @@ import lk.workbridge.marketplace.dto.responses.WantedAdvertisementApplication;
 import lk.workbridge.marketplace.entity.ApplicationRequestCancellationResult;
 import lk.workbridge.marketplace.entity.ApplicationsForWantedAdvertisements;
 import lk.workbridge.marketplace.entity.HireRequestCancellationResult;
+import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.ServiceWantedAdvertisement;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
 import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
 import lk.workbridge.marketplace.repository.ApplicationRequestCancellationResultRepository;
 import lk.workbridge.marketplace.repository.RatingRepository;
+import lk.workbridge.marketplace.repository.ServiceProviderAdvertisementRepository;
 import lk.workbridge.marketplace.repository.ServiceWantedAdvertisementRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
 import lk.workbridge.marketplace.service.ApplicationForWantedADService;
@@ -26,18 +28,21 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ApplicationForWantedADServiceImpl implements ApplicationForWantedADService {
     private final UserRepository userRepository;
+    private final ServiceProviderAdvertisementRepository serviceProviderAdvertisementRepository;
     private final ApplicationForWantedADRepository applicationForWantedADRepository;
     private final ServiceWantedAdvertisementRepository serviceWantedAdvertisementRepository;
     private final RatingRepository ratingRepository;
-    private  final ApplicationRequestCancellationResultRepository applicationRequestCancellationResultRepository;
+    private final ApplicationRequestCancellationResultRepository applicationRequestCancellationResultRepository;
 
     @Override
     public String createNewRequest(ServiceProviderRequestForWantedAD requestForWantedAD) {
@@ -69,6 +74,7 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
             request.setMessage(requestForWantedAD.getMessage());
             request.setProposedRate(requestForWantedAD.getDailyRate());
             request.setCreatedAt(LocalDate.now());
+            request.setPaymentType(advertisement.getPaymentType());
             request.setStatus("PENDING");
 
             applicationForWantedADRepository.save(request);
@@ -82,13 +88,13 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
 
     @Override
     public String updateRequest(String ad_status, int request_id, String request_status) {
-        if (!request_status.equalsIgnoreCase("CONFIRMED") &&
+        if (!request_status.equalsIgnoreCase("ACCEPTED") &&
                 !request_status.equalsIgnoreCase("REJECTED")) {
 
             throw new RuntimeException("Invalid status.");
         }
-        if (!ad_status.equalsIgnoreCase("ACCEPTED") &&
-                !ad_status.equalsIgnoreCase("REJECTED")) {
+        if (!ad_status.equalsIgnoreCase("CONFIRMED") &&
+                !ad_status.equalsIgnoreCase("PUBLISHED")) {
 
             throw new RuntimeException("Invalid status.");
         }
@@ -124,8 +130,9 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
     @Override
     public List<ClientJobs> getClientOngoingApplications(String clientId, String jobStatus) {
 
+        List<String> statuses2 = Arrays.asList("IN_PROGRESS", "CONFIRMED");
         List<ApplicationsForWantedAdvertisements> applications =
-                applicationForWantedADRepository.findByClientIdAndStatus(clientId, jobStatus);
+                applicationForWantedADRepository.findByClientIdAndStatus(clientId, statuses2);
 
         if (applications.isEmpty()) {
             return Collections.emptyList();
@@ -137,21 +144,34 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public Boolean updateCompleteOrIncompleteJobs(int applicationId, String status) {
-        if (!status.equalsIgnoreCase("COMPLETED")
-               ) {
+        if (!status.equalsIgnoreCase("COMPLETED") &&
+                !status.equalsIgnoreCase("INCOMPLETED")) {
 
             throw new RuntimeException("Invalid status.");
         }
+
+           
+
         ApplicationsForWantedAdvertisements applicationsForWantedAdvertisements = applicationForWantedADRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Advertisement not found."));
         String serviceWantedAdvertisementId = applicationsForWantedAdvertisements.getAdvertisement().getAdvertisement_id();
         ServiceWantedAdvertisement byId = serviceWantedAdvertisementRepository.findById(serviceWantedAdvertisementId)
                 .orElseThrow(() -> new RuntimeException("Wanted advertisement not found"));
+                 ServiceProviderAdvertisement serviceProviderAdvertisement = serviceProviderAdvertisementRepository.findAdvertisementByWorker(applicationsForWantedAdvertisements.getWorker().getId())
+                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
         applicationsForWantedAdvertisements.setStatus(status);
         byId.setStatus(status);
-        return null;
+        byId.setUpdatedAt(LocalDate.now());
+        if (status.equals("COMPLETED")) {
+            Worker worker = applicationsForWantedAdvertisements.getWorker();
+            worker.setAvailable(true);
+            userRepository.save(worker);
+                        serviceProviderAdvertisement.setStatus("PUBLISHED");
+        }
+        return true;
     }
 
     @Override
@@ -301,7 +321,9 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
 
                 averageStars,
 
-                worker.getId()
+                worker.getId(),
+                application.getAdvertisement().getAdvertisement_id(),
+                application.getCreatedAt()
         );
 
     }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,15 +26,13 @@ public class ClientJobsServiceImpl implements ClientJobsService {
     private final HireRequestRepository hireRequestRepository;
 
     @Override
-    public List<ClientJobs> getClientOngoingJobs(String clientId, String jobStatus) {
+    public List<ClientJobs> getClientOngoingJobs(String clientId) {
         List<ClientJobs> allJobs = new ArrayList<>();
 
-        if (!jobStatus.equalsIgnoreCase("CONFIRMED")) {
 
-            throw new RuntimeException("Invalid status.");
-        }
+        List<String> statuses = Arrays.asList("IN_PROGRESS", "ACCEPTED");
         List<HireRequest> hireRequests = hireRequestRepository
-                .findByClientIdAndStatus(clientId, jobStatus);
+                .findByClientIdAndStatus(clientId, statuses);
 
         if (!hireRequests.isEmpty()) {
             List<ClientJobs> hireJobs = hireRequests.stream()
@@ -42,9 +41,9 @@ public class ClientJobsServiceImpl implements ClientJobsService {
             allJobs.addAll(hireJobs);
         }
 
-
+        List<String> statuses2 = Arrays.asList("IN_PROGRESS", "CONFIRMED");
         List<ApplicationsForWantedAdvertisements> applications =
-                applicationForWantedADRepository.findByClientIdAndStatus(clientId, jobStatus);
+                applicationForWantedADRepository.findByClientIdAndStatus(clientId, statuses2);
 
         if (!applications.isEmpty()) {
             List<ClientJobs> applicationJobs = applications.stream()
@@ -56,14 +55,12 @@ public class ClientJobsServiceImpl implements ClientJobsService {
     }
 
     @Override
-    public List<ClientJobs> getClientCompletedJobs(String clientId, String jobStatus) {
+    public List<ClientJobs> getClientCompletedJobs(String clientId) {
         List<ClientJobs> allJobs = new ArrayList<>();
-        if (!jobStatus.equalsIgnoreCase("COMPLETED")) {
 
-            throw new RuntimeException("Invalid status.");
-        }
+        List<String> statuses = Arrays.asList("completed", "COMPLETED");
         List<HireRequest> hireRequests = hireRequestRepository
-                .findByClientIdAndStatus(clientId, jobStatus);
+                .findByClientIdAndStatus(clientId, statuses);
 
         if (!hireRequests.isEmpty()) {
             List<ClientJobs> hireJobs = hireRequests.stream()
@@ -72,9 +69,9 @@ public class ClientJobsServiceImpl implements ClientJobsService {
             allJobs.addAll(hireJobs);
         }
 
-
+        List<String> statuses2 = Arrays.asList("completed", "COMPLETED");
         List<ApplicationsForWantedAdvertisements> applications =
-                applicationForWantedADRepository.findByClientIdAndStatus(clientId, jobStatus);
+                applicationForWantedADRepository.findByClientIdAndStatus(clientId, statuses2);
 
         if (!applications.isEmpty()) {
             List<ClientJobs> applicationJobs = applications.stream()
@@ -86,15 +83,12 @@ public class ClientJobsServiceImpl implements ClientJobsService {
     }
 
     @Override
-    public List<ClientJobs> getClientCancelledJobs(String clientId, String jobStatus) {
+    public List<ClientJobs> getClientCancelledJobs(String clientId) {
         List<ClientJobs> allJobs = new ArrayList<>();
-        if (!jobStatus.equalsIgnoreCase("CANCELLED")) {
 
-            throw new RuntimeException("Invalid status.");
-        }
-
+        List<String> statuses = Arrays.asList("CANCELLED", "cancelled");
         List<HireRequest> hireRequests = hireRequestRepository
-                .findByClientIdAndStatus(clientId, jobStatus);
+                .findByClientIdAndStatus(clientId, statuses);
 
         if (!hireRequests.isEmpty()) {
             List<ClientJobs> hireJobs = hireRequests.stream()
@@ -103,9 +97,9 @@ public class ClientJobsServiceImpl implements ClientJobsService {
             allJobs.addAll(hireJobs);
         }
 
-
+        List<String> statuses2 = Arrays.asList("cancelled", "CANCELLED");
         List<ApplicationsForWantedAdvertisements> applications =
-                applicationForWantedADRepository.findByClientIdAndStatus(clientId, jobStatus);
+                applicationForWantedADRepository.findByClientIdAndStatus(clientId, statuses2);
 
         if (!applications.isEmpty()) {
             List<ClientJobs> applicationJobs = applications.stream()

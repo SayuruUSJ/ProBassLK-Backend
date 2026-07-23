@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +57,10 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         ServiceProviderAdvertisement serviceProviderAdvertisement = new ServiceProviderAdvertisement();
         serviceProviderAdvertisement.setWorker(worker);
         serviceProviderAdvertisement.setStatus(serviceProviderAD.getStatus());
+        serviceProviderAdvertisement.setCreatedAt(LocalDate.now());
+        serviceProviderAdvertisement.setUpdatedAt(LocalDate.now());
         serviceProviderAdvertisementRepository.save(serviceProviderAdvertisement);
+
         return "success send";
     }
 
@@ -239,21 +243,53 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
     //TODO CHECK VALIDATION
 
     private void validateWorkerProfile(Worker worker) {
-        if (worker.getFirstName() == null || worker.getFirstName().isBlank() ||
-                worker.getLastName() == null || worker.getLastName().isBlank() ||
-                worker.getEmail() == null || worker.getEmail().isBlank() ||
-                worker.getPrimaryPhoneNumber() == null || worker.getPrimaryPhoneNumber().isBlank() ||
-                worker.getDistrict() == null || worker.getDistrict().isBlank() ||
-                worker.getAddress() == null || worker.getAddress().isBlank() ||
-                worker.getAvailable() == null|| worker.getNIC().isBlank()||
-                worker.getTitle().isBlank()|| worker.getWorkingDays().isEmpty()||
-        worker.getSecondaryPhoneNumber().isBlank() || worker.getStartTime()==null||
-                worker.getEndTime()==null
-        ) {
+        try {
+            // Check User fields (from User entity)
+            if (worker.getFirstName() == null || worker.getFirstName().isBlank() ||
+                    worker.getLastName() == null || worker.getLastName().isBlank() ||
+                    worker.getEmail() == null || worker.getEmail().isBlank() ||
+                    worker.getPrimaryPhoneNumber() == null || worker.getPrimaryPhoneNumber().isBlank() ||
+                    worker.getDistrict() == null || worker.getDistrict().isBlank() ||
+                    worker.getAddress() == null || worker.getAddress().isBlank()) {
 
+                throw new RuntimeException("Please complete your profile. Missing required user information.");
+            }
 
-            throw new RuntimeException("Please complete your profile.");
+            // Check Worker specific fields
+            if (worker.getAvailable() == null) {
+                throw new RuntimeException("Please complete your profile. Availability status is required.");
+            }
+
+            if (worker.getNIC() == null || worker.getNIC().isBlank()) {
+                throw new RuntimeException("Please complete your profile. NIC is required.");
+            }
+
+            if (worker.getTitle() == null || worker.getTitle().isBlank()) {
+                throw new RuntimeException("Please complete your profile. Title is required.");
+            }
+
+            // Check working days - use the workingDaysMask
+            if (worker.getWorkingDays() == null || worker.getWorkingDays().isEmpty()) {
+                throw new RuntimeException("Please complete your profile. Working days are required.");
+            }
+
+            // Check secondary phone (allow null but check if present)
+            if (worker.getSecondaryPhoneNumber() != null && worker.getSecondaryPhoneNumber().isBlank()) {
+                throw new RuntimeException("Please complete your profile. Secondary phone number cannot be empty.");
+            }
+
+            if (worker.getStartTime() == null) {
+                throw new RuntimeException("Please complete your profile. Start time is required.");
+            }
+
+            if (worker.getEndTime() == null) {
+                throw new RuntimeException("Please complete your profile. End time is required.");
+            }
+
+        } catch (NullPointerException e) {
+            throw new RuntimeException("Please complete your profile. Missing required fields.", e);
         }
+
     }
 
 

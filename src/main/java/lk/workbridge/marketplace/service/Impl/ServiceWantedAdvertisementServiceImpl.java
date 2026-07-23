@@ -16,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdvertisementService {
@@ -58,6 +60,8 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
             advertisement.setRateNegotiable(serviceWantedAD.getIsRateNegotiable());
             advertisement.setAdditionalInstructions(serviceWantedAD.getAdditionalInstructions());
             advertisement.setUrgent(serviceWantedAD.isUrgent());
+            advertisement.setCreatedAt(LocalDate.now());
+            advertisement.setUpdatedAt(LocalDate.now());
 
             serviceWantedAdvertisementRepository.save(advertisement);
             return "Advertisement request sent successfully.";

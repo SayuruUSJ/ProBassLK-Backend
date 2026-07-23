@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,6 +37,11 @@ public class ServiceProviderAdvertisement {
 
 
     private String status;
+
+
+    private LocalDate createdAt;
+
+    private  LocalDate updatedAt;
 //    @Column(name="service_provider_id",nullable = false)
 //    private String serviceProviderId;
 //@Column(name="service_provider_name",nullable = false)

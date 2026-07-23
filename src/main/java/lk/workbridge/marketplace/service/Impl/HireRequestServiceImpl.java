@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -160,8 +162,9 @@ public class HireRequestServiceImpl implements HireRequestService {
                 ;
     }
 
-    private HireRequestResponse mapToHireRequestResponse(HireRequest hireRequest){
+    private HireRequestResponse mapToHireRequestResponse(HireRequest hireRequest) {
         return new HireRequestResponse(
+                hireRequest.getId(),
                 hireRequest.getClientName(),
                 hireRequest.getRequestedService(),
                 hireRequest.getDescription(),
@@ -174,24 +177,52 @@ public class HireRequestServiceImpl implements HireRequestService {
         );
     }
 
-    @Override
-    public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String status) {
-        if (!status.equalsIgnoreCase("COMPLETED") &&
-                !status.equalsIgnoreCase("INCOMPLETE")) {
-
-            throw new RuntimeException("Invalid status.");
+    @Transactional
+@Override
+public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String status) {
+    try {
+        // Validate status
+        if (!"COMPLETED".equalsIgnoreCase(status) && !"INCOMPLETED".equalsIgnoreCase(status)) {
+            throw new IllegalArgumentException("Invalid status. Allowed values: COMPLETED, INCOMPLETED");
         }
 
-        HireRequest advertisement =
-                hireRequestRepository.findById(advertisementId)
-                        .orElseThrow(() ->
-                                new RuntimeException("Advertisement not found."));
+        // Find hire request
+        HireRequest hireRequest = hireRequestRepository.findById(advertisementId)
+                .orElseThrow(() -> new RuntimeException("Advertisement not found with ID: " + advertisementId));
 
-        advertisement.setStatus(status.toUpperCase());
+        String statusUpperCase = status.toUpperCase();
+        hireRequest.setStatus(statusUpperCase);
 
-        hireRequestRepository.save(advertisement);
+        if ("COMPLETED".equalsIgnoreCase(status)) {
+            Worker worker = hireRequest.getWorker();
+            if (worker == null) {
+                throw new RuntimeException("Worker not associated with this advertisement");
+            }
+
+            // Update worker availability
+            worker.setAvailable(true);
+            userRepository.save(worker);
+
+            // Update service provider advertisement
+            ServiceProviderAdvertisement serviceProviderAdvertisement = 
+                    serviceProviderAdvertisementRepository
+                            .findAdvertisementByWorker(worker.getId())
+                            .orElseThrow(() -> new RuntimeException(
+                                    "Service provider advertisement not found for worker: " + worker.getId()));
+            serviceProviderAdvertisement.setStatus("PUBLISHED");
+            serviceProviderAdvertisement.setUpdatedAt(LocalDate.now());
+            serviceProviderAdvertisementRepository.save(serviceProviderAdvertisement);
+        }
+
+        hireRequestRepository.save(hireRequest);
         return true;
+        
+    } catch (Exception e) {
+        // Log the error
+        System.err.println("Error updating advertisement status: " + e.getMessage());
+        throw new RuntimeException("Failed to update advertisement status: " + e.getMessage());
     }
+}
 
     @Override
     public String cancelRequest(String id) {
@@ -255,8 +286,9 @@ public class HireRequestServiceImpl implements HireRequestService {
     @Override
     public List<ClientJobs> getClientOngoingJobs(String clientId, String jobStatus) {
 
+        List<String> statuses = Arrays.asList("IN_PROGRESS", jobStatus);
         List<HireRequest> hireRequests = hireRequestRepository
-                .findByClientIdAndStatus(clientId, jobStatus);
+                .findByClientIdAndStatus(clientId, statuses);
 
         if (hireRequests.isEmpty()) {
             return Collections.emptyList();

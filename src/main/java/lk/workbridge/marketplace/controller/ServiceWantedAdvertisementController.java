@@ -36,6 +36,7 @@ public class ServiceWantedAdvertisementController {
         return ResponseEntity.ok(result);
     }
 
+
     @PostMapping("/create-request-for-wanted-advertisement")
     public ResponseEntity<?> createNewRequestForAdFromServiceProvider(
             @Valid @RequestBody ServiceProviderRequestForWantedAD request) {

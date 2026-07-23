@@ -18,28 +18,28 @@ public class ClientJobsController {
 
     @GetMapping("/get-ongoing-jobs")
     public ResponseEntity<?> getAllOngoingJobsClient(
-            @RequestParam String clientId,
-            @RequestParam String jobStatus
+            @RequestParam String clientId
+
     ){
-        return ResponseEntity.ok(clientJobsService.getClientOngoingJobs(clientId,jobStatus));
+        return ResponseEntity.ok(clientJobsService.getClientOngoingJobs(clientId));
 
     }
 
     @GetMapping("/get-compelted-jobs")
     public ResponseEntity<?> getAllCompletedJobsClient(
-            @RequestParam String clientId,
-            @RequestParam String jobStatus
+            @RequestParam String clientId
+
     ){
-        return ResponseEntity.ok(clientJobsService.getClientCompletedJobs(clientId,jobStatus));
+        return ResponseEntity.ok(clientJobsService.getClientCompletedJobs(clientId));
 
     }
 
     @GetMapping("/get-cancelled-jobs")
     public ResponseEntity<?> getAllCancelledJobsClient(
-            @RequestParam String clientId,
-            @RequestParam String jobStatus
+            @RequestParam String clientId
+
     ){
-        return ResponseEntity.ok(clientJobsService.getClientCancelledJobs(clientId,jobStatus));
+        return ResponseEntity.ok(clientJobsService.getClientCancelledJobs(clientId));
 
     }
 

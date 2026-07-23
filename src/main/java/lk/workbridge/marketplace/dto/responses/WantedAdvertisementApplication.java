@@ -2,6 +2,8 @@ package lk.workbridge.marketplace.dto.responses;
 
 import lk.workbridge.marketplace.enums.PaymentType;
 
+import java.time.LocalDate;
+
 public record WantedAdvertisementApplication(
         int requestId,
         String title,
@@ -17,7 +19,9 @@ public record WantedAdvertisementApplication(
         PaymentType paymentType,
         String status,
         Double ratingStars,
-        String serviceProviderId
+        String serviceProviderId,
+        String  serviceWantedId,
+        LocalDate applicationDate
 
 
 ) {

@@ -47,12 +47,12 @@ public interface HireRequestRepository extends JpaRepository<HireRequest,String>
         SELECT c
         FROM HireRequest c
         WHERE c.client.id = :clientId
-          AND c.status = :status
+          AND c.status IN (:statuses)
         ORDER BY c.createdAt DESC
     """)
     List<HireRequest> findByClientIdAndStatus(
-            @Param("clientId") String clientId,
-            @Param("status") String status
+            @Param("clientId") String clientId
+            ,@Param("statuses") List<String> statuses
     );
 
 
