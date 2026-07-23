@@ -21,7 +21,9 @@ public record WantedAdvertisementApplication(
         Double ratingStars,
         String serviceProviderId,
         String  serviceWantedId,
-        LocalDate applicationDate
+        LocalDate applicationDate,
+        String message
+
 
 
 ) {

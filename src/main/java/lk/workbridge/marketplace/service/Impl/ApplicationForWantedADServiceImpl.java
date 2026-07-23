@@ -331,7 +331,9 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
 
                 worker.getId(),
                 application.getAdvertisement().getAdvertisement_id(),
-                application.getCreatedAt()
+                application.getCreatedAt(),
+                application.getMessage()
+
         );
 
     }
