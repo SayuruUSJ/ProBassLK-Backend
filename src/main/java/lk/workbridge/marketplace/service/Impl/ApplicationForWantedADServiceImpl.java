@@ -31,6 +31,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -65,6 +66,13 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
                     requestForWantedAD.getWorkerId()) > 0) {
 
                 throw new RuntimeException("You have already requested this advertisement.");
+            }
+            ServiceProviderAdvertisement serviceProviderAdvertisement = serviceProviderAdvertisementRepository.findAdvertisementByWorker(worker.getId())
+                    .orElseThrow(()->new RuntimeException("provider ad not found"));
+
+            if (!Objects.equals(serviceProviderAdvertisement.getStatus(), "PUBLISHED")) {
+
+                throw new RuntimeException("You cant apply this advertisement because admin not approved your advertisement");
             }
 
             ApplicationsForWantedAdvertisements request = new ApplicationsForWantedAdvertisements();

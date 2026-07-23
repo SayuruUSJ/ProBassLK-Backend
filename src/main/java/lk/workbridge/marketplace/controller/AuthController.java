@@ -58,6 +58,7 @@ public class AuthController {
         return "Hello";
     }
 
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         String result = service.register(request);
