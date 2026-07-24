@@ -274,6 +274,7 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
         LocalDate createdAt = application.getCreatedAt();
 
         return new ClientJobs(
+                null,
                 requestedService,
                 status,
                 serviceProviderName,

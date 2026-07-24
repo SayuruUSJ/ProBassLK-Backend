@@ -2,6 +2,7 @@ package lk.workbridge.marketplace.service.Impl;
 
 import lk.workbridge.marketplace.dto.HireRequestAD;
 import lk.workbridge.marketplace.dto.responses.ClientJobs;
+import lk.workbridge.marketplace.dto.responses.HireRequestCreatedResponse;
 import lk.workbridge.marketplace.dto.responses.HireRequestResponse;
 import lk.workbridge.marketplace.entity.HireRequestCancellationResult;
 import lk.workbridge.marketplace.entity.Client;
@@ -38,7 +39,7 @@ public class HireRequestServiceImpl implements HireRequestService {
     private final HireRequestCancellationResultRepository hireRequestCancellationResultRepository;
 
     @Override
-    public String requestAdvertisement(HireRequestAD requestAD) {
+    public HireRequestCreatedResponse requestAdvertisement(HireRequestAD requestAD) {
         try {
             User userOne = userRepository.findById(requestAD.getWorkerId())
                     .orElseThrow(() -> new RuntimeException("Worker not found."));
@@ -71,7 +72,11 @@ public class HireRequestServiceImpl implements HireRequestService {
                 throw new RuntimeException("Worker is already booked for this date.");
             } else {
                 hireRequestRepository.save(advertisement);
-                return "Advertisement request sent successfully.";
+                return new HireRequestCreatedResponse(
+                        advertisement.getId(),
+                        advertisement.getStatus(),
+                        "advertisement created successfully"
+                );
             }
 
 
@@ -328,6 +333,7 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
 
 
         return new ClientJobs(
+                hireRequest.getId(),
                 requestedService,
                 status,
                 serviceProviderName,

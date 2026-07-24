@@ -90,7 +90,9 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                             rating.getWorker() != null ? rating.getWorker().getFirstName() : null,
                             rating.getClient() != null ? rating.getClient().getId() : null,
                             rating.getClient() != null ? rating.getClient().getFirstName() : null,
-                            rating.getWorker().getTitle()
+                            rating.getWorker().getTitle(),
+                            rating.getProviderReply(),
+                            rating.getCreatedAt()
                     );
                     return response;
                 })
@@ -203,7 +205,9 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                             rating.getWorker() != null ? rating.getWorker().getFirstName() : null,
                             rating.getClient() != null ? rating.getClient().getId() : null,
                             rating.getClient() != null ? rating.getClient().getFirstName() : null,
-                            rating.getWorker().getTitle()
+                            rating.getWorker().getTitle(),
+                            rating.getProviderReply(),
+                            rating.getCreatedAt()
                     );
                     return response;
                 })

@@ -2,6 +2,7 @@ package lk.workbridge.marketplace.controller;
 
 import jakarta.validation.Valid;
 import lk.workbridge.marketplace.dto.HireRequestAD;
+import lk.workbridge.marketplace.dto.responses.HireRequestCreatedResponse;
 import lk.workbridge.marketplace.dto.responses.HireRequestResponse;
 import lk.workbridge.marketplace.service.HireRequestService;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,8 @@ public class HireRequestController {
     private final HireRequestService hireRequestService;
 
     @PostMapping("/create-request")
-    public ResponseEntity<?> register(@Valid @RequestBody HireRequestAD request) {
-        String result = hireRequestService.requestAdvertisement(request);
+    public ResponseEntity<HireRequestCreatedResponse> register(@Valid @RequestBody HireRequestAD request) {
+        HireRequestCreatedResponse result = hireRequestService.requestAdvertisement(request);
         return ResponseEntity.ok(result);
     }
 

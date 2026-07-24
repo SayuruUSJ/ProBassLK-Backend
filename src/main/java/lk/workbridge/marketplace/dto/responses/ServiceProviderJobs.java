@@ -10,6 +10,10 @@ public record ServiceProviderJobs(
         LocalDate requestedDate,
         LocalDate createdAt,
         String clientContactNumber,
-        String description
+        String description,
+        String hireRequestId,
+        int applicationId
+
+
 ) {
 }

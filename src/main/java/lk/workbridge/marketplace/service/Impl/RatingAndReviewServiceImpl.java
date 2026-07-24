@@ -108,7 +108,9 @@ public class RatingAndReviewServiceImpl implements RatingAndReviewService {
                 workerName,
                 client != null ? client.getId() : null,
                 clientName,
-                jobTitle
+                jobTitle,
+                rating.getProviderReply(),
+                rating.getCreatedAt()
         );
 
 

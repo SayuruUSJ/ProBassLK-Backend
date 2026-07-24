@@ -1,5 +1,6 @@
 package lk.workbridge.marketplace.service.Impl;
 
+import jakarta.transaction.Transactional;
 import lk.workbridge.marketplace.dto.responses.ClientJobs;
 import lk.workbridge.marketplace.entity.ApplicationsForWantedAdvertisements;
 import lk.workbridge.marketplace.entity.HireRequest;
@@ -25,6 +26,7 @@ public class ClientJobsServiceImpl implements ClientJobsService {
     private final ApplicationForWantedADRepository applicationForWantedADRepository;
     private final HireRequestRepository hireRequestRepository;
 
+    @Transactional
     @Override
     public List<ClientJobs> getClientOngoingJobs(String clientId) {
         List<ClientJobs> allJobs = new ArrayList<>();
@@ -54,6 +56,7 @@ public class ClientJobsServiceImpl implements ClientJobsService {
        return allJobs;
     }
 
+    @Transactional
     @Override
     public List<ClientJobs> getClientCompletedJobs(String clientId) {
         List<ClientJobs> allJobs = new ArrayList<>();
@@ -82,6 +85,7 @@ public class ClientJobsServiceImpl implements ClientJobsService {
         return allJobs;
     }
 
+    @Transactional
     @Override
     public List<ClientJobs> getClientCancelledJobs(String clientId) {
         List<ClientJobs> allJobs = new ArrayList<>();
@@ -135,6 +139,7 @@ public class ClientJobsServiceImpl implements ClientJobsService {
                 "UNKNOWN";
 
         return new ClientJobs(
+                hireRequest.getId(),
                 requestedService,
                 status,
                 serviceProviderName,
@@ -175,6 +180,7 @@ public class ClientJobsServiceImpl implements ClientJobsService {
                 "UNKNOWN";
 
         return new ClientJobs(
+                null,
                 requestedService,
                 status,
                 serviceProviderName,

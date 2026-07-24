@@ -162,13 +162,13 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
                 worker.getFirstName() + " " + worker.getLastName() :
                 "Unknown Service Provider";
 
+        String clientName=hireRequest.getClientName();
         String fullAddress = hireRequest.getLocation() != null ?
                 hireRequest.getLocation() :
                 "Address not available";
 
-        String contactNumber = worker != null && worker.getPrimaryPhoneNumber() != null ?
-                worker.getPrimaryPhoneNumber() :
-                "Contact not available";
+        String contactNumber =  hireRequest.getClientContactNumber();
+
 
         String requestedService = hireRequest.getRequestedService() != null ?
                 hireRequest.getRequestedService() :
@@ -185,12 +185,14 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
         return new ServiceProviderJobs(
                 requestedService,
                 status,
-                serviceProviderName,
+                clientName,
                 fullAddress,
                 hireRequest.getRequestedDate(),
                 hireRequest.getCreatedAt(),
                 contactNumber,
-                description
+                description,
+                hireRequest.getId(),
+                0
         );
     }
 
@@ -202,11 +204,13 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
                 worker.getFirstName() + " " + worker.getLastName() :
                 "Unknown Service Provider";
 
+        String clientName=application.getAdvertisement().getClient().getFirstName()+""+application.getAdvertisement().getClient().getLastName();
+
         String requestedService = advertisement != null && advertisement.getTitle() != null ?
                 advertisement.getTitle() :
                 "Service not specified";
 
-        // Using location from ServiceWantedAdvertisement
+
         String fullAddress = advertisement != null && advertisement.getFullAddress() != null ?
                 advertisement.getFullAddress() :
                 "Address not available";
@@ -215,9 +219,7 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
                 advertisement.getRequiredDate() :
                 null;
 
-        String contactNumber = worker != null && worker.getPrimaryPhoneNumber() != null ?
-                worker.getPrimaryPhoneNumber() :
-                "Contact not available";
+        String contactNumber = application.getAdvertisement().getClientContactNumber();
 
         String status = application.getStatus() != null ?
                 application.getStatus() :
@@ -230,12 +232,14 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
         return new ServiceProviderJobs(
                 requestedService,
                 status,
-                serviceProviderName,
+                clientName,
                 fullAddress,
                 requestedDate,
                 application.getCreatedAt(),
                 contactNumber,
-                description
+                description,
+                null,
+                application.getRequestId()
         );
     }
 }

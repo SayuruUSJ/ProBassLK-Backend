@@ -1,5 +1,8 @@
 package lk.workbridge.marketplace.dto.responses;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public record RatingResponse(
         long id,
         int stars,
@@ -8,6 +11,9 @@ public record RatingResponse(
         String workerName,
         String clientId,
         String clientName,
-        String jobTitle
+        String jobTitle,
+        String providerReply,
+        LocalDateTime createdAt
+
         ) {
 }
