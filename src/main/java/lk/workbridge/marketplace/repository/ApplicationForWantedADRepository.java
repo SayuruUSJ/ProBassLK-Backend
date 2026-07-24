@@ -97,4 +97,15 @@ public interface ApplicationForWantedADRepository extends JpaRepository<Applicat
     long countByClientIdAndStatus(@Param("clientId") String clientId,
                                   @Param("status") String status);
 
+    @Query("""
+    SELECT COUNT(c)
+    FROM ApplicationsForWantedAdvertisements c
+    WHERE c.worker.id = :workerId
+      AND c.status = :status
+""")
+    Long countCompletedBookings(
+            @Param("workerId") String workerId,
+            @Param("status") String status);
+
+
 }

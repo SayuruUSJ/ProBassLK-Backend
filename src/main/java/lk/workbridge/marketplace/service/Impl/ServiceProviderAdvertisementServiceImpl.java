@@ -9,6 +9,7 @@ import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
 
+import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
 import lk.workbridge.marketplace.repository.HireRequestRepository;
 import lk.workbridge.marketplace.repository.RatingRepository;
 import lk.workbridge.marketplace.repository.ServiceProviderAdvertisementRepository;
@@ -38,6 +39,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
     private final WorkerSkillRepository workerSkillRepository;
     private final RatingRepository ratingRepository;
     private final HireRequestRepository hireRequestRepository;
+    private final ApplicationForWantedADRepository applicationForWantedADRepository;
 
     @Override
     public String createNewAdvertisement(ServiceProviderAD serviceProviderAD) {
@@ -170,7 +172,9 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         validateWorkerProfile(worker);
 
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
-        long completedJobs = hireRequestRepository.countCompletedBookings(worker.getId(), "COMPLETED");
+        long hireRequestCompletedJobs = hireRequestRepository.countCompletedBookings(worker.getId(), "COMPLETED");
+        long applicationRequestCompleted= applicationForWantedADRepository.countCompletedBookings(worker.getId(),"COMPLETED");
+      long completedJobs=hireRequestCompletedJobs+applicationRequestCompleted;
         Optional<Worker> workerWithSkills =
                 workerSkillRepository.findByIdWithSkills(worker.getId());
 
