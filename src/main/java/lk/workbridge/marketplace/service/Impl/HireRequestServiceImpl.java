@@ -308,6 +308,7 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public Page<ClientHireRequestResponse> getClientAllHireRequests(String clientId, int page, int size) {
         Pageable pageable= PageRequest.of(page,size);
@@ -323,7 +324,7 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
         return new ClientHireRequestResponse(
                 hireRequest.getId(),
                 worker != null ? worker.getId() : null,
-                worker != null ? worker.getFirstName()+""+worker.getLastName() : null,
+                worker != null ? worker.getFirstName()+" "+worker.getLastName() : null,
                 worker != null ? worker.getPrimaryPhoneNumber() : null,
                 worker != null ? worker.getProfileImageUrl() : null,
                 service != null ? hireRequest.getRequestedService() : null,
