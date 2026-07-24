@@ -23,7 +23,9 @@ public record WantedAdvertisementApplication(
         String  serviceWantedId,
         LocalDate applicationDate,
         String message,
-        String serviceProviderImageUrl
+        String serviceProviderImageUrl,
+        String clientImageUrl,
+        String clientName
 
 
 

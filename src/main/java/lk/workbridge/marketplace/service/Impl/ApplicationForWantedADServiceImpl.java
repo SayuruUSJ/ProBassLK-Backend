@@ -293,7 +293,7 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
         Worker worker = application.getWorker();
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
 
-
+String fullName=application.getAdvertisement().getClient().getFirstName()+" "+application.getAdvertisement().getClient().getLastName();
         return new WantedAdvertisementApplication(
                 application.getRequestId(),
                 advertisement.getTitle(),
@@ -336,7 +336,9 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
                 application.getAdvertisement().getAdvertisement_id(),
                 application.getCreatedAt(),
                 application.getMessage(),
-                application.getWorker().getProfileImageUrl()
+                application.getWorker().getProfileImageUrl(),
+                application.getAdvertisement().getClient().getProfileImageUrl(),
+                fullName
 
 
         );
