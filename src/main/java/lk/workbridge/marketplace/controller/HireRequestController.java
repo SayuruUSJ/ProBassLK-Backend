@@ -66,6 +66,7 @@ public class HireRequestController {
         return ResponseEntity.ok(hireRequestService.getAllRejectedRequestsByWorkerId(workerId));
     }
 
+    @GetMapping("/get-all-hire-requests-by-client")
     public ResponseEntity<Page<ClientHireRequestResponse>> getAllHireRequestClient(
             @RequestParam String clientId,
             @RequestParam(defaultValue = "0") int page,
