@@ -115,6 +115,38 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@Valid @RequestParam String email,
+                                       String code) {
+
+        boolean isValid = verificationCodeService.validateCode(email, code);
+        if (isValid) {
+            return ResponseEntity.ok("otp verification successes");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid or expired code");
+        }
+    }
+
+    @PostMapping("/send-otp")
+    public ResponseEntity<?> sendOtp(@Valid @RequestParam String email
+                                       ) {
+
+       String result =service.sendOtpTOForgotPassword(email);
+
+    return ResponseEntity.ok(result);
+    }
+    @PostMapping("/reset-passsowrd")
+    public ResponseEntity<?> resetPassword(@Valid @RequestParam String email,
+                                           @RequestParam String newPassword
+    ) {
+
+        String result =service.resetPassword(email,newPassword);
+
+        return ResponseEntity.ok(result);
+    }
+
+
+
     @PostMapping("/login-json")
     public ResponseEntity<?> loginJson(@RequestBody LoginRequest loginRequest,
                                        HttpServletRequest request) {

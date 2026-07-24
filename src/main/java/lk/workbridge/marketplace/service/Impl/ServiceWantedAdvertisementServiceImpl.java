@@ -1,5 +1,6 @@
 package lk.workbridge.marketplace.service.Impl;
 
+import jakarta.transaction.Transactional;
 import lk.workbridge.marketplace.dto.ServiceWantedAD;
 import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
 import lk.workbridge.marketplace.entity.Client;
@@ -75,6 +76,7 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
         return "PENDING".equals(status);
     }
 
+    @Transactional
     @Override
     public Page<ServiceWantedADResponse> getAllAdvertisements(int page, int size) {
 
@@ -86,6 +88,7 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
 
     }
 
+    @Transactional
     @Override
     public Page<ServiceWantedADResponse> getClientSpecificAdvertisements(String clientId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

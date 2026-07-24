@@ -24,9 +24,9 @@ public interface AuthService {
 
     String clientProfileUpdate(ClientProfileUpdate clientProfileUpdate);
 
-    String serviceProviderProfileUpdate(ServiceProviderProfileUpdate serviceProviderProfileUpdate);
-
     String uploadProfileImage(String profileImageUrl, String userId);
+
+    String serviceProviderProfileUpdate(ServiceProviderProfileUpdate serviceProviderProfileUpdate);
 
     ClientProfile getClientProfileInfo(String userId);
 
@@ -36,5 +36,9 @@ public interface AuthService {
 
     String addWorkSkill(String UserId, WorkerSkillRequest workerSkillRequest);
     String removeSkillID(String userId,Integer skillId);
+
+    String sendOtpTOForgotPassword(String userEmail);
+
+    String resetPassword(String userEmail,String newPassword);
 
 }

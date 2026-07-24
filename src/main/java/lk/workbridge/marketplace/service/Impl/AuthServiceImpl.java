@@ -492,5 +492,71 @@ Worker worker= (Worker) repo.findById(userId)
         return "Skill removed successfully";
     }
 
+    @Override
+    public String sendOtpTOForgotPassword(String userEmail) {
+
+        if (userEmail == null || userEmail.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+
+        if (!repo.existsByEmail(userEmail)) {
+            throw new RuntimeException("User not found with email: " + userEmail);
+        }
+
+        try {
+            boolean isTrue = emailService.sendVerificationEmail(userEmail);
+            if (isTrue) {
+                return "OTP sent successfully";
+            }
+            throw new RuntimeException("Failed to send OTP. Please try again later.");
+        } catch (Exception e) {
+
+            throw new RuntimeException("Failed to send OTP: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String resetPassword(String userEmail, String newPassword) {
+
+        if (userEmail == null || userEmail.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+
+
+        User userOptional = repo.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + userEmail));
+
+        if (userOptional.getRole() == Role.CLIENT) {
+            try {
+                Client client = (Client) userOptional;
+                client.setPassword(passwordEncoder.encode(newPassword));
+                repo.save(client);
+                return "Password updated successfully";
+            } catch (Exception e) {
+
+                throw new RuntimeException("Failed to reset password: " + e.getMessage());
+            }
+        } else if (userOptional.getRole() == Role.WORKER) {
+            try {
+                Worker worker = (Worker) userOptional;
+                worker.setPassword(passwordEncoder.encode(newPassword));
+                repo.save(worker);
+                return "Password updated successfully";
+            } catch (Exception e) {
+
+                throw new RuntimeException("Failed to reset password: " + e.getMessage());
+            }
+        }else {
+            return "Error occurred";
+        }
+
+
+    }
+
+
+
 
 }

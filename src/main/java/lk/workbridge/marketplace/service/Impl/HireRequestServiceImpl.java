@@ -108,7 +108,7 @@ public class HireRequestServiceImpl implements HireRequestService {
         hireRequestRepository.save(advertisement);
         return true;
     }
-
+    @Transactional
     @Override
     public List<HireRequestResponse> getAllRequestsByWorkerId(String workerId) {
 
@@ -125,7 +125,7 @@ public class HireRequestServiceImpl implements HireRequestService {
                 ;
 
     }
-
+@Transactional
     @Override
     public List<HireRequestResponse> getAllPendingRequestsByWorkerId(String workerId) {
         List<String> statuses = Arrays.asList("pending", "PENDING");
@@ -140,7 +140,7 @@ public class HireRequestServiceImpl implements HireRequestService {
                 .collect(Collectors.toList())
                 ;
     }
-
+@Transactional
     @Override
     public List<HireRequestResponse> getAllAcceptedRequestsByWorkerId(String workerId) {
         List<String> statuses = Arrays.asList("accepted", "ACCEPTED");
@@ -155,7 +155,7 @@ public class HireRequestServiceImpl implements HireRequestService {
                 .collect(Collectors.toList())
                 ;
     }
-
+@Transactional
     @Override
     public List<HireRequestResponse> getAllRejectedRequestsByWorkerId(String workerId) {
         List<String> statuses = Arrays.asList("rejected", "REJECTED");
@@ -293,6 +293,7 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
         return result.getMessage();
     }
 
+    @Transactional
     @Override
     public List<ClientJobs> getClientOngoingJobs(String clientId, String jobStatus) {
 
