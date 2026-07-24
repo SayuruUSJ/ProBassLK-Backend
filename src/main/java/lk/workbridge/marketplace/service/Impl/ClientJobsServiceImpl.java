@@ -143,8 +143,9 @@ public class ClientJobsServiceImpl implements ClientJobsService {
                 requestedService,
                 status,
                 serviceProviderName,
-                fullAddress,
-                hireRequest.getRequestedDate(),
+                worker.getId(),
+                hireRequest.getLocation(),
+                     hireRequest.getRequestedDate(),
                 hireRequest.getCreatedAt(),
                 contactNumber
         );
@@ -184,6 +185,7 @@ public class ClientJobsServiceImpl implements ClientJobsService {
                 requestedService,
                 status,
                 serviceProviderName,
+                worker.getId(),
                 fullAddress,
                 requestedDate,
                 application.getCreatedAt(),

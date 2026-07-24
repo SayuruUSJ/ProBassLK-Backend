@@ -7,6 +7,7 @@ public record ClientJobs(
         String requestedService,
         String status,
         String serviceProviderName,
+        String serviceProviderId,
         String fullAddress,
         LocalDate requestedDate,
         LocalDate createdAt,

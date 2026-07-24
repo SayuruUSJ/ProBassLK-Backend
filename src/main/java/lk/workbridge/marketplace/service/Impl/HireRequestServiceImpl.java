@@ -368,6 +368,7 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
                 requestedService,
                 status,
                 serviceProviderName,
+                worker.getId(),
                 fullAddress,
                 requestedDate,
                 createdAt,

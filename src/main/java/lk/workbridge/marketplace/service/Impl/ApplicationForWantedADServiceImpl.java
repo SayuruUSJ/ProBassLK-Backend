@@ -278,6 +278,7 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
                 requestedService,
                 status,
                 serviceProviderName,
+                worker.getId(),
                 fullAddress,
                 requestedDate,
                 createdAt,
