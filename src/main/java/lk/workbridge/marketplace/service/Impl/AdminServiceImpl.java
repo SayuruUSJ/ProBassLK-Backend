@@ -307,7 +307,8 @@ public class AdminServiceImpl implements AdminService {
                 advertisement.getAdditionalInstructions(),
                 advertisement.isUrgent(),
                 advertisement.getCreatedAt(),
-                advertisement.getUpdatedAt()
+                advertisement.getUpdatedAt(),
+                advertisement.getClient().getProfileImageUrl()
         );
 
     }

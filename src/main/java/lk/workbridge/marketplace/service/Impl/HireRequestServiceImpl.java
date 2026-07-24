@@ -181,7 +181,8 @@ public class HireRequestServiceImpl implements HireRequestService {
                 hireRequest.getRequestedDate(),
                 hireRequest.getCreatedAt(),
                 hireRequest.getRateForRequiredService(),
-                hireRequest.getStatus()
+                hireRequest.getStatus(),
+                hireRequest.getClient().getProfileImageUrl()
 
         );
     }
@@ -333,7 +334,8 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
                 hireRequest.getRequestedDate(),
                 hireRequest.getCreatedAt(),
                 hireRequest.getRateForRequiredService(),
-               hireRequest.getStatus()
+               hireRequest.getStatus(),
+                hireRequest.getWorker().getProfileImageUrl()
         );
     }
 
@@ -373,7 +375,8 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
                 fullAddress,
                 requestedDate,
                 createdAt,
-                contactNumber
+                contactNumber,
+                hireRequest.getWorker().getProfileImageUrl()
         );
     }
 

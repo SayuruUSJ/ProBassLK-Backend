@@ -12,7 +12,8 @@ public record ServiceProviderJobs(
         String clientContactNumber,
         String description,
         String hireRequestId,
-        int applicationId
+        int applicationId,
+        String clientProfileImageUrl
 
 
 ) {

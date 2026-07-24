@@ -129,7 +129,8 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
                 advertisement.getAdditionalInstructions(),
                 advertisement.isUrgent(),
                 advertisement.getCreatedAt(),
-                advertisement.getUpdatedAt()
+                advertisement.getUpdatedAt(),
+                advertisement.getClient().getProfileImageUrl()
         );
 
 

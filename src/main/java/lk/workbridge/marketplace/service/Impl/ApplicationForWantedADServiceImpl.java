@@ -282,7 +282,8 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
                 fullAddress,
                 requestedDate,
                 createdAt,
-                contactNumber
+                contactNumber,
+                worker.getProfileImageUrl()
         );
     }
 
@@ -334,7 +335,9 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
                 worker.getId(),
                 application.getAdvertisement().getAdvertisement_id(),
                 application.getCreatedAt(),
-                application.getMessage()
+                application.getMessage(),
+                application.getWorker().getProfileImageUrl()
+
 
         );
 

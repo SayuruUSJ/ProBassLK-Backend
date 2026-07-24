@@ -192,7 +192,8 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
                 contactNumber,
                 description,
                 hireRequest.getId(),
-                0
+                0,
+                hireRequest.getClient().getProfileImageUrl()
         );
     }
 
@@ -239,7 +240,8 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
                 contactNumber,
                 description,
                 null,
-                application.getRequestId()
+                application.getRequestId(),
+                application.getAdvertisement().getClient().getProfileImageUrl()
         );
     }
 }

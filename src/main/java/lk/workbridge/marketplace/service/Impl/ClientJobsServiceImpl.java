@@ -147,7 +147,8 @@ public class ClientJobsServiceImpl implements ClientJobsService {
                 hireRequest.getLocation(),
                      hireRequest.getRequestedDate(),
                 hireRequest.getCreatedAt(),
-                contactNumber
+                contactNumber,
+                hireRequest.getWorker().getProfileImageUrl()
         );
     }
 
@@ -189,7 +190,8 @@ public class ClientJobsServiceImpl implements ClientJobsService {
                 fullAddress,
                 requestedDate,
                 application.getCreatedAt(),
-                contactNumber
+                contactNumber,
+                application.getWorker().getProfileImageUrl()
         );
     }
 }

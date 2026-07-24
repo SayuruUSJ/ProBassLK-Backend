@@ -43,6 +43,7 @@ public record ServiceWantedADResponse(
         String additionalInstructions,
         boolean isUrgent,
         LocalDate createdAt,
-        LocalDate updatedAt
+        LocalDate updatedAt,
+        String clientProfileImageUrl
 ) {
 }

@@ -11,7 +11,8 @@ public record ClientJobs(
         String fullAddress,
         LocalDate requestedDate,
         LocalDate createdAt,
-        String serviceProviderContactNumber
+        String serviceProviderContactNumber,
+        String serviceProviderImageUrl
 
 ) {
 }

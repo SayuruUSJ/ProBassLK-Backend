@@ -13,7 +13,8 @@ public record HireRequestResponse(
         LocalDate requestedDate,
         LocalDate createAt,
         Double offeredRate,
-        String status
+        String status,
+        String clientProfileImageUrl
 
 ) {
 }
