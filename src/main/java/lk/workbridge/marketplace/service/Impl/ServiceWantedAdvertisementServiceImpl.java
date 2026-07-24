@@ -127,7 +127,9 @@ public class ServiceWantedAdvertisementServiceImpl implements ServiceWantedAdver
                 advertisement.getOfferedRate(),
                 advertisement.isRateNegotiable(),
                 advertisement.getAdditionalInstructions(),
-                advertisement.isUrgent()
+                advertisement.isUrgent(),
+                advertisement.getCreatedAt(),
+                advertisement.getUpdatedAt()
         );
 
 

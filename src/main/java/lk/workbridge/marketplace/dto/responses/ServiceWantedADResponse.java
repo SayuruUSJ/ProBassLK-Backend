@@ -41,6 +41,8 @@ public record ServiceWantedADResponse(
         Double offeredRate,
         Boolean isRateNegotiable,
         String additionalInstructions,
-        boolean isUrgent
+        boolean isUrgent,
+        LocalDate createdAt,
+        LocalDate updatedAt
 ) {
 }

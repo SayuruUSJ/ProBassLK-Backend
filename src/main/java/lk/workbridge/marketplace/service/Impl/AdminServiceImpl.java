@@ -305,7 +305,9 @@ public class AdminServiceImpl implements AdminService {
                 advertisement.getOfferedRate(),
                 advertisement.isRateNegotiable(),
                 advertisement.getAdditionalInstructions(),
-                advertisement.isUrgent()
+                advertisement.isUrgent(),
+                advertisement.getCreatedAt(),
+                advertisement.getUpdatedAt()
         );
 
     }
