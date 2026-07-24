@@ -1,6 +1,7 @@
 package lk.workbridge.marketplace.service;
 
 import lk.workbridge.marketplace.dto.HireRequestAD;
+import lk.workbridge.marketplace.dto.responses.ClientHireRequestResponse;
 import lk.workbridge.marketplace.dto.responses.ClientJobs;
 import lk.workbridge.marketplace.dto.responses.HireRequestCreatedResponse;
 import lk.workbridge.marketplace.dto.responses.HireRequestResponse;
@@ -20,7 +21,7 @@ public interface HireRequestService {
     Boolean updateCompleteOrIncompleteJobs(String advertisementId, String status);
    String cancelRequest(String id);
     List<ClientJobs> getClientOngoingJobs(String clientId,String jobStatus);
-    
+    Page<ClientHireRequestResponse> getClientAllHireRequests(String clientId,int page,int size);
 
 
 }

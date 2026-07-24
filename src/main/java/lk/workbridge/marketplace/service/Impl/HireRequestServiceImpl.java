@@ -1,6 +1,7 @@
 package lk.workbridge.marketplace.service.Impl;
 
 import lk.workbridge.marketplace.dto.HireRequestAD;
+import lk.workbridge.marketplace.dto.responses.ClientHireRequestResponse;
 import lk.workbridge.marketplace.dto.responses.ClientJobs;
 import lk.workbridge.marketplace.dto.responses.HireRequestCreatedResponse;
 import lk.workbridge.marketplace.dto.responses.HireRequestResponse;
@@ -17,6 +18,9 @@ import lk.workbridge.marketplace.repository.UserRepository;
 import lk.workbridge.marketplace.service.HireRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -304,6 +308,33 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Page<ClientHireRequestResponse> getClientAllHireRequests(String clientId, int page, int size) {
+        Pageable pageable= PageRequest.of(page,size);
+
+        Page<HireRequest> hireRequests = hireRequestRepository.findAllByClientId(clientId, pageable);
+        return hireRequests.map(this::mapToClientHireRequestResponse);
+    }
+
+    private ClientHireRequestResponse mapToClientHireRequestResponse(HireRequest hireRequest){
+        Worker worker = hireRequest.getWorker();
+        ServiceProviderAdvertisement service = hireRequest.getServiceProviderAdvertisement();
+
+        return new ClientHireRequestResponse(
+                hireRequest.getId(),
+                worker != null ? worker.getId() : null,
+                worker != null ? worker.getFirstName()+""+worker.getLastName() : null,
+                worker != null ? worker.getPrimaryPhoneNumber() : null,
+                worker != null ? worker.getProfileImageUrl() : null,
+                service != null ? hireRequest.getRequestedService() : null,
+                hireRequest.getDescription(),
+                hireRequest.getLocation(),
+                hireRequest.getRequestedDate(),
+                hireRequest.getCreatedAt(),
+                hireRequest.getRateForRequiredService(),
+               hireRequest.getStatus()
+        );
+    }
 
     private ClientJobs mapToClientJobs(HireRequest hireRequest) {
 

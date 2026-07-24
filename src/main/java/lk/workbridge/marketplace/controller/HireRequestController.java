@@ -2,10 +2,12 @@ package lk.workbridge.marketplace.controller;
 
 import jakarta.validation.Valid;
 import lk.workbridge.marketplace.dto.HireRequestAD;
+import lk.workbridge.marketplace.dto.responses.ClientHireRequestResponse;
 import lk.workbridge.marketplace.dto.responses.HireRequestCreatedResponse;
 import lk.workbridge.marketplace.dto.responses.HireRequestResponse;
 import lk.workbridge.marketplace.service.HireRequestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +66,13 @@ public class HireRequestController {
         return ResponseEntity.ok(hireRequestService.getAllRejectedRequestsByWorkerId(workerId));
     }
 
+    public ResponseEntity<Page<ClientHireRequestResponse>> getAllHireRequestClient(
+            @RequestParam String clientId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        return ResponseEntity.ok(hireRequestService.getClientAllHireRequests(clientId,page,size));
+    }
 
 
 
