@@ -12,13 +12,15 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/workbridge
-    username: root
-    password: 12345
+    # UPDATED: Points to your TiDB host, port, database, and forces SSL
+    url: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/workbridge?sslMode=VERIFY_IDENTITY&enabledTLSProtocols=TLSv1.2,TLSv1.3&createDatabaseIfNotExist=true
+    username: 3pps1erHUXPgSdq.root
+    password: jabYuI9XWZNNeSxJ
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 10
-      minimum-idle: 5
+      # OPTIMIZED: Reduced pool size slightly to fit TiDB Serverless free limits efficiently
+      maximum-pool-size: 5
+      minimum-idle: 2
       idle-timeout: 300000
       connection-timeout: 30000
       pool-name: WorkbridgeHikariPool
@@ -33,6 +35,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    # UPDATED: Added MySQLDialect explicitly so Hibernate communicates properly with TiDB
+    database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       hibernate:
         format_sql: true
