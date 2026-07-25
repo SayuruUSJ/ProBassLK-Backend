@@ -4,14 +4,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lk.workbridge.marketplace.entity.JobRole;
-import lk.workbridge.marketplace.enums.WorkerJobRole;
 import lk.workbridge.marketplace.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,29 +28,15 @@ public class RegisterRequest {
     @Size(max = 100, message = "Email must not exceed 100 characters")
     private String email;
 
-    @NotBlank(message="Username cannot null")
+    @NotBlank(message = "Username cannot null")
     private String username;
     @NotBlank(message = "Password is required")
     @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
-     private String password;
-
-    @NotBlank(message = "Phone number is required")
-
-    private String phoneNumber;
-
+    private String password;
     @NotNull(message = "Role is required")
     private Role role;
 
-    private Boolean available;
-
-    private String organizationName;
-
     private Boolean verificationStatus;
+    private Boolean termsAndConditions;
 
-    private Set<WorkerSkillRequest>  skills;
-
-    @NotBlank(message="District cannot null")
-    private String district;
-    @NotBlank(message = "Address is required")
-    private String address;
 }

@@ -1,14 +1,13 @@
 package lk.workbridge.marketplace.config;
 
-import lk.workbridge.marketplace.service.AuthService;
 import lk.workbridge.marketplace.service.Impl.AuthServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.session.SessionRegistry;
@@ -21,11 +20,12 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
-
+@EnableMethodSecurity
 public class SecurityConfig {
 
 
     private final AuthServiceImpl userDetailsService;
+
     @Autowired
     public SecurityConfig(@Lazy AuthServiceImpl userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -56,23 +56,22 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                // 1. Disable CSRF for REST APIs
+
                 .csrf(csrf -> csrf.disable())
 
-                // 2. Configure session management - FIXED VERSION
+
                 .sessionManagement(session -> session
-                                .sessionFixation().migrateSession()
-                                .maximumSessions(1)
-                                .expiredUrl("/api/auth/expired")
-                                .sessionRegistry(sessionRegistry())
-                        // ⚠️ NO .and() HERE - This was the problem!
+                        .sessionFixation().migrateSession()
+                        .maximumSessions(1)
+                        .expiredUrl("/api/auth/expired")
+                        .sessionRegistry(sessionRegistry())
                 )
-                // ⚠️ .invalidSessionUrl goes here, OUTSIDE the session lambda
+
                 .sessionManagement(session -> session
                         .invalidSessionUrl("/api/auth/invalid-session")
                 )
 
-                // 3. Define URL authorization rules
+
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
@@ -85,6 +84,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/invalid-session").permitAll()
                         .requestMatchers("/api/auth/login-failed").permitAll()
                         .requestMatchers("/api/auth/logout-success").permitAll()
+                        .requestMatchers("/api/auth/send-otp").permitAll()
+                        .requestMatchers("/api/auth/verify-otp").permitAll()
+                        .requestMatchers("/api/auth/reset-passsowrd").permitAll()
+                        .requestMatchers("/api/service-wanted-advertisements/get-all-wanted-ads").permitAll()
+                        .requestMatchers("/api/service-provider-advertisements/get-all-ads").permitAll()
 
                         .requestMatchers("/error").permitAll()
 
@@ -95,13 +99,12 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                // 4. Configure form login
+
                 .formLogin(form -> form
-                        .disable()  // ✅ Disable default login page
+                        .disable()
                 )
 
 
-                // 5. Configure logout
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
                         .logoutSuccessUrl("/api/auth/logout-success")
@@ -109,8 +112,6 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 );
-
-                // 6. Remember me
 
 
         return http.build();
@@ -123,13 +124,12 @@ public class SecurityConfig {
 
             if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
                 System.out.println("Admin logged in successfully");
-              //  response.sendRedirect("/api/admin/dashboard");
-                System.out.println();
+
             } else if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_WORKER"))) {
-               // response.sendRedirect("/api/worker/dashboard");
+
                 System.out.println("Worker logged in successfully");
             } else {
-              //  response.sendRedirect("/api/employer/dashboard");
+
                 System.out.println("Employer logged in successfully");
             }
         };

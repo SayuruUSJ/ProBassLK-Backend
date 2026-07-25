@@ -12,5 +12,5 @@ public class VerificationRequest {
     private String email;
     private String code;
     private String username;
-    private  boolean verificationStatus;
+    private boolean verificationStatus;
 }
