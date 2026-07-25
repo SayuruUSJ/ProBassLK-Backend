@@ -14,7 +14,7 @@ public record ClientHireRequestResponse(
         LocalDate requestedDate,
         LocalDate createdAt,
         Double offeredRate,
-       String status,
+        String status,
         String serviceProviderImageUrl
 ) {
 }

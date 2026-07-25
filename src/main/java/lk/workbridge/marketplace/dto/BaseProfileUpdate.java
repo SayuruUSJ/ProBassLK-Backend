@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,10 +23,7 @@ public class BaseProfileUpdate {
 
     private String address;
 
-    private  String city;
-
-
-
+    private String city;
 
 
 }

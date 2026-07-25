@@ -1,19 +1,17 @@
 package lk.workbridge.marketplace.repository;
 
 import lk.workbridge.marketplace.entity.ApplicationsForWantedAdvertisements;
-import lk.workbridge.marketplace.entity.HireRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ApplicationForWantedADRepository extends JpaRepository<ApplicationsForWantedAdvertisements, Integer> {
-//    boolean existsByAdvertisementAdvertisementIdAndWorkerWorkerId(
-//            String advertisementId,
-//            String workerId);
 
     @Query(value = """
             SELECT COUNT(*)
@@ -41,10 +39,8 @@ public interface ApplicationForWantedADRepository extends JpaRepository<Applicat
             
             """, nativeQuery = true)
     Long countApplicantsRequestsServiceProvider(@Param("workerId") String workerId
-            ,@Param("status") String status
+            , @Param("status") String status
     );
-
-
 
 
     @Query("""
@@ -60,7 +56,7 @@ public interface ApplicationForWantedADRepository extends JpaRepository<Applicat
     @Query(value = """
             SELECT * 
             FROM service_providers_requests_for_wanted_advertisements sp
-           
+            
             WHERE sp.worker_id = :workerId
             """,
             nativeQuery = true)
@@ -68,12 +64,13 @@ public interface ApplicationForWantedADRepository extends JpaRepository<Applicat
             @Param("workerId") String workerId,
             Pageable pageable
     );
+
     @Query(value = """
-    SELECT * 
-    FROM service_providers_requests_for_wanted_advertisements sp
-    WHERE sp.worker_id = :workerId
-    AND sp.status IN (:statuses)
-    """,
+            SELECT * 
+            FROM service_providers_requests_for_wanted_advertisements sp
+            WHERE sp.worker_id = :workerId
+            AND sp.status IN (:statuses)
+            """,
             nativeQuery = true)
     List<ApplicationsForWantedAdvertisements> findByWorkerIdAndStatuses(
             @Param("workerId") String workerId,
@@ -98,11 +95,11 @@ public interface ApplicationForWantedADRepository extends JpaRepository<Applicat
                                   @Param("status") String status);
 
     @Query("""
-    SELECT COUNT(c)
-    FROM ApplicationsForWantedAdvertisements c
-    WHERE c.worker.id = :workerId
-      AND c.status = :status
-""")
+                SELECT COUNT(c)
+                FROM ApplicationsForWantedAdvertisements c
+                WHERE c.worker.id = :workerId
+                  AND c.status = :status
+            """)
     Long countCompletedBookings(
             @Param("workerId") String workerId,
             @Param("status") String status);

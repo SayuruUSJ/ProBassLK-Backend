@@ -9,23 +9,23 @@ import java.time.LocalTime;
 public record ServiceWantedADResponse(
         String advertisementId,
 
-         String firstName,
+        String firstName,
 
-         String lastName,
+        String lastName,
 
-         String title,
+        String title,
 
-         String clientContactNumber,
+        String clientContactNumber,
 
-         String description,
+        String description,
 
-         String serviceType,
+        String serviceType,
 
-         String location,
+        String location,
 
         LocalDate requiredDate,
 
-         String status,
+        String status,
 
         Long applicationCount,
         ContactMethod preferredContactMethod,

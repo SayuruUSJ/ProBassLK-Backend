@@ -3,7 +3,6 @@ F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbrid
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\AdminController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\AuthController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\ClientJobsController.java
-F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\CustomController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\HireRequestController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\ProfileCountController.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\controller\RatingAndReviewController.java
@@ -17,10 +16,12 @@ F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbrid
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\RatingRequest.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\RegisterRequest.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\BookingRequestResponse.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\ClientHireRequestResponse.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\ClientJobs.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\ClientMoreInfo.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\ClientProfile.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\ClientProfileCounts.java
+F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\HireRequestCreatedResponse.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\HireRequestResponse.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\RatingResponse.java
 F:\UNIVERSITY WORKS\COMPUTER SCIENCE\ProBassLK-Backend\src\main\java\lk\workbridge\marketplace\dto\responses\ServiceProviderADResponse.java

@@ -12,11 +12,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="rating")
+@Table(name = "rating")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,7 +38,7 @@ public class Rating {
     @Column(name = "comment", nullable = true)
     private String comment;
 
-    @Column(name="provider_reply",nullable = true)
+    @Column(name = "provider_reply", nullable = true)
     private String providerReply;
 
 

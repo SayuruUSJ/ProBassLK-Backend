@@ -6,20 +6,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+@Repository
+public interface UserRepository extends JpaRepository<User, String> {
 
-public interface UserRepository extends JpaRepository<User,String> {
-    // ✅ CORRECT - matches 'username' field in User entity
     Optional<User> findByUsername(String username);
 
-    // ✅ CORRECT - matches 'email' field
+
     Optional<User> findByEmail(String email);
 
-    // ✅ CORRECT - checks existence by username
+
     boolean existsByUsername(String username);
 
-    // ✅ CORRECT - checks existence by email
+
     boolean existsByEmail(String email);
 
     @Query(value = "SELECT CASE WHEN verification_status = 1 THEN true ELSE false END " +

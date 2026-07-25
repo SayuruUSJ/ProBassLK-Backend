@@ -7,9 +7,7 @@ import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
 import lk.workbridge.marketplace.dto.responses.ClientProfile;
 import lk.workbridge.marketplace.dto.responses.ServiceProviderProfile;
-import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
 import lk.workbridge.marketplace.entity.User;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface AuthService {
@@ -35,10 +33,11 @@ public interface AuthService {
     String deleteMyAccount(String userId);
 
     String addWorkSkill(String UserId, WorkerSkillRequest workerSkillRequest);
-    String removeSkillID(String userId,Integer skillId);
+
+    String removeSkillID(String userId, Integer skillId);
 
     String sendOtpTOForgotPassword(String userEmail);
 
-    String resetPassword(String userEmail,String newPassword);
+    String resetPassword(String userEmail, String newPassword);
 
 }

@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lk.workbridge.marketplace.enums.WorkerJobRole;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +30,6 @@ public class JobRole {
     @Enumerated(
             EnumType.STRING
     )
-    @Column(name="role-name",nullable = false)
+    @Column(name = "role-name", nullable = false)
     private WorkerJobRole roleName;
 }

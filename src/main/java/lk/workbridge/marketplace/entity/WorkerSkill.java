@@ -11,18 +11,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lk.workbridge.marketplace.enums.RateType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -59,9 +52,9 @@ public class WorkerSkill {
     private RateType rateType;
     @Column(name = "experience", nullable = true)
     private Integer experience;
-    @Column(name="description",nullable = true)
+    @Column(name = "description", nullable = true)
     private String description;
-    @Column(name="negotiable",nullable = true)
+    @Column(name = "negotiable", nullable = true)
     private Boolean negotiable;
 
 }

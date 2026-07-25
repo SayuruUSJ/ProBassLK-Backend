@@ -1,4 +1,5 @@
 package lk.workbridge.marketplace.util;
+
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
@@ -7,7 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class UserIdGenerator implements  IdentifierGenerator{
+public class UserIdGenerator implements IdentifierGenerator {
     private static final String PREFIX = "workbridge#";
 
     @Override

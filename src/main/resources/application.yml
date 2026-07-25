@@ -12,13 +12,11 @@ server:
 
 spring:
   datasource:
-    # UPDATED: Points to your TiDB host, port, database, and forces SSL
-    url: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/workbridge?sslMode=VERIFY_IDENTITY&enabledTLSProtocols=TLSv1.2,TLSv1.3&createDatabaseIfNotExist=true
-    username: 3pps1erHUXPgSdq.root
-    password: jabYuI9XWZNNeSxJ
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      # OPTIMIZED: Reduced pool size slightly to fit TiDB Serverless free limits efficiently
       maximum-pool-size: 5
       minimum-idle: 2
       idle-timeout: 300000
@@ -35,7 +33,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    # UPDATED: Added MySQLDialect explicitly so Hibernate communicates properly with TiDB
     database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       hibernate:
@@ -49,8 +46,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: tumiraduli@gmail.com
-    password: "ghip qzcl kedi hyug"
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     protocol: smtp
     default-encoding: UTF-8
     properties:
@@ -62,10 +59,10 @@ spring:
 
   security:
     user:
-      name: admin
-      password: admin123
+      name: ${ADMIN_USERNAME:admin}
+      password: ${ADMIN_PASSWORD:admin123}
     remember-me:
-      key: workbridge-remember-me-secret-key
+      key: ${REMEMBER_ME_KEY:workbridge-remember-me-secret-key}
       token-validity-seconds: 86400
 
   web:
@@ -89,9 +86,9 @@ spring:
     name: workbridge-marketplace
 
 cloudinary:
-  cloud-name: ubi91zgy
-  api-key: "572833356563818"
-  api-secret: "-ZRffHjPRio4Gk5NzRUGSdX-VZY"
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
 
 logging:
   level:

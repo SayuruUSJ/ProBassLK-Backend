@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name="application_requests_cancellaion_results")
+@Table(name = "application_requests_cancellaion_results")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApplicationRequestCancellationResult {
@@ -32,7 +32,7 @@ public class ApplicationRequestCancellationResult {
 
     private String message;
 
-    private  String status;
+    private String status;
 
     private LocalDateTime cancelledAt;
 

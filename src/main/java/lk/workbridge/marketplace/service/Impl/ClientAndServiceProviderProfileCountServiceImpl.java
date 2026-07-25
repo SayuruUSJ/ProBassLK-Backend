@@ -48,11 +48,11 @@ public class ClientAndServiceProviderProfileCountServiceImpl implements ClientAn
 
     @Override
     public ServiceProviderProfileCounts getServiceProviderProfileCounts(String workerId) {
-        long pendingHireRequestCount= hireRequestRepository.countHireRequests(workerId,"PENDING");
-        long  confirmedHireRequestCount=hireRequestRepository.countHireRequests(workerId,"CONFIRMED");
-        long confirmedApplicationRequestCount= applicationForWantedADRepository.countApplicantsRequestsServiceProvider(workerId,"CONFIRMED");
-        long ongoingJobs=confirmedApplicationRequestCount+confirmedHireRequestCount;
-        long pendingApplicationRequestCount=applicationForWantedADRepository.countApplicantsRequestsServiceProvider(workerId,"PENDING");
+        long pendingHireRequestCount = hireRequestRepository.countHireRequests(workerId, "PENDING");
+        long confirmedHireRequestCount = hireRequestRepository.countHireRequests(workerId, "CONFIRMED");
+        long confirmedApplicationRequestCount = applicationForWantedADRepository.countApplicantsRequestsServiceProvider(workerId, "CONFIRMED");
+        long ongoingJobs = confirmedApplicationRequestCount + confirmedHireRequestCount;
+        long pendingApplicationRequestCount = applicationForWantedADRepository.countApplicantsRequestsServiceProvider(workerId, "PENDING");
 
         return new ServiceProviderProfileCounts(
                 pendingHireRequestCount,

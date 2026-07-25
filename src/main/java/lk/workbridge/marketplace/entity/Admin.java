@@ -13,6 +13,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Admin extends  User {
+public class Admin extends User {
     private String adminSecretKey;
 }

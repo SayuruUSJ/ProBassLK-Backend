@@ -57,16 +57,16 @@ public class Worker extends User {
     @OneToMany(mappedBy = "worker")
     private List<Rating> ratings = new ArrayList<>();
 
-    @Column(name="overallExperience",nullable = true)
+    @Column(name = "overallExperience", nullable = true)
     private int overallExperience;
 
-    @Column(name="about",nullable = true)
+    @Column(name = "about", nullable = true)
     private String about;
 
     @Column(name = "emergency_available")
     private boolean emergencyAvailable;
 
-    @Column(name="nic",nullable = true)
+    @Column(name = "nic", nullable = true)
     private String NIC;
 
 

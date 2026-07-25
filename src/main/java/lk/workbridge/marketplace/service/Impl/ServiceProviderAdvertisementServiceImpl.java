@@ -67,7 +67,6 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
     }
 
 
-
     @Override
     public ServiceProviderADResponse getAdvertisementForSpecificWorker(String workerId) {
 
@@ -81,7 +80,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
         Optional<Worker> byIdWithSkills = workerSkillRepository.findByIdWithSkills(worker.getId());
 
         List<Rating> ratings = ratingRepository.findByWorker(worker);
-        List<RatingResponse> ratingsResponses =ratings
+        List<RatingResponse> ratingsResponses = ratings
                 .stream()
                 .map(rating -> {
                     RatingResponse response = new RatingResponse(
@@ -173,8 +172,8 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
 
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
         long hireRequestCompletedJobs = hireRequestRepository.countCompletedBookings(worker.getId(), "COMPLETED");
-        long applicationRequestCompleted= applicationForWantedADRepository.countCompletedBookings(worker.getId(),"COMPLETED");
-      long completedJobs=hireRequestCompletedJobs+applicationRequestCompleted;
+        long applicationRequestCompleted = applicationForWantedADRepository.countCompletedBookings(worker.getId(), "COMPLETED");
+        long completedJobs = hireRequestCompletedJobs + applicationRequestCompleted;
         Optional<Worker> workerWithSkills =
                 workerSkillRepository.findByIdWithSkills(worker.getId());
 
@@ -198,7 +197,7 @@ public class ServiceProviderAdvertisementServiceImpl implements ServiceProviderA
                 .toList();
 
         List<Rating> ratings = ratingRepository.findByWorker(worker);
-        List<RatingResponse> ratingsResponses =ratings
+        List<RatingResponse> ratingsResponses = ratings
                 .stream()
                 .map(rating -> {
                     RatingResponse response = new RatingResponse(

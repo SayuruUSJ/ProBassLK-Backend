@@ -1,34 +1,28 @@
 package lk.workbridge.marketplace.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import lk.workbridge.marketplace.util.ServiceProviderAdvertisementID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="service_provider_advertisement")
+@Table(name = "service_provider_advertisement")
 public class ServiceProviderAdvertisement {
 
     @Id
     @ServiceProviderAdvertisementID
-   @Column(name="service_id",nullable = false,unique = true)
+    @Column(name = "service_id", nullable = false, unique = true)
     private String serviceId;
 
     @OneToOne  // Add this annotation
@@ -41,7 +35,7 @@ public class ServiceProviderAdvertisement {
 
     private LocalDate createdAt;
 
-    private  LocalDate updatedAt;
+    private LocalDate updatedAt;
 //    @Column(name="service_provider_id",nullable = false)
 //    private String serviceProviderId;
 //@Column(name="service_provider_name",nullable = false)

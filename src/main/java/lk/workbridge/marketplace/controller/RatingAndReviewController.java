@@ -26,7 +26,7 @@ public class RatingAndReviewController {
     @PostMapping("/add-review")
     public ResponseEntity<?> addRating(
             @RequestBody RatingRequest requestDTO
-            ) {
+    ) {
 
         String response = ratingAndReviewService.addRatingAndReview(requestDTO);
 
@@ -47,6 +47,7 @@ public class RatingAndReviewController {
 
         return ResponseEntity.ok(ratings);
     }
+
     @GetMapping("/get-service-provider-reviews")
     public ResponseEntity<Page<RatingResponse>> getServiceProviderRatings(
             @RequestParam String serviceProviderId,
@@ -64,10 +65,10 @@ public class RatingAndReviewController {
 
     @PutMapping("/add-reply-for-review")
     public ResponseEntity<?> addServiceProviderReplyForReview(
-           @RequestParam long id,
-           @RequestParam String providerReply
-    ){
-        return ResponseEntity.ok(ratingAndReviewService.addReplyToReview(id,providerReply));
+            @RequestParam long id,
+            @RequestParam String providerReply
+    ) {
+        return ResponseEntity.ok(ratingAndReviewService.addReplyToReview(id, providerReply));
     }
 
 }

@@ -43,7 +43,7 @@ public class HireRequestController {
 
     @PutMapping("/update-completed-jobs")
     public ResponseEntity<?> updateCompletedJobs(@RequestParam String advertisementId,
-                                                  @RequestParam String status) {
+                                                 @RequestParam String status) {
         boolean isCompleted = hireRequestService.updateCompleteOrIncompleteJobs(advertisementId, status);
         return ResponseEntity.ok(isCompleted);
     }
@@ -57,10 +57,12 @@ public class HireRequestController {
     public ResponseEntity<List<HireRequestResponse>> getAllPendingRequestsByWorkerId(@RequestParam String workerId) {
         return ResponseEntity.ok(hireRequestService.getAllPendingRequestsByWorkerId(workerId));
     }
+
     @GetMapping("/get-accepted-requests")
     public ResponseEntity<List<HireRequestResponse>> getAllAcceptedRequestsByWorkerId(@RequestParam String workerId) {
         return ResponseEntity.ok(hireRequestService.getAllAcceptedRequestsByWorkerId(workerId));
     }
+
     @GetMapping("/get-rejected-requests")
     public ResponseEntity<List<HireRequestResponse>> getAllRejectedRequestsByWorkerId(@RequestParam String workerId) {
         return ResponseEntity.ok(hireRequestService.getAllRejectedRequestsByWorkerId(workerId));
@@ -71,16 +73,15 @@ public class HireRequestController {
             @RequestParam String clientId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
-    ){
-        return ResponseEntity.ok(hireRequestService.getClientAllHireRequests(clientId,page,size));
+    ) {
+        return ResponseEntity.ok(hireRequestService.getClientAllHireRequests(clientId, page, size));
     }
-
 
 
     @PostMapping("/cancel-request")
     public ResponseEntity<?> cancelRequest(
             @RequestParam String hireAdvertisementId
-    ){
+    ) {
         return ResponseEntity.ok(hireRequestService.cancelRequest(hireAdvertisementId));
     }
 

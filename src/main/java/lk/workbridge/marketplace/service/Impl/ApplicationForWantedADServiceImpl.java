@@ -6,7 +6,6 @@ import lk.workbridge.marketplace.dto.responses.ClientJobs;
 import lk.workbridge.marketplace.dto.responses.WantedAdvertisementApplication;
 import lk.workbridge.marketplace.entity.ApplicationRequestCancellationResult;
 import lk.workbridge.marketplace.entity.ApplicationsForWantedAdvertisements;
-import lk.workbridge.marketplace.entity.HireRequestCancellationResult;
 import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.ServiceWantedAdvertisement;
 import lk.workbridge.marketplace.entity.User;
@@ -32,7 +31,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,7 +66,7 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
                 throw new RuntimeException("You have already requested this advertisement.");
             }
             ServiceProviderAdvertisement serviceProviderAdvertisement = serviceProviderAdvertisementRepository.findAdvertisementByWorker(worker.getId())
-                    .orElseThrow(()->new RuntimeException("provider ad not found"));
+                    .orElseThrow(() -> new RuntimeException("provider ad not found"));
 
             if (!Objects.equals(serviceProviderAdvertisement.getStatus(), "PUBLISHED")) {
 
@@ -161,14 +159,13 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
             throw new RuntimeException("Invalid status.");
         }
 
-           
 
         ApplicationsForWantedAdvertisements applicationsForWantedAdvertisements = applicationForWantedADRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Advertisement not found."));
         String serviceWantedAdvertisementId = applicationsForWantedAdvertisements.getAdvertisement().getAdvertisement_id();
         ServiceWantedAdvertisement byId = serviceWantedAdvertisementRepository.findById(serviceWantedAdvertisementId)
                 .orElseThrow(() -> new RuntimeException("Wanted advertisement not found"));
-                 ServiceProviderAdvertisement serviceProviderAdvertisement = serviceProviderAdvertisementRepository.findAdvertisementByWorker(applicationsForWantedAdvertisements.getWorker().getId())
+        ServiceProviderAdvertisement serviceProviderAdvertisement = serviceProviderAdvertisementRepository.findAdvertisementByWorker(applicationsForWantedAdvertisements.getWorker().getId())
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
         applicationsForWantedAdvertisements.setStatus(status);
         byId.setStatus(status);
@@ -177,7 +174,7 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
             Worker worker = applicationsForWantedAdvertisements.getWorker();
             worker.setAvailable(true);
             userRepository.save(worker);
-                        serviceProviderAdvertisement.setStatus("PUBLISHED");
+            serviceProviderAdvertisement.setStatus("PUBLISHED");
         }
         return true;
     }
@@ -293,7 +290,7 @@ public class ApplicationForWantedADServiceImpl implements ApplicationForWantedAD
         Worker worker = application.getWorker();
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
 
-String fullName=application.getAdvertisement().getClient().getFirstName()+" "+application.getAdvertisement().getClient().getLastName();
+        String fullName = application.getAdvertisement().getClient().getFirstName() + " " + application.getAdvertisement().getClient().getLastName();
         return new WantedAdvertisementApplication(
                 application.getRequestId(),
                 advertisement.getTitle(),

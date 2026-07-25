@@ -7,7 +7,6 @@ import lk.workbridge.marketplace.dto.VerificationRequest;
 import lk.workbridge.marketplace.dto.WorkerSkillRequest;
 import lk.workbridge.marketplace.dto.responses.ClientProfile;
 import lk.workbridge.marketplace.dto.responses.ServiceProviderProfile;
-import lk.workbridge.marketplace.dto.responses.ServiceWantedADResponse;
 import lk.workbridge.marketplace.dto.responses.WorkerSkillResponse;
 import lk.workbridge.marketplace.entity.Admin;
 import lk.workbridge.marketplace.entity.Client;
@@ -22,7 +21,6 @@ import lk.workbridge.marketplace.repository.WorkerSkillRepository;
 import lk.workbridge.marketplace.service.AuthService;
 import lk.workbridge.marketplace.service.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -102,7 +100,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                     request.getVerificationStatus()
             );
 
-        worker.setTermsAndConditions(request.getTermsAndConditions());
+            worker.setTermsAndConditions(request.getTermsAndConditions());
             boolean isTrue = emailService.sendVerificationEmail(
                     request.getEmail()
             );
@@ -123,7 +121,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             admin.setVerificationStatus(request.getVerificationStatus());
             admin.setRole(Role.ADMIN);
 
-admin.setTermsAndConditions(request.getTermsAndConditions());
+            admin.setTermsAndConditions(request.getTermsAndConditions());
             boolean isTrue = emailService.sendVerificationEmail(admin.getEmail());
             System.out.println(isTrue);
             if (isTrue == true) {
@@ -211,6 +209,7 @@ admin.setTermsAndConditions(request.getTermsAndConditions());
 
         return "Client Profile Updated Successfully";
     }
+
     @Transactional
     @Override
     public String serviceProviderProfileUpdate(ServiceProviderProfileUpdate serviceProviderProfileUpdate) {
@@ -382,7 +381,7 @@ admin.setTermsAndConditions(request.getTermsAndConditions());
                 worker.getCreatedAt(),
                 worker.getVerificationStatus(),
                 worker.getProfileImageUrl(),
-                  skills,
+                skills,
                 worker.getAvailable() != null && worker.getAvailable(),
                 worker.getTitle(),
                 worker.getOverallExperience() > 0 ? worker.getOverallExperience() : null,
@@ -418,57 +417,57 @@ admin.setTermsAndConditions(request.getTermsAndConditions());
         User user = userOptional.get();
         Worker worker = (Worker) user;
 
-            JobRole jobRole =
+        JobRole jobRole =
 
-                    jobRoleRepository
+                jobRoleRepository
 
-                            .findByRoleName(
+                        .findByRoleName(
 
-                                    workerSkillRequest.getRole()
+                                workerSkillRequest.getRole()
 
-                            )
+                        )
 
-                            .orElseThrow(
+                        .orElseThrow(
 
-                                    () -> new RuntimeException(
+                                () -> new RuntimeException(
 
-                                            "Role not found"
+                                        "Role not found"
 
-                                    )
+                                )
 
-                            );
+                        );
 
-            WorkerSkill skill =
-                    new WorkerSkill();
+        WorkerSkill skill =
+                new WorkerSkill();
 
-            skill.setWorker(
-                    worker
-            );
+        skill.setWorker(
+                worker
+        );
 
-            skill.setJobRole(
-                    jobRole
-            );
+        skill.setJobRole(
+                jobRole
+        );
 
-            skill.setRate(
+        skill.setRate(
 
-                    workerSkillRequest.getDailyRate()
+                workerSkillRequest.getDailyRate()
 
-            );
-            skill.setRateType(workerSkillRequest.getRateType());
-            skill.setExperience(workerSkillRequest.getExperience());
-            skill.setDescription(workerSkillRequest.getDescription());
-            skill.setNegotiable(workerSkillRequest.isNegotiable());
+        );
+        skill.setRateType(workerSkillRequest.getRateType());
+        skill.setExperience(workerSkillRequest.getExperience());
+        skill.setDescription(workerSkillRequest.getDescription());
+        skill.setNegotiable(workerSkillRequest.isNegotiable());
 
-            worker.getSkills().add(skill);
+        worker.getSkills().add(skill);
 
-            repo.save(worker);
+        repo.save(worker);
         return "new skill added successfully";
     }
 
     @Transactional
     @Override
     public String removeSkillID(String userId, Integer skillId) {
-Worker worker= (Worker) repo.findById(userId)
+        Worker worker = (Worker) repo.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Worker not found with ID: " + userId));
 
         // Find the skill
@@ -550,14 +549,12 @@ Worker worker= (Worker) repo.findById(userId)
 
                 throw new RuntimeException("Failed to reset password: " + e.getMessage());
             }
-        }else {
+        } else {
             return "Error occurred";
         }
 
 
     }
-
-
 
 
 }

@@ -6,8 +6,11 @@ import org.springframework.data.domain.Page;
 
 public interface RatingAndReviewService {
 
-String addRatingAndReview(RatingRequest ratingRequest);
-Page<RatingResponse> getRatingsAndReviewsClient(int page, int size, String clientId);
-String addReplyToReview(long id,String providerReply);
-Page<RatingResponse> getRatingsAndReviewsServiceProvider(int page,int size,String serviceProviderId);
+    String addRatingAndReview(RatingRequest ratingRequest);
+
+    Page<RatingResponse> getRatingsAndReviewsClient(int page, int size, String clientId);
+
+    String addReplyToReview(long id, String providerReply);
+
+    Page<RatingResponse> getRatingsAndReviewsServiceProvider(int page, int size, String serviceProviderId);
 }

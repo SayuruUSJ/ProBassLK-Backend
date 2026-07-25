@@ -10,15 +10,13 @@ import lk.workbridge.marketplace.repository.RatingRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
 import lk.workbridge.marketplace.service.RatingAndReviewService;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDateTime;
-
-import org.hibernate.jdbc.Work;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +56,7 @@ public class RatingAndReviewServiceImpl implements RatingAndReviewService {
         Client client = (Client) userOne;
         Pageable pageable = PageRequest.of(page, size);
 
-        return  ratingRepository.findByClient(client, pageable)
+        return ratingRepository.findByClient(client, pageable)
                 .map(this::mapToRatingResponse);
     }
 
@@ -87,7 +85,7 @@ public class RatingAndReviewServiceImpl implements RatingAndReviewService {
         Worker worker = (Worker) userOne;
         Pageable pageable = PageRequest.of(page, size);
 
-        return  ratingRepository.findByWorker(worker, pageable)
+        return ratingRepository.findByWorker(worker, pageable)
                 .map(this::mapToRatingResponse);
     }
 
@@ -115,6 +113,7 @@ public class RatingAndReviewServiceImpl implements RatingAndReviewService {
 
 
     }
+
     private String buildFullName(User user) {
         if (user == null) {
             return "Unknown User";

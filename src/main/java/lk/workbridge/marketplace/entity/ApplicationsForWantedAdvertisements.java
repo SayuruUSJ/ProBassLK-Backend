@@ -22,7 +22,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="service_providers_requests_for_wanted_advertisements")
+@Table(name = "service_providers_requests_for_wanted_advertisements")
 public class ApplicationsForWantedAdvertisements {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,20 +40,20 @@ public class ApplicationsForWantedAdvertisements {
     @Column(name = "message", nullable = false, length = 255)
     private String message;
 
-    @Column(name="daily_rate",nullable = false)
+    @Column(name = "daily_rate", nullable = false)
 
-    private  Double proposedRate;
+    private Double proposedRate;
 
     @Enumerated(
             EnumType.STRING
     )
-    @Column(name="payment_type",nullable = false)
+    @Column(name = "payment_type", nullable = false)
     private PaymentType paymentType;
 
-    @Column(name="status", nullable = false)
+    @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private LocalDate createdAt;
 
 

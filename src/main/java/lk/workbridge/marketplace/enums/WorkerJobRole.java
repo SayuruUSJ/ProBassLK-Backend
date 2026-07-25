@@ -2,26 +2,18 @@ package lk.workbridge.marketplace.enums;
 
 public enum WorkerJobRole {
     PLUMBER,
-
-    PAINTER
-,
-            ELECTRICIAN,
-
+    PAINTER,
+    ELECTRICIAN,
     CARPENTER,
-
-            MASON,
-
+    MASON,
     GARDENER,
-
-            CLEANER,
-
+    CLEANER,
     MOVER,
     WELDER,
     TILE_INSTALLATION,
     CEILING_INSTALLATION,
     ALUMINIUM_FABRICATION,
     CONTRACTOR,
-    GARDENING,
     LANDSCAPING,
     TREE_CUTTING,
     COCONUT_PLUCKING,
@@ -31,7 +23,6 @@ public enum WorkerJobRole {
     SOLAR_PANEL_INSTALLATION,
     GENERAL_HANDYMAN,
     VEHICLE_REPAIR,
-    HOUSE_MOVERS,
     TOOL_RENTAL,
     EQUIPMENT_RENTAL,
     SAND_SOIL_GRAVEL_SUPPLY,

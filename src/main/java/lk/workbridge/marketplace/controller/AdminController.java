@@ -167,4 +167,22 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+    @GetMapping("/get-all-service-provider-advertisments")
+    public ResponseEntity<Page<ServiceProviderADResponse>> getAllServiceProviderAdvertisements(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                adminService.getAllServiceProviderAdvertisements(page, size)
+        );
+    }
+    @GetMapping("/get-all-service-wanted-advertisments")
+    public ResponseEntity<Page<ServiceWantedADResponse>> getAllServiceWantedAdvertisements(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                adminService.getAllServiceWantedAdvertisements(page, size)
+        );
+    }
 }

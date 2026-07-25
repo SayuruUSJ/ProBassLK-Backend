@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientProfileUpdate extends BaseProfileUpdate{
+public class ClientProfileUpdate extends BaseProfileUpdate {
 
     private String organizationName;
 }

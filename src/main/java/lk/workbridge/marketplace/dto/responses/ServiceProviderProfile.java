@@ -44,13 +44,21 @@ public record ServiceProviderProfile(
         List<WorkerSkillResponse> skills,
 
         boolean available,
+
         String title,
+
         Integer overallExperience,
+
         String about,
+
         Boolean emergencyAvailable,
+
         String nic,
+
         Set<DayOfWeek> workingDaysMask,
+
         LocalTime startTime,
+
         LocalTime endTime
 ) {
 }

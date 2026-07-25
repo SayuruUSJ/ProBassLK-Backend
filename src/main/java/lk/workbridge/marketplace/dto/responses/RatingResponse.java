@@ -1,6 +1,5 @@
 package lk.workbridge.marketplace.dto.responses;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record RatingResponse(
@@ -15,5 +14,5 @@ public record RatingResponse(
         String providerReply,
         LocalDateTime createdAt
 
-        ) {
+) {
 }

@@ -20,13 +20,12 @@ public record WantedAdvertisementApplication(
         String status,
         Double ratingStars,
         String serviceProviderId,
-        String  serviceWantedId,
+        String serviceWantedId,
         LocalDate applicationDate,
         String message,
         String serviceProviderImageUrl,
         String clientImageUrl,
         String clientName
-
 
 
 ) {

@@ -8,12 +8,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
     @Query("SELECT AVG(r.stars) FROM Rating r WHERE r.worker.id = :workerId")
     Double getAverageStarsByWorkerId(@Param("workerId") String workerId);
+
     @Query("SELECT r FROM Rating r WHERE r.worker = :worker")
     List<Rating> findByWorker(@Param("worker") Worker worker);
 
@@ -24,6 +26,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     Page<Rating> findByClient(@Param("client") Client client,
                               Pageable pageable
     );
+
     @Query("SELECT r FROM Rating r WHERE r.worker = :worker")
     Page<Rating> findByWorker(@Param("worker") Worker worker,
                               Pageable pageable

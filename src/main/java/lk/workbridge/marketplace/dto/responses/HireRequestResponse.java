@@ -1,7 +1,5 @@
 package lk.workbridge.marketplace.dto.responses;
 
-
-
 import java.time.LocalDate;
 
 public record HireRequestResponse(

@@ -15,10 +15,10 @@ import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.ServiceWantedAdvertisement;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
+import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
 import lk.workbridge.marketplace.repository.HireRequestRepository;
 import lk.workbridge.marketplace.repository.RatingRepository;
 import lk.workbridge.marketplace.repository.ServiceProviderAdvertisementRepository;
-import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
 import lk.workbridge.marketplace.repository.ServiceWantedAdvertisementRepository;
 import lk.workbridge.marketplace.repository.UserRepository;
 import lk.workbridge.marketplace.repository.WorkerSkillRepository;
@@ -28,6 +28,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -46,13 +48,14 @@ public class AdminServiceImpl implements AdminService {
     private final RatingRepository ratingRepository;
     private final HireRequestRepository hireRequestRepository;
     private final ApplicationForWantedADRepository applicationForWantedADRepository;
+
     @Override
     public boolean acceptOrRejectServiceProviderAdvertisement(String serviceId, String status) {
         if (!isValidStatus(status)) {
             throw new IllegalArgumentException("Invalid status: " + status + ". Status must be 'PUBLISHED' or 'REJECTED'");
         }
-      ServiceProviderAdvertisement providerAdvertisement= serviceProviderAdvertisementRepository.findById(serviceId)
-        .orElseThrow(() -> new IllegalArgumentException("Advertisement not found with ID: " + serviceId));
+        ServiceProviderAdvertisement providerAdvertisement = serviceProviderAdvertisementRepository.findById(serviceId)
+                .orElseThrow(() -> new IllegalArgumentException("Advertisement not found with ID: " + serviceId));
         providerAdvertisement.setStatus(status);
         providerAdvertisement.setUpdatedAt(LocalDate.now());
         serviceProviderAdvertisementRepository.save(providerAdvertisement);
@@ -65,8 +68,8 @@ public class AdminServiceImpl implements AdminService {
             throw new IllegalArgumentException("Invalid status: " + status + ". Status must be 'PUBLISHED' or 'REJECTED'");
         }
 
-        ServiceWantedAdvertisement wantedAdvertisement= serviceWantedAdvertisementRepository.findById(advertisementId)
-            .orElseThrow(() -> new IllegalArgumentException("Advertisement not found with ID: " + advertisementId));
+        ServiceWantedAdvertisement wantedAdvertisement = serviceWantedAdvertisementRepository.findById(advertisementId)
+                .orElseThrow(() -> new IllegalArgumentException("Advertisement not found with ID: " + advertisementId));
         wantedAdvertisement.setStatus(status);
         wantedAdvertisement.setUpdatedAt(LocalDate.now());
         serviceWantedAdvertisementRepository.save(wantedAdvertisement);
@@ -77,15 +80,17 @@ public class AdminServiceImpl implements AdminService {
         return "PUBLISHED".equals(status) || "REJECTED".equals(status);
     }
 
+    @Transactional
     @Override
     public Page<ServiceProviderADResponse> getAllPendingServiceProviderAdvertisements(int page, int size) {
-        Pageable pageable= PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
 
         return serviceProviderAdvertisementRepository
                 .findAllPendingAdvertisements(pageable)
                 .map(this::mapToResponse);
     }
 
+    @Transactional
     @Override
     public Page<ServiceWantedADResponse> getAllPendingWantedAdvertisements(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -117,28 +122,51 @@ public class AdminServiceImpl implements AdminService {
         return "User deleted successfully.";
     }
 
-  
+
     @Override
-    public Page<UserBasicInfo> getAllUsersBaseInfo(int page , int size) {
+    public Page<UserBasicInfo> getAllUsersBaseInfo(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> users = userRepository.findAllUsersWithBasicInfo(pageable);
         return users.map(this::convertToUserBaseInfo);
     }
 
+    
     @Override
     public WorkerMoreInfo getWorkerMoreInfo(String workerId) {
-        User user=userRepository.findById(workerId)
+        User user = userRepository.findById(workerId)
                 .orElseThrow(() -> new RuntimeException("User not found."));
-        Worker worker=(Worker) user;
+        Worker worker = (Worker) user;
         return convertToWorkerMoreInfo(worker);
     }
 
     @Override
     public ClientMoreInfo getClientMoreInfo(String clientId) {
-        User user=userRepository.findById(clientId)
+        User user = userRepository.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("User not found."));
-        Client client=(Client) user;
+        Client client = (Client) user;
         return convertToClientMoreInfo(client);
+    }
+
+    @Transactional
+    @Override
+    public Page<ServiceProviderADResponse> getAllServiceProviderAdvertisements(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ServiceProviderAdvertisement> advertisements =
+                serviceProviderAdvertisementRepository.findAllAdvertisements(pageable);
+
+        return advertisements.map(this::mapToResponse);
+    }
+    
+    @Transactional
+    @Override
+    public Page<ServiceWantedADResponse> getAllServiceWantedAdvertisements(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ServiceWantedAdvertisement> advertisements =
+                serviceWantedAdvertisementRepository.findAllAdvertisements(pageable);
+
+        return advertisements.map(this::mapToServiceWantedResponse);
     }
 
     private ClientMoreInfo convertToClientMoreInfo(Client client) {
@@ -213,7 +241,7 @@ public class AdminServiceImpl implements AdminService {
 
         List<Rating> ratings = ratingRepository.findByWorker(worker);
 
-        List<RatingResponse> ratingsResponses =ratings
+        List<RatingResponse> ratingsResponses = ratings
                 .stream()
                 .map(rating -> {
                     RatingResponse response = new RatingResponse(
@@ -272,13 +300,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-
-
-
     private ServiceWantedADResponse mapToServiceWantedResponse(ServiceWantedAdvertisement advertisement) {
-        User user=userRepository.findById(advertisement.getClient().getId())
+        User user = userRepository.findById(advertisement.getClient().getId())
                 .orElseThrow(() -> new RuntimeException("Client not found."));
-        Client client=(Client) user;
+        Client client = (Client) user;
         long countApplicantsRequest = applicationForWantedADRepository.countApplicantsRequests(advertisement.getAdvertisement_id());
         return new ServiceWantedADResponse(
                 advertisement.getAdvertisement_id(),
@@ -321,12 +346,12 @@ public class AdminServiceImpl implements AdminService {
         Worker worker = (Worker) user;
 
         Double averageStars = ratingRepository.getAverageStarsByWorkerId(worker.getId());
-        long completedJobs= hireRequestRepository.countCompletedBookings(worker.getId(), "COMPLETED");
+        long completedJobs = hireRequestRepository.countCompletedBookings(worker.getId(), "COMPLETED");
         Optional<Worker> workerWithSkills =
                 workerSkillRepository.findByIdWithSkills(worker.getId());
         Set<DayOfWeek> workingDays = worker.getWorkingDays();
         List<Rating> ratings = ratingRepository.findByWorker(worker);
-        List<RatingResponse> ratingsResponses =ratings
+        List<RatingResponse> ratingsResponses = ratings
                 .stream()
                 .map(rating -> {
                     RatingResponse response = new RatingResponse(
@@ -364,7 +389,7 @@ public class AdminServiceImpl implements AdminService {
                 ))
                 .toList();
         Long count = ratingRepository.countByWorkerId(worker.getId());
-       return new ServiceProviderADResponse(
+        return new ServiceProviderADResponse(
                 advertisement.getServiceId(),
                 worker.getId(),
                 worker.getEmail(),
@@ -380,16 +405,16 @@ public class AdminServiceImpl implements AdminService {
                 averageStars,
                 completedJobs,
                 skills,
-               worker.getAbout(),
-               worker.getOverallExperience(),
-               workingDays,
-               worker.getStartTime(),
-               worker.getEndTime(),
-               worker.isEmergencyAvailable(),
-               ratingsResponses,
-               count,
-               worker.getProfileImageUrl(),
-               worker.getCity()
+                worker.getAbout(),
+                worker.getOverallExperience(),
+                workingDays,
+                worker.getStartTime(),
+                worker.getEndTime(),
+                worker.isEmergencyAvailable(),
+                ratingsResponses,
+                count,
+                worker.getProfileImageUrl(),
+                worker.getCity()
         );
 
     }

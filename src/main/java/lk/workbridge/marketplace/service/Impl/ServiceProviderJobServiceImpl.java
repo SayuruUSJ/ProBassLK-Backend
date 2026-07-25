@@ -1,8 +1,6 @@
 package lk.workbridge.marketplace.service.Impl;
 
-import jakarta.persistence.Entity;
 import jakarta.transaction.Transactional;
-import lk.workbridge.marketplace.dto.responses.ClientJobs;
 import lk.workbridge.marketplace.dto.responses.ServiceProviderJobs;
 import lk.workbridge.marketplace.entity.ApplicationsForWantedAdvertisements;
 import lk.workbridge.marketplace.entity.HireRequest;
@@ -22,7 +20,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,7 +58,8 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
         }
         return allJobs;
     }
-@Transactional
+
+    @Transactional
     @Override
     public List<ServiceProviderJobs> getServiceProviderCompletedJobs(String serviceProviderId) {
         List<ServiceProviderJobs> allJobs = new ArrayList<>();
@@ -89,7 +87,8 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
         }
         return allJobs;
     }
-@Transactional
+
+    @Transactional
     @Override
     public List<ServiceProviderJobs> getServiceProviderCancelledJobs(String serviceProviderId) {
         List<ServiceProviderJobs> allJobs = new ArrayList<>();
@@ -118,16 +117,17 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
         }
         return allJobs;
     }
+
     @Transactional
     @Override
-    public String handleServiceProviderAndAdvertisementAvailability(String serviceProviderId,String hireRequestId) {
+    public String handleServiceProviderAndAdvertisementAvailability(String serviceProviderId, String hireRequestId) {
         User user = userRepository.findById(serviceProviderId).orElseThrow(() -> new RuntimeException("User not found."));
         Worker worker = (Worker) user;
         worker.setAvailable(Boolean.FALSE);
         ServiceProviderAdvertisement advertisement = serviceProviderAdvertisementRepository.findAdvertisementByWorker(serviceProviderId)
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
-        HireRequest hireRequest=hireRequestRepository.findById(hireRequestId)
-                .orElseThrow(()->new RuntimeException("Hire request not found"));
+        HireRequest hireRequest = hireRequestRepository.findById(hireRequestId)
+                .orElseThrow(() -> new RuntimeException("Hire request not found"));
         advertisement.setStatus("NOT_AVAILABLE");
         hireRequest.setStatus("IN_PROGRESS");
         advertisement.setUpdatedAt(LocalDate.now());
@@ -136,7 +136,8 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
         hireRequestRepository.save(hireRequest);
         return "updated status successfully";
     }
-@Transactional
+
+    @Transactional
     @Override
     public String handleServiceWantedAdvertisement(int requestId, String serviceProviderId) {
         User user = userRepository.findById(serviceProviderId).orElseThrow(() -> new RuntimeException("User not found."));
@@ -144,7 +145,7 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
         worker.setAvailable(Boolean.FALSE);
         ApplicationsForWantedAdvertisements advertisement = applicationForWantedADRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
-                ServiceProviderAdvertisement serviceProviderAdvertisement = serviceProviderAdvertisementRepository.findAdvertisementByWorker(serviceProviderId)
+        ServiceProviderAdvertisement serviceProviderAdvertisement = serviceProviderAdvertisementRepository.findAdvertisementByWorker(serviceProviderId)
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
         advertisement.setStatus("IN_PROGRESS");
         advertisement.getAdvertisement().setUpdatedAt(LocalDate.now());
@@ -162,12 +163,12 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
                 worker.getFirstName() + " " + worker.getLastName() :
                 "Unknown Service Provider";
 
-        String clientName=hireRequest.getClientName();
+        String clientName = hireRequest.getClientName();
         String fullAddress = hireRequest.getLocation() != null ?
                 hireRequest.getLocation() :
                 "Address not available";
 
-        String contactNumber =  hireRequest.getClientContactNumber();
+        String contactNumber = hireRequest.getClientContactNumber();
 
 
         String requestedService = hireRequest.getRequestedService() != null ?
@@ -205,7 +206,7 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
                 worker.getFirstName() + " " + worker.getLastName() :
                 "Unknown Service Provider";
 
-        String clientName=application.getAdvertisement().getClient().getFirstName()+""+application.getAdvertisement().getClient().getLastName();
+        String clientName = application.getAdvertisement().getClient().getFirstName() + "" + application.getAdvertisement().getClient().getLastName();
 
         String requestedService = advertisement != null && advertisement.getTitle() != null ?
                 advertisement.getTitle() :

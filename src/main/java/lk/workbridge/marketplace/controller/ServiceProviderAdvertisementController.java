@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServiceProviderAdvertisementController {
 
     private final ServiceProviderAdvertisementService serviceProviderAdvertisementService;
+
     @PostMapping("/create-advertisement")
     public ResponseEntity<String> createAdvertisement(
             @RequestBody ServiceProviderAD serviceProviderAD) {
@@ -29,19 +30,6 @@ public class ServiceProviderAdvertisementController {
     }
 
 
-//    @PutMapping("/update-status")
-//    public ResponseEntity<Boolean> updateStatus(
-//            @RequestParam String serviceId,
-//            @RequestParam String status) {
-//
-//        Boolean response = serviceProviderAdvertisementService
-//                .updateAdvertisementStatus(status, serviceId);
-//
-//        return ResponseEntity.ok(response);
-//    }
-
-
-    //This is also use for button service provider info in applications
     @GetMapping("/{workerId}")
     public ResponseEntity<ServiceProviderADResponse> getAdvertisement(
             @PathVariable String workerId) {
@@ -67,14 +55,5 @@ public class ServiceProviderAdvertisementController {
         );
     }
 
-//    @GetMapping("/get-all-pending-ads")
-//    public ResponseEntity<Page<ServiceProviderADResponse>> getAllPendingAdvertisements(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size) {
-//
-//        return ResponseEntity.ok(
-//                serviceProviderAdvertisementService.getAllPendingAdvertisements(page, size)
-//        );
-//    }
 
 }

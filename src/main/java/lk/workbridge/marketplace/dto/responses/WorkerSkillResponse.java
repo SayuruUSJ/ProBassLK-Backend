@@ -5,11 +5,11 @@ import lk.workbridge.marketplace.enums.RateType;
 
 public record WorkerSkillResponse(
         Long id,
-       JobRole jobRole,
+        JobRole jobRole,
         Double dailyRate,
-       RateType rateType,
-       Integer experience,
-      String description,
-       Boolean negotiable
+        RateType rateType,
+        Integer experience,
+        String description,
+        Boolean negotiable
 ) {
 }

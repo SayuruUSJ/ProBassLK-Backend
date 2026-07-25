@@ -1,13 +1,14 @@
 package lk.workbridge.marketplace.service.Impl;
 
+import jakarta.transaction.Transactional;
 import lk.workbridge.marketplace.dto.HireRequestAD;
 import lk.workbridge.marketplace.dto.responses.ClientHireRequestResponse;
 import lk.workbridge.marketplace.dto.responses.ClientJobs;
 import lk.workbridge.marketplace.dto.responses.HireRequestCreatedResponse;
 import lk.workbridge.marketplace.dto.responses.HireRequestResponse;
-import lk.workbridge.marketplace.entity.HireRequestCancellationResult;
 import lk.workbridge.marketplace.entity.Client;
 import lk.workbridge.marketplace.entity.HireRequest;
+import lk.workbridge.marketplace.entity.HireRequestCancellationResult;
 import lk.workbridge.marketplace.entity.ServiceProviderAdvertisement;
 import lk.workbridge.marketplace.entity.User;
 import lk.workbridge.marketplace.entity.Worker;
@@ -22,8 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -108,6 +107,7 @@ public class HireRequestServiceImpl implements HireRequestService {
         hireRequestRepository.save(advertisement);
         return true;
     }
+
     @Transactional
     @Override
     public List<HireRequestResponse> getAllRequestsByWorkerId(String workerId) {
@@ -125,7 +125,8 @@ public class HireRequestServiceImpl implements HireRequestService {
                 ;
 
     }
-@Transactional
+
+    @Transactional
     @Override
     public List<HireRequestResponse> getAllPendingRequestsByWorkerId(String workerId) {
         List<String> statuses = Arrays.asList("pending", "PENDING");
@@ -140,7 +141,8 @@ public class HireRequestServiceImpl implements HireRequestService {
                 .collect(Collectors.toList())
                 ;
     }
-@Transactional
+
+    @Transactional
     @Override
     public List<HireRequestResponse> getAllAcceptedRequestsByWorkerId(String workerId) {
         List<String> statuses = Arrays.asList("accepted", "ACCEPTED");
@@ -155,7 +157,8 @@ public class HireRequestServiceImpl implements HireRequestService {
                 .collect(Collectors.toList())
                 ;
     }
-@Transactional
+
+    @Transactional
     @Override
     public List<HireRequestResponse> getAllRejectedRequestsByWorkerId(String workerId) {
         List<String> statuses = Arrays.asList("rejected", "REJECTED");
@@ -188,51 +191,51 @@ public class HireRequestServiceImpl implements HireRequestService {
     }
 
     @Transactional
-@Override
-public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String status) {
-    try {
-        // Validate status
-        if (!"COMPLETED".equalsIgnoreCase(status) && !"INCOMPLETED".equalsIgnoreCase(status)) {
-            throw new IllegalArgumentException("Invalid status. Allowed values: COMPLETED, INCOMPLETED");
-        }
-
-        // Find hire request
-        HireRequest hireRequest = hireRequestRepository.findById(advertisementId)
-                .orElseThrow(() -> new RuntimeException("Advertisement not found with ID: " + advertisementId));
-
-        String statusUpperCase = status.toUpperCase();
-        hireRequest.setStatus(statusUpperCase);
-
-        if ("COMPLETED".equalsIgnoreCase(status)) {
-            Worker worker = hireRequest.getWorker();
-            if (worker == null) {
-                throw new RuntimeException("Worker not associated with this advertisement");
+    @Override
+    public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String status) {
+        try {
+            // Validate status
+            if (!"COMPLETED".equalsIgnoreCase(status) && !"INCOMPLETED".equalsIgnoreCase(status)) {
+                throw new IllegalArgumentException("Invalid status. Allowed values: COMPLETED, INCOMPLETED");
             }
 
-            // Update worker availability
-            worker.setAvailable(true);
-            userRepository.save(worker);
+            // Find hire request
+            HireRequest hireRequest = hireRequestRepository.findById(advertisementId)
+                    .orElseThrow(() -> new RuntimeException("Advertisement not found with ID: " + advertisementId));
 
-            // Update service provider advertisement
-            ServiceProviderAdvertisement serviceProviderAdvertisement = 
-                    serviceProviderAdvertisementRepository
-                            .findAdvertisementByWorker(worker.getId())
-                            .orElseThrow(() -> new RuntimeException(
-                                    "Service provider advertisement not found for worker: " + worker.getId()));
-            serviceProviderAdvertisement.setStatus("PUBLISHED");
-            serviceProviderAdvertisement.setUpdatedAt(LocalDate.now());
-            serviceProviderAdvertisementRepository.save(serviceProviderAdvertisement);
+            String statusUpperCase = status.toUpperCase();
+            hireRequest.setStatus(statusUpperCase);
+
+            if ("COMPLETED".equalsIgnoreCase(status)) {
+                Worker worker = hireRequest.getWorker();
+                if (worker == null) {
+                    throw new RuntimeException("Worker not associated with this advertisement");
+                }
+
+                // Update worker availability
+                worker.setAvailable(true);
+                userRepository.save(worker);
+
+                // Update service provider advertisement
+                ServiceProviderAdvertisement serviceProviderAdvertisement =
+                        serviceProviderAdvertisementRepository
+                                .findAdvertisementByWorker(worker.getId())
+                                .orElseThrow(() -> new RuntimeException(
+                                        "Service provider advertisement not found for worker: " + worker.getId()));
+                serviceProviderAdvertisement.setStatus("PUBLISHED");
+                serviceProviderAdvertisement.setUpdatedAt(LocalDate.now());
+                serviceProviderAdvertisementRepository.save(serviceProviderAdvertisement);
+            }
+
+            hireRequestRepository.save(hireRequest);
+            return true;
+
+        } catch (Exception e) {
+            // Log the error
+            System.err.println("Error updating advertisement status: " + e.getMessage());
+            throw new RuntimeException("Failed to update advertisement status: " + e.getMessage());
         }
-
-        hireRequestRepository.save(hireRequest);
-        return true;
-        
-    } catch (Exception e) {
-        // Log the error
-        System.err.println("Error updating advertisement status: " + e.getMessage());
-        throw new RuntimeException("Failed to update advertisement status: " + e.getMessage());
     }
-}
 
     @Override
     public String cancelRequest(String id) {
@@ -313,20 +316,20 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
     @Transactional
     @Override
     public Page<ClientHireRequestResponse> getClientAllHireRequests(String clientId, int page, int size) {
-        Pageable pageable= PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
 
         Page<HireRequest> hireRequests = hireRequestRepository.findAllByClientId(clientId, pageable);
         return hireRequests.map(this::mapToClientHireRequestResponse);
     }
 
-    private ClientHireRequestResponse mapToClientHireRequestResponse(HireRequest hireRequest){
+    private ClientHireRequestResponse mapToClientHireRequestResponse(HireRequest hireRequest) {
         Worker worker = hireRequest.getWorker();
         ServiceProviderAdvertisement service = hireRequest.getServiceProviderAdvertisement();
 
         return new ClientHireRequestResponse(
                 hireRequest.getId(),
                 worker != null ? worker.getId() : null,
-                worker != null ? worker.getFirstName()+" "+worker.getLastName() : null,
+                worker != null ? worker.getFirstName() + " " + worker.getLastName() : null,
                 worker != null ? worker.getPrimaryPhoneNumber() : null,
                 worker != null ? worker.getProfileImageUrl() : null,
                 service != null ? hireRequest.getRequestedService() : null,
@@ -335,7 +338,7 @@ public Boolean updateCompleteOrIncompleteJobs(String advertisementId, String sta
                 hireRequest.getRequestedDate(),
                 hireRequest.getCreatedAt(),
                 hireRequest.getRateForRequiredService(),
-               hireRequest.getStatus(),
+                hireRequest.getStatus(),
                 hireRequest.getWorker().getProfileImageUrl()
         );
     }

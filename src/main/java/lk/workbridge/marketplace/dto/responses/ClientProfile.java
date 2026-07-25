@@ -3,7 +3,6 @@ package lk.workbridge.marketplace.dto.responses;
 import lk.workbridge.marketplace.enums.Role;
 
 import java.util.Date;
-import java.util.List;
 
 public record ClientProfile(
         String id,

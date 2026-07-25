@@ -15,13 +15,12 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client  extends  User{
+public class Client extends User {
     @Column(name = "organization_name", nullable = true, length = 100)
     private String organizationName;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private Set<HireRequest> bookingRequests = new HashSet<>();
-
 
 
 }

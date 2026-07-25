@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="client_requested_advertisements")
+@Table(name = "client_requested_advertisements")
 public class HireRequest {
 
     @Id
@@ -35,14 +35,13 @@ public class HireRequest {
     private ServiceProviderAdvertisement serviceProviderAdvertisement;
 
 
-
     @Column(name = "worker_email", nullable = false, length = 100)
     private String workerEmail;
 
     @Column(name = "requested_service", nullable = false, length = 100)
     private String requestedService;
 
-    @Column(name="rate_for_required_service")
+    @Column(name = "rate_for_required_service")
     private Double rateForRequiredService;
 
     @Column(name = "requested_date", nullable = false)
@@ -68,7 +67,7 @@ public class HireRequest {
     @Column(name = "description", nullable = true, length = 255)
     private String description;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private LocalDate createdAt;
 
 }

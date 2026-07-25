@@ -129,22 +129,22 @@ public class AuthController {
 
     @PostMapping("/send-otp")
     public ResponseEntity<?> sendOtp(@Valid @RequestParam String email
-                                       ) {
+    ) {
 
-       String result =service.sendOtpTOForgotPassword(email);
+        String result = service.sendOtpTOForgotPassword(email);
 
-    return ResponseEntity.ok(result);
+        return ResponseEntity.ok(result);
     }
+
     @PostMapping("/reset-passsowrd")
     public ResponseEntity<?> resetPassword(@Valid @RequestParam String email,
                                            @RequestParam String newPassword
     ) {
 
-        String result =service.resetPassword(email,newPassword);
+        String result = service.resetPassword(email, newPassword);
 
         return ResponseEntity.ok(result);
     }
-
 
 
     @PostMapping("/login-json")
@@ -269,10 +269,11 @@ public class AuthController {
         return ResponseEntity.ok(service.addWorkSkill(workerId, workerSkillRequest));
 
     }
+
     @DeleteMapping("/remove-new-skill")
     public ResponseEntity<?> removeNewSkill(
             @RequestParam String workerId,
-            @RequestParam  Integer skillId
+            @RequestParam Integer skillId
     ) {
         return ResponseEntity.ok(service.removeSkillID(workerId, skillId));
 

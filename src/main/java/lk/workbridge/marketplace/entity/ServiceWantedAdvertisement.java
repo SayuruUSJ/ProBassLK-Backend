@@ -43,70 +43,70 @@ public class ServiceWantedAdvertisement {
     @Enumerated(
             EnumType.STRING
     )
-    @Column(name="preferred_contact_method")
+    @Column(name = "preferred_contact_method")
     private ContactMethod preferredContactMethod;
 
-    @Column(name="title",nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "description", nullable = true, length = 255)
     private String description;
 
-    @Column(name="service_type", nullable = false, length = 100)
+    @Column(name = "service_type", nullable = false, length = 100)
     private String serviceType;
 
     @Column(name = "location", nullable = false, length = 255)
     private String fullAddress;
 
-    @Column(name="city",nullable = false)
+    @Column(name = "city", nullable = false)
     private String city;
 
-    @Column(name="district",nullable = false)
+    @Column(name = "district", nullable = false)
     private String district;
 
     @Column(name = "required_date", nullable = false)
     private LocalDate requiredDate;
 
-    @Column(name="start_time",nullable = true)
+    @Column(name = "start_time", nullable = true)
     private LocalTime startTime;
 
-    @Column(name="expected_duration",nullable = false)
+    @Column(name = "expected_duration", nullable = false)
     private String expectedDuration;
 
     @Column(name = "application_deadline")
     private LocalDate applicationDeadline;
 
-    @Column(name="is_work_date_flexible")
+    @Column(name = "is_work_date_flexible")
     private boolean isWorkDateFlexible;
 
     @Column(name = "status", nullable = false, length = 50)
     private String status;
 
-@Column(name="required_skills",nullable = true)
+    @Column(name = "required_skills", nullable = true)
     private String requiredSkills;
 
-@Column(name="no_of_workers_required",nullable = false)
+    @Column(name = "no_of_workers_required", nullable = false)
     private int noOfWorkersRequired;
-@Enumerated(
-        EnumType.STRING
-)
-@Column(name="payment_type",nullable = false)
-private PaymentType paymentType;
+    @Enumerated(
+            EnumType.STRING
+    )
+    @Column(name = "payment_type", nullable = false)
+    private PaymentType paymentType;
 
-@Column(name="offered_rate",nullable = false)
-private Double offeredRate;
+    @Column(name = "offered_rate", nullable = false)
+    private Double offeredRate;
 
-@Column(name="is_negotiable",nullable = false)
-private boolean isRateNegotiable;
+    @Column(name = "is_negotiable", nullable = false)
+    private boolean isRateNegotiable;
 
-@Column(name="isUrgent",nullable = true)
-private boolean isUrgent;
+    @Column(name = "isUrgent", nullable = true)
+    private boolean isUrgent;
 
-@Column(name="additional_instructions",nullable = true)
-private String additionalInstructions;
+    @Column(name = "additional_instructions", nullable = true)
+    private String additionalInstructions;
 
     private LocalDate createdAt;
 
-    private  LocalDate updatedAt;
+    private LocalDate updatedAt;
 
 }

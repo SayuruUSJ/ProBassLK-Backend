@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/client-jobs")
 @RequiredArgsConstructor
 public class ClientJobsController {
-    private  final ClientJobsService clientJobsService;
+    private final ClientJobsService clientJobsService;
 
     @GetMapping("/get-ongoing-jobs")
     public ResponseEntity<?> getAllOngoingJobsClient(
             @RequestParam String clientId
 
-    ){
+    ) {
         return ResponseEntity.ok(clientJobsService.getClientOngoingJobs(clientId));
 
     }
@@ -29,7 +29,7 @@ public class ClientJobsController {
     public ResponseEntity<?> getAllCompletedJobsClient(
             @RequestParam String clientId
 
-    ){
+    ) {
         return ResponseEntity.ok(clientJobsService.getClientCompletedJobs(clientId));
 
     }
@@ -38,7 +38,7 @@ public class ClientJobsController {
     public ResponseEntity<?> getAllCancelledJobsClient(
             @RequestParam String clientId
 
-    ){
+    ) {
         return ResponseEntity.ok(clientJobsService.getClientCancelledJobs(clientId));
 
     }

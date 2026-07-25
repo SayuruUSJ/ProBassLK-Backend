@@ -1,7 +1,5 @@
 package lk.workbridge.marketplace.dto;
 
-import jakarta.persistence.Column;
-import lk.workbridge.marketplace.enums.RateType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +11,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceProviderProfileUpdate extends BaseProfileUpdate{
+public class ServiceProviderProfileUpdate extends BaseProfileUpdate {
 
     private Boolean available;
 

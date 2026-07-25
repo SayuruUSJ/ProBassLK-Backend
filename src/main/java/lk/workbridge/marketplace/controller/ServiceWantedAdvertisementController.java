@@ -109,21 +109,21 @@ public class ServiceWantedAdvertisementController {
     }
 
     @GetMapping("/get-all-applications-clientwise")
-    public  ResponseEntity<Page<WantedAdvertisementApplication>> getClientApplications(
+    public ResponseEntity<Page<WantedAdvertisementApplication>> getClientApplications(
             @RequestParam String clientId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
-    ){
-        return ResponseEntity.ok(applicationForWantedADService.getClientApplications(clientId,page,size));
+    ) {
+        return ResponseEntity.ok(applicationForWantedADService.getClientApplications(clientId, page, size));
     }
 
-        @GetMapping("/get-all-applications-serviceproviderwise")
-    public  ResponseEntity<Page<WantedAdvertisementApplication>> getServiceProviderApplications(
+    @GetMapping("/get-all-applications-serviceproviderwise")
+    public ResponseEntity<Page<WantedAdvertisementApplication>> getServiceProviderApplications(
             @RequestParam String serviceProviderId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
-    ){
-        return ResponseEntity.ok(applicationForWantedADService.getServiceProvidersSpecificApplications(serviceProviderId,page,size));
+    ) {
+        return ResponseEntity.ok(applicationForWantedADService.getServiceProvidersSpecificApplications(serviceProviderId, page, size));
     }
 
     @PutMapping("/{applicationId}/status")

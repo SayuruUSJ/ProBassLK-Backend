@@ -10,7 +10,6 @@ import lk.workbridge.marketplace.repository.ApplicationForWantedADRepository;
 import lk.workbridge.marketplace.repository.HireRequestRepository;
 import lk.workbridge.marketplace.service.ClientJobsService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -53,7 +52,7 @@ public class ClientJobsServiceImpl implements ClientJobsService {
                     .collect(Collectors.toList());
             allJobs.addAll(applicationJobs);
         }
-       return allJobs;
+        return allJobs;
     }
 
     @Transactional
@@ -145,7 +144,7 @@ public class ClientJobsServiceImpl implements ClientJobsService {
                 serviceProviderName,
                 worker.getId(),
                 hireRequest.getLocation(),
-                     hireRequest.getRequestedDate(),
+                hireRequest.getRequestedDate(),
                 hireRequest.getCreatedAt(),
                 contactNumber,
                 hireRequest.getWorker().getProfileImageUrl()

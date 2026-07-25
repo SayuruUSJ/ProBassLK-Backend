@@ -39,7 +39,6 @@ lk\workbridge\marketplace\Main.class
 lk\workbridge\marketplace\util\ServiceProviderBookingADID.class
 lk\workbridge\marketplace\service\AuthService.class
 lk\workbridge\marketplace\entity\User.class
-lk\workbridge\marketplace\controller\CustomController.class
 lk\workbridge\marketplace\dto\responses\UserBasicInfo.class
 lk\workbridge\marketplace\dto\ServiceProviderRequestForWantedAD.class
 lk\workbridge\marketplace\service\Impl\AdminServiceImpl.class
