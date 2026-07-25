@@ -1,0 +1,115 @@
+server:
+  port: 8081
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        name: JSESSIONID
+        path: /
+        http-only: true
+        secure: false
+        same-site: Lax
+
+spring:
+  datasource:
+    # UPDATED: Points to your TiDB host, port, database, and forces SSL
+    url: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/workbridge?sslMode=VERIFY_IDENTITY&enabledTLSProtocols=TLSv1.2,TLSv1.3&createDatabaseIfNotExist=true
+    username: 3pps1erHUXPgSdq.root
+    password: jabYuI9XWZNNeSxJ
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      # OPTIMIZED: Reduced pool size slightly to fit TiDB Serverless free limits efficiently
+      maximum-pool-size: 5
+      minimum-idle: 2
+      idle-timeout: 300000
+      connection-timeout: 30000
+      pool-name: WorkbridgeHikariPool
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    # UPDATED: Added MySQLDialect explicitly so Hibernate communicates properly with TiDB
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tumiraduli@gmail.com
+    password: "ghip qzcl kedi hyug"
+    protocol: smtp
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  security:
+    user:
+      name: admin
+      password: admin123
+    remember-me:
+      key: workbridge-remember-me-secret-key
+      token-validity-seconds: 86400
+
+  web:
+    cors:
+      allowed-origins:
+        - http://localhost:3000
+        - http://localhost:4200
+        - http://localhost:8080
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allowed-headers:
+        - "*"
+      allow-credentials: true
+      max-age: 3600
+
+  application:
+    name: workbridge-marketplace
+
+cloudinary:
+  cloud-name: ubi91zgy
+  api-key: "572833356563818"
+  api-secret: "-ZRffHjPRio4Gk5NzRUGSdX-VZY"
+
+logging:
+  level:
+    root: INFO
+    lk.workbridge.marketplace: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.mail: DEBUG
+    com.sun.mail: DEBUG
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+  file:
+    name: logs/application.log
+
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
