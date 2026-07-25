@@ -77,6 +77,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             client.setRole(
                     Role.CLIENT
             );
+            client.setTermsAndConditions(request.getTermsAndConditions());
             boolean isTrue = emailService.sendVerificationEmail(
                     request.getEmail()
             );
@@ -101,7 +102,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                     request.getVerificationStatus()
             );
 
-
+        worker.setTermsAndConditions(request.getTermsAndConditions());
             boolean isTrue = emailService.sendVerificationEmail(
                     request.getEmail()
             );
@@ -122,7 +123,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             admin.setVerificationStatus(request.getVerificationStatus());
             admin.setRole(Role.ADMIN);
 
-
+admin.setTermsAndConditions(request.getTermsAndConditions());
             boolean isTrue = emailService.sendVerificationEmail(admin.getEmail());
             System.out.println(isTrue);
             if (isTrue == true) {

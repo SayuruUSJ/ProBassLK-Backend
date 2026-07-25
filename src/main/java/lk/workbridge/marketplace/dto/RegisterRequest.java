@@ -40,5 +40,6 @@ public class RegisterRequest {
     private Role role;
 
     private Boolean verificationStatus;
+    private Boolean termsAndConditions;
 
 }

@@ -70,4 +70,6 @@
         private Boolean verificationStatus;
         @Column(name="profile_image_url",nullable = true)
         private String profileImageUrl;
+        @Column(name="terms_and_conditions")
+        private Boolean termsAndConditions;
     }
