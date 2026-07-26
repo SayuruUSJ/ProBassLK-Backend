@@ -25,7 +25,7 @@ public class ServiceProviderAdvertisement {
     @Column(name = "service_id", nullable = false, unique = true)
     private String serviceId;
 
-    @OneToOne  // Add this annotation
+    @OneToOne  
     @JoinColumn(name = "worker_id", referencedColumnName = "user-id", nullable = false)
     private Worker worker;
 
@@ -36,27 +36,6 @@ public class ServiceProviderAdvertisement {
     private LocalDate createdAt;
 
     private LocalDate updatedAt;
-//    @Column(name="service_provider_id",nullable = false)
-//    private String serviceProviderId;
-//@Column(name="service_provider_name",nullable = false)
-//    private String serviceProviderName;
-//
-//@Column(name="contact_number",nullable = false)
-//    private String contactNumber;
-//
-//    @OneToMany(
-//            mappedBy = "worker",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-//@Column(name="skills",nullable = false)
-//
-//    private Set<WorkerSkill> skills
-//            = new HashSet<>();
-//
-//    private Boolean available;
-//
-//    private String address;
 
 
 }

@@ -46,9 +46,9 @@ public class ServiceProviderJobServiceImpl implements ServiceProviderJobService 
             allJobs.addAll(hireJobs);
         }
 
-        List<String> statuses2 = Arrays.asList("IN_PROGRESS", "CONFIRMED");
+
         List<ApplicationsForWantedAdvertisements> applications =
-                applicationForWantedADRepository.findByWorkerIdAndStatuses(serviceProviderId, statuses2);
+                applicationForWantedADRepository.findByWorkerIdAndStatuses(serviceProviderId, statuses);
 
         if (!applications.isEmpty()) {
             List<ServiceProviderJobs> applicationJobs = applications.stream()

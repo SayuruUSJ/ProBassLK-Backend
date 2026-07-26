@@ -42,9 +42,9 @@ public class ClientJobsServiceImpl implements ClientJobsService {
             allJobs.addAll(hireJobs);
         }
 
-        List<String> statuses2 = Arrays.asList("IN_PROGRESS", "CONFIRMED");
+
         List<ApplicationsForWantedAdvertisements> applications =
-                applicationForWantedADRepository.findByClientIdAndStatus(clientId, statuses2);
+                applicationForWantedADRepository.findByClientIdAndStatus(clientId, statuses);
 
         if (!applications.isEmpty()) {
             List<ClientJobs> applicationJobs = applications.stream()
